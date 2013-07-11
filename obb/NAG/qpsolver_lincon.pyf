@@ -1,0 +1,22 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module qpsolver_lincon ! in 
+    interface  ! in :qpsolver_lincon
+        subroutine qpsolver_lincon(h,cvec,bl,bu,n,x,obj,nclin,a) ! in :qpsolver_lincon:qpsolver_lincon.f90
+            use nag_library,,only: e54nfu,e04wbf,e04nfa,nag_wp
+            real(kind=nag_wp) dimension(n,n),intent(in) :: h
+            real(kind=nag_wp) dimension(n),intent(in),depend(n) :: cvec
+            real(kind=nag_wp) dimension(n+nclin),intent(in),depend(n,nclin) :: bl
+            real(kind=nag_wp) dimension(n+nclin),intent(in),depend(n,nclin) :: bu
+            integer optional,intent(in),check(shape(h,0)==n),depend(h) :: n=shape(h,0)
+            real(kind=nag_wp) dimension(n),intent(inout),depend(n) :: x
+            real(kind=nag_wp) intent(out) :: obj
+            integer optional,intent(in),check(shape(a,0)==nclin),depend(a) :: nclin=shape(a,0)
+            real(kind=nag_wp) dimension(nclin,n),intent(in),depend(n) :: a
+        end subroutine qpsolver_lincon
+    end interface 
+end python module qpsolver_lincon
+
+! This file was auto-generated with f2py (version:1).
+! See http://cens.ioc.ee/projects/f2py2e/

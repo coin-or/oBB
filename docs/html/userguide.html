@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>User Guide &mdash; oBB Documentation</title>
+    
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="oBB Documentation" href="index.html" />
+    <link rel="prev" title="Installing oBB" href="install.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="header">
+        <div class="headertitle"><a
+          href="index.html">oBB Documentation</a></div>
+        <div class="rel">
+          <a href="install.html" title="Installing oBB"
+             accesskey="P">previous</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="user-guide">
+<h1>User Guide<a class="headerlink" href="#user-guide" title="Permalink to this headline">¶</a></h1>
+<p>This section describes the main interface to oBB and how to use it.</p>
+<div class="section" id="global-optimization">
+<h2>Global Optimization<a class="headerlink" href="#global-optimization" title="Permalink to this headline">¶</a></h2>
+<p>oBB is designed to solve the global optimization problem</p>
+<blockquote>
+<div><div class="math">
+\[\begin{split}&amp;\min_{x \in \mathcal{R}^n} f(x) \\
+\text{s.t. } \; &amp;l \le x \le u \\
+\text{and } \; &amp;lc \le Ax \le uc\end{split}\]</div>
+</div></blockquote>
+<p>where the domain <span class="math">\(\mathcal{D}\)</span> is convex, compact and the objective function <span class="math">\(f\)</span> has Lipschitz continuous gradient or Hessian. oBB does not need to know the Lipschitz constants explicitly, it merely requires the user to supply elementwise bounds on the Hessian or derivative tensor of the objective function (see <a class="reference internal" href="#how-to-use-obb">How to use oBB</a>).</p>
+<p>oBB uses local first or second order Taylor type approximations over balls within a parallel branch and bound framework. As with all branch and bound algorithms, the curse of dimensionality limits its use to low dimensional problems. The choice of whether to use first or second order approximations is down to the user  (see <a class="reference internal" href="#how-to-use-obb">How to use oBB</a>).</p>
+<p>For an in-depth technical description of the algorithm see the tech-report <a class="reference internal" href="#cfg2013">[CFG2013]</a> and the paper <a class="reference internal" href="#fgf2012">[FGF2012]</a>.</p>
+</div>
+<div class="section" id="how-to-use-obb">
+<h2>How to use oBB<a class="headerlink" href="#how-to-use-obb" title="Permalink to this headline">¶</a></h2>
+<p>oBB requires the user to write a python script file which defines the functions and parameters necessary to solve the problem. These are determined by the choice of a first or second order approximation model (see <a class="reference internal" href="#cfg2013">[CFG2013]</a> for details):</p>
+<ul class="simple">
+<li>First order models: <em>q</em> - norm based,  <em>g</em>, <em>Hz</em>, <em>lbH</em>, <em>E0</em>, <em>Ediag</em> - minimum eigenvalue based</li>
+<li>Second order models: <em>c</em> - norm based, <em>gc</em> - minimum eigenvalue based</li>
+</ul>
+<p>If using a first order model, the following functions are required:</p>
+<ul class="simple">
+<li><strong>f(x)</strong> - returns objective function <span class="math">\(f\)</span> at point <span class="math">\(x\)</span> (scalar)</li>
+<li><strong>g(x)</strong> - returns gradient <span class="math">\(\nabla_x f\)</span> of objective function at <span class="math">\(x\)</span> (numpy vector)</li>
+</ul>
+<p>and the bounding function:</p>
+<ul class="simple">
+<li><strong>bndH(l,u)</strong> - returns two numpy matrices of elementwise lower and upper bounds on the Hessian <span class="math">\(\nabla_{xx} f\)</span> of the objective function over <span class="math">\([l,u]\)</span></li>
+</ul>
+<p>For a second order model we also require:</p>
+<ul class="simple">
+<li><strong>H(x)</strong> - returns Hessian <span class="math">\(\nabla_{xx} f\)</span> of objective function at <span class="math">\(x\)</span> (numpy matrix)</li>
+</ul>
+<p>and rather than bndH the bounding function:</p>
+<ul class="simple">
+<li><strong>bndT(l,u)</strong> - returns two third order numpy tensors of elementwise lower and upper bounds on the derivative tensor <span class="math">\(\nabla_{xxx} f\)</span> of the objective function over <span class="math">\([l,u]\)</span></li>
+</ul>
+<p>We now need only specify the type of parallel branch and bound algorithm to use (again, see <a class="reference internal" href="#cfg2013">[CFG2013]</a> for details):</p>
+<ul class="simple">
+<li><em>T1</em> - bounds in parallel</li>
+<li><em>T2_individual</em>, <em>T2_synchronised</em> - tree in parallel</li>
+</ul>
+<p>See <a class="reference internal" href="#example-of-use">Example of Use</a> for an in-depth worked example in python.</p>
+</div>
+<div class="section" id="optional-parameters">
+<h2>Optional Parameters<a class="headerlink" href="#optional-parameters" title="Permalink to this headline">¶</a></h2>
+<p>oBB allows the user to specify several optional parameters to control the behaviour of the algorithm:</p>
+<ul class="simple">
+<li><em>tol</em> - objective function tolerance (e.g. 1e-2, the default)</li>
+<li><em>toltype</em> - tolerance type (r - relative [default], a - absolute)</li>
+<li><em>countf</em> - count objective function evaluations (0 - off, 1 - on [default])</li>
+<li><em>countsp</em> - count subproblem evaluations (0 - off, 1 - on [default])</li>
+</ul>
+<p>and if matplotlib (<a class="reference external" href="http://www.matplotlib.org/">http://www.matplotlib.org/</a>) is installed:</p>
+<ul class="simple">
+<li>vis - visualisation of the algorithm in 2D (0 - off [default], 1 - on)</li>
+</ul>
+<p>Note that the linear constraint parameters <span class="math">\(A, lc\)</span> and  <span class="math">\(uc\)</span> are also optional as the optimization problem is only required to be bound constrained.</p>
+</div>
+<div class="section" id="example-of-use">
+<h2>Example of Use<a class="headerlink" href="#example-of-use" title="Permalink to this headline">¶</a></h2>
+<p>Suppose we wish to solve the following problem:</p>
+<blockquote>
+<div><div class="math">
+\[\begin{split}&amp;\min_{x \in \mathcal{R}^n} \sum_{i=1}^n \sin(x_i) \\
+\text{s.t. } \; &amp;-1 \le x_i \le 1 \; \; \forall i=1,\dotsc,n \\
+\text{and }  \; &amp;-1 \le \sum_{i=1}^nx_i \le 1\end{split}\]</div>
+</div></blockquote>
+<p>One can see that the gradient <span class="math">\(g\)</span>, Hessian <span class="math">\(H\)</span> and third order derivative tensor <span class="math">\(T\)</span> are given by</p>
+<blockquote>
+<div><div class="math">
+\[\begin{split}&amp;g(x) = ( \cos(x_1), \dotsc, \cos(x_n))^T \\
+&amp;H(x) = diag( -\sin(x_1), \dotsc, -\sin(x_n)) \\
+&amp;T(x) = diagt( -\cos(x_1), \dotsc, -\cos(x_n))\end{split}\]</div>
+</div></blockquote>
+<p>where <span class="math">\(diagt\)</span> is the tensor diagonal function (i.e. <span class="math">\(diagt(v)\)</span> places the vector <span class="math">\(v\)</span> on the diagonal of the tensor).</p>
+<p>It is straightforward to obtain elementwise bounds on the Hessian matrix <span class="math">\(H\)</span> and third order derivative tensor <span class="math">\(T\)</span> as both <span class="math">\(sin\)</span> and <span class="math">\(cos\)</span> can be bounded below and above by -1 and 1 respectively.</p>
+<p>We can code this up in a python script file, let&#8217;s call it sins.py as follows:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="c"># Example code for oBB</span>
+<span class="kn">from</span> <span class="nn">obb</span> <span class="kn">import</span> <span class="n">obb</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span><span class="n">cos</span><span class="p">,</span><span class="n">diag</span><span class="p">,</span><span class="n">ones</span><span class="p">,</span><span class="n">zeros</span>
+
+<span class="c"># Input Settings</span>
+<span class="c"># Algorithm (T1, T2_individual, T2_synchronised)</span>
+<span class="n">alg</span> <span class="o">=</span> <span class="s">&#39;T2_synchronised&#39;</span>
+
+<span class="c"># Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,</span>
+<span class="c"># c - norm cubic, gc - gershgorin cubic)</span>
+<span class="n">mod</span> <span class="o">=</span> <span class="s">&#39;c&#39;</span>
+
+<span class="c"># Tolerance</span>
+<span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-2</span>
+
+<span class="c"># Tensor diagonal function</span>
+<span class="k">def</span> <span class="nf">diagt</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">D</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">D</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">D</span><span class="p">):</span>
+            <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">T</span>
+
+<span class="c"># Set up sum of sins test function</span>
+<span class="c"># Dimension</span>
+<span class="n">D</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="c"># Constraints</span>
+<span class="n">l</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="n">u</span> <span class="o">=</span> <span class="mi">1</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">D</span><span class="p">))</span>
+<span class="n">lc</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">uc</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c"># Required functions</span>
+<span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">g</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">cos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">diag</span><span class="p">(</span><span class="o">-</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">bndH</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">l</span><span class="p">,</span><span class="n">u</span><span class="p">:</span> <span class="p">(</span><span class="n">diag</span><span class="p">(</span><span class="o">-</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">)),</span> <span class="n">diag</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">)))</span>
+<span class="n">bndT</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">l</span><span class="p">,</span><span class="n">u</span><span class="p">:</span> <span class="p">(</span><span class="n">diagt</span><span class="p">(</span><span class="o">-</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">)),</span> <span class="n">diagt</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">)))</span>
+
+<span class="c"># Name objective function</span>
+<span class="n">f</span><span class="o">.</span><span class="n">__name__</span> <span class="o">=</span> <span class="s">&#39;Sum of Sins&#39;</span>
+
+<span class="c"># Run oBB</span>
+<span class="n">xs</span><span class="p">,</span> <span class="n">fxs</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">itr</span> <span class="o">=</span> <span class="n">obb</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">bndH</span><span class="p">,</span> <span class="n">bndT</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">alg</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="p">,</span> <span class="n">lc</span><span class="o">=</span><span class="n">lc</span><span class="p">,</span> <span class="n">uc</span><span class="o">=</span><span class="n">uc</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This file is included in oBB as sins.py.</p>
+</div>
+<div class="section" id="running-the-algorithm">
+<h2>Running the Algorithm<a class="headerlink" href="#running-the-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>To run the user-created python script file (e.g. sins.py) we need to execute it using MPI&#8217;s mpiexec command, specifying the number of processor cores with the -n option. For example, to run oBB on four processor cores we simply execute the following shell command:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mpiexec -n 4 python sins.py
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that if using the MPICH2 implementation of MPI we first need to start an mpd daemon in the background:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mpd &amp;
+</pre></div>
+</div>
+</div></blockquote>
+<p>but this is not necessary for other MPI implmentations, e.g. OpenMPI.</p>
+<p>And that&#8217;s all there is to it!</p>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<table class="docutils citation" frame="void" id="cfg2013" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[CFG2013]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>, <a class="fn-backref" href="#id4">3</a>)</em> <ol class="last upperalpha simple" start="3">
+<li>Cartis, J. M. Fowkes and N. I. M. Gould. (2013) &#8220;Branching and Bounding Improvements for Global Optimization Algorithms with Lipschitz Continuity Properties&#8221;, ERGO Technical Report, no. 13-010, pp. 1-33. <a class="reference external" href="http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html">http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html</a></li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="fgf2012" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[FGF2012]</a></td><td><ol class="first last upperalpha simple" start="10">
+<li><ol class="first upperalpha" start="13">
+<li>Fowkes, N. I. M. Gould and C. L. Farmer. (2012) &#8220;A Branch and Bound Algorithm for the Global Optimization of Hessian Lipschitz Continuous Functions&#8221;, Journal of Global Optimization, pp. 1-25. ISSN 0925-5001. <a class="reference external" href="http://dx.doi.org/10.1007/s10898-012-9937-9">http://dx.doi.org/10.1007/s10898-012-9937-9</a></li>
+</ol>
+</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing oBB</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#global-optimization">Global Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-use-obb">How to use oBB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optional-parameters">Optional Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-of-use">Example of Use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <a href="install.html" title="Installing oBB"
+             >previous</a> |
+          <a href="genindex.html" title="General Index"
+             >index</a>
+            <br/>
+            <a href="_sources/userguide.txt"
+               rel="nofollow">Show Source</a>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer">
+        &copy; Copyright 2013, J. M. Fowkes.
+      Last updated on 09 Jul, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

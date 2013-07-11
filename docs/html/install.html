@@ -1,0 +1,196 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing oBB &mdash; oBB Documentation</title>
+    
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="oBB Documentation" href="index.html" />
+    <link rel="next" title="User Guide" href="userguide.html" />
+    <link rel="prev" title="oBB Documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper">
+      <div class="header">
+        <div class="headertitle"><a
+          href="index.html">oBB Documentation</a></div>
+        <div class="rel">
+          <a href="index.html" title="oBB Documentation"
+             accesskey="P">previous</a> |
+          <a href="userguide.html" title="User Guide"
+             accesskey="N">next</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="installing-obb">
+<h1>Installing oBB<a class="headerlink" href="#installing-obb" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>oBB requires the following software to be installed:</p>
+<ul class="simple">
+<li>Python 2.6 to 2.7 (<a class="reference external" href="http://www.python.org/">http://www.python.org/</a>)</li>
+<li>A working implementation of MPI-2 (e.g. OpenMPI, <a class="reference external" href="http://www.open-mpi.org/">http://www.open-mpi.org/</a>)</li>
+</ul>
+<p>Additionally, the following python packages should be installed (these will be installed automatically if using <em>pip</em>, see <a class="reference internal" href="#installation-using-pip-recommended">Installation using pip (recommended)</a>):</p>
+<ul class="simple">
+<li>NumPy 1.3.0 or higher (<a class="reference external" href="http://www.numpy.org/">http://www.numpy.org/</a>)</li>
+<li>MPI for Python 1.3 or higher (<a class="reference external" href="http://mpi4py.scipy.org/">http://mpi4py.scipy.org/</a>)</li>
+<li>CVXOPT 1.1.3 or higher (<a class="reference external" href="http://cvxopt.org/">http://cvxopt.org/</a>)</li>
+</ul>
+<p>Optionally, the following software may be manually installed for added functionality:</p>
+<ul class="simple">
+<li>matplotlib 1.1.0 or higher (<a class="reference external" href="http://www.matplotlib.org/">http://www.matplotlib.org/</a>) - for visualising the algorithm in 2D</li>
+</ul>
+</div>
+<div class="section" id="installation-using-pip-recommended">
+<h2>Installation using pip (recommended)<a class="headerlink" href="#installation-using-pip-recommended" title="Permalink to this headline">¶</a></h2>
+<p>For easy installation, use <em>pip</em> (<a class="reference external" href="http://www.pip-installer.org/">http://www.pip-installer.org/</a>):</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="o">[</span>sudo<span class="o">]</span> pip install obb
+</pre></div>
+</div>
+</div></blockquote>
+<p>or alternatively <em>easy_install</em> (deprecated):</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="o">[</span>sudo<span class="o">]</span> easy_install obb
+</pre></div>
+</div>
+</div></blockquote>
+<p>If you do not have root privileges or you want to install oBB for your private use, you can use:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install --user obb
+</pre></div>
+</div>
+</div></blockquote>
+<p>which will install oBB in your home directory.</p>
+</div>
+<div class="section" id="manual-installation">
+<h2>Manual installation<a class="headerlink" href="#manual-installation" title="Permalink to this headline">¶</a></h2>
+<p>Alternatively, you can download the source code and unpack as follows:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>wget http://pypi.python.org/packages/source/o/oBB/oBB-X.X.tar.gz
+<span class="nv">$ </span>tar -xzvf oBB-X.X.tar.gz
+<span class="nv">$ </span><span class="nb">cd </span>oBB-X.X
+</pre></div>
+</div>
+</div></blockquote>
+<p>and then build and install manually using:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python setup.py build
+<span class="nv">$ </span>python setup.py install
+</pre></div>
+</div>
+</div></blockquote>
+<p>If you do not have root privileges or you want to install oBB for your private use, you can use:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python setup.py install --user
+</pre></div>
+</div>
+</div></blockquote>
+<p>instead.</p>
+</div>
+<div class="section" id="uninstallation">
+<h2>Uninstallation<a class="headerlink" href="#uninstallation" title="Permalink to this headline">¶</a></h2>
+<p>If oBB was installed using <em>pip</em> you can uninstall as follows:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="o">[</span>sudo<span class="o">]</span> pip uninstall obb
+</pre></div>
+</div>
+</div></blockquote>
+<p>If oBB was installed manually you have to remove the installed files by hand (located in your python site-packages directory).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Installing oBB</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-using-pip-recommended">Installation using pip (recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manual-installation">Manual installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#uninstallation">Uninstallation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="userguide.html">User Guide</a></li>
+</ul>
+
+          <h3 style="margin-top: 1.5em;">Search</h3>
+          <form class="search" action="search.html" method="get">
+            <input type="text" name="q" />
+            <input type="submit" value="Go" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+          </form>
+          <p class="searchtip" style="font-size: 90%">
+            Enter search terms or a module, class or function name.
+          </p>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <a href="index.html" title="oBB Documentation"
+             >previous</a> |
+          <a href="userguide.html" title="User Guide"
+             >next</a> |
+          <a href="genindex.html" title="General Index"
+             >index</a>
+            <br/>
+            <a href="_sources/install.txt"
+               rel="nofollow">Show Source</a>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer">
+        &copy; Copyright 2013, J. M. Fowkes.
+      Last updated on 09 Jul, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

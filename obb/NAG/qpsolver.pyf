@@ -1,0 +1,20 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module qpsolver ! in 
+    interface  ! in :qpsolver
+        subroutine qpsolver(h,cvec,bl,bu,n,x,obj) ! in :qpsolver:qpsolver.f90
+            use nag_library,,only: e54nfu,e04wbf,e04nfa,nag_wp
+            real(kind=nag_wp) dimension(n,n),intent(in) :: h
+            real(kind=nag_wp) dimension(n),intent(in),depend(n) :: cvec
+            real(kind=nag_wp) dimension(n),intent(in),depend(n) :: bl
+            real(kind=nag_wp) dimension(n),intent(in),depend(n) :: bu
+            integer optional,intent(in),check(shape(h,0)==n),depend(h) :: n=shape(h,0)
+            real(kind=nag_wp) dimension(n),intent(inout),depend(n) :: x
+            real(kind=nag_wp) intent(out) :: obj
+        end subroutine qpsolver
+    end interface 
+end python module qpsolver
+
+! This file was auto-generated with f2py (version:1).
+! See http://cens.ioc.ee/projects/f2py2e/

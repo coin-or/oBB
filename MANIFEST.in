@@ -1,0 +1,6 @@
+include *.txt
+include docs/latex/*.pdf
+#include obb/evtustates
+#include obb/*.pyf
+#include obb/*.f90
+#include obb/.f2py_f2cmap
