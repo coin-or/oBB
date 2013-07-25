@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2013.2.8)  9 JUL 2013 15:19
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2013.2.8)  25 JUL 2013 15:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -985,33 +985,33 @@ LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10> not available
 (Font)              Font shape `T1/pcr/m/sl' tried instead on input line 372.
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
 (Font)              Font shape `T1/pcr/b/n' tried instead on input line 373.
- [6] [7] (./oBB.ind)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 470.
+ [6] [7] [8] [9] (./oBB.ind)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 539.
 
 
 Package Fancyhdr Warning: \fancyfoot's `E' option without twoside option is use
-less on input line 470.
+less on input line 539.
 
-[8
+[10
 
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 470.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 539.
  (./oBB.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 470.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 470.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 539.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 539.
 Package rerunfilecheck Info: File `oBB.out' has not changed.
-(rerunfilecheck)             Checksum: 9EF09342E59D7CC54C26E607DA6BAD9E;786.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 470.
+(rerunfilecheck)             Checksum: 1785E125AA3221080751A378E95AA3FD;916.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 539.
  ) 
 Here is how much of TeX's memory you used:
- 8951 strings out of 493488
- 125447 string characters out of 3141348
- 219818 words of memory out of 3000000
- 12031 multiletter control sequences out of 15000+200000
+ 8959 strings out of 493488
+ 125568 string characters out of 3141348
+ 219910 words of memory out of 3000000
+ 12035 multiletter control sequences out of 15000+200000
  57580 words of font info for 72 fonts, out of 3000000 for 9000
  958 hyphenation exceptions out of 8191
- 36i,16n,45p,511b,467s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,16n,45p,604b,467s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/local/mathstexlive/2012/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/lo
 cal/mathstexlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
 r/local/mathstexlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
@@ -1029,10 +1029,10 @@ b8a.pfb></usr/local/mathstexlive/2012/texmf-dist/fonts/type1/urw/helvetic/uhvbo
 8a.pfb></usr/local/mathstexlive/2012/texmf-dist/fonts/type1/urw/times/utmb8a.pf
 b></usr/local/mathstexlive/2012/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></u
 sr/local/mathstexlive/2012/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on oBB.pdf (10 pages, 177163 bytes).
+Output written on oBB.pdf (12 pages, 183946 bytes).
 PDF statistics:
- 216 PDF objects out of 1000 (max. 8388607)
- 186 compressed objects within 2 object streams
- 33 named destinations out of 1000 (max. 500000)
- 105 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 243 PDF objects out of 1000 (max. 8388607)
+ 210 compressed objects within 3 object streams
+ 37 named destinations out of 1000 (max. 500000)
+ 121 words of extra memory for PDF output out of 10000 (max. 10000000)
 

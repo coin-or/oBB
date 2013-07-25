@@ -10,5 +10,7 @@
 \contentsline {section}{\numberline {2.3}Optional Parameters}{5}{section.2.3}
 \contentsline {section}{\numberline {2.4}Example of Use}{5}{section.2.4}
 \contentsline {section}{\numberline {2.5}Running the Algorithm}{7}{section.2.5}
-\contentsline {section}{\numberline {2.6}References}{7}{section.2.6}
-\contentsline {chapter}{Bibliography}{8}{chapter*.4}
+\contentsline {section}{\numberline {2.6}Using the RBF Layer}{7}{section.2.6}
+\contentsline {section}{\numberline {2.7}RBF Layer Example}{8}{section.2.7}
+\contentsline {section}{\numberline {2.8}References}{9}{section.2.8}
+\contentsline {chapter}{Bibliography}{10}{chapter*.4}

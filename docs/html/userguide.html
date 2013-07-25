@@ -77,7 +77,7 @@
 <p>If using a first order model, the following functions are required:</p>
 <ul class="simple">
 <li><strong>f(x)</strong> - returns objective function <span class="math">\(f\)</span> at point <span class="math">\(x\)</span> (scalar)</li>
-<li><strong>g(x)</strong> - returns gradient <span class="math">\(\nabla_x f\)</span> of objective function at <span class="math">\(x\)</span> (numpy vector)</li>
+<li><strong>g(x)</strong> - returns gradient <span class="math">\(\nabla_x f\)</span> of objective function at <span class="math">\(x\)</span> (1D numpy array)</li>
 </ul>
 <p>and the bounding function:</p>
 <ul class="simple">
@@ -85,7 +85,7 @@
 </ul>
 <p>For a second order model we also require:</p>
 <ul class="simple">
-<li><strong>H(x)</strong> - returns Hessian <span class="math">\(\nabla_{xx} f\)</span> of objective function at <span class="math">\(x\)</span> (numpy matrix)</li>
+<li><strong>H(x)</strong> - returns Hessian <span class="math">\(\nabla_{xx} f\)</span> of objective function at <span class="math">\(x\)</span> (2D numpy array)</li>
 </ul>
 <p>and rather than bndH the bounding function:</p>
 <ul class="simple">
@@ -195,7 +195,69 @@
 </div>
 </div></blockquote>
 <p>but this is not necessary for other MPI implmentations, e.g. OpenMPI.</p>
-<p>And that&#8217;s all there is to it!</p>
+<p>And that&#8217;s all there is to it! Well, almost...</p>
+</div>
+<div class="section" id="using-the-rbf-layer">
+<h2>Using the RBF Layer<a class="headerlink" href="#using-the-rbf-layer" title="Permalink to this headline">¶</a></h2>
+<p>oBB can optionally approximate the objective function <span class="math">\(f\)</span> by a radial basis function (RBF) surrogate and optimize the approximation instead (see <a class="reference internal" href="#fgf2012">[FGF2012]</a> for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which the objective function should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.</p>
+<p>As before, the user is required to write a python script file which defines the functions and parameters necessary to solve the problem. In addition to the approximation model, algorithm type parameters and objective function described in <a class="reference internal" href="#how-to-use-obb">How to use oBB</a> only an <span class="math">\(n\)</span> by <span class="math">\(m\)</span> numpy array of <span class="math">\(m\)</span> points at which to sample the objective function needs to be specified.</p>
+<p>See the <a class="reference internal" href="#rbf-layer-example">RBF Layer Example</a> below for an in-depth worked example in python.</p>
+</div>
+<div class="section" id="rbf-layer-example">
+<h2>RBF Layer Example<a class="headerlink" href="#rbf-layer-example" title="Permalink to this headline">¶</a></h2>
+<p>Suppose we wish to solve an RBF approximation to the problem give in the <a class="reference internal" href="#example-of-use">Example of Use</a> section:</p>
+<blockquote>
+<div><div class="math">
+\[\begin{split}&amp;\min_{x \in \mathcal{R}^n} \sum_{i=1}^n \sin(x_i) \\
+\text{s.t. } \; &amp;-1 \le x_i \le 1 \; \; \forall i=1,\dotsc,n \\
+\text{and }  \; &amp;-1 \le \sum_{i=1}^nx_i \le 1\end{split}\]</div>
+</div></blockquote>
+<p>We can code this up in a python script file, let&#8217;s call it sins_rbf.py as follows:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="c"># Example RBF Layer code for oBB</span>
+<span class="kn">from</span> <span class="nn">obb</span> <span class="kn">import</span> <span class="n">obb_rbf</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span><span class="n">ones</span><span class="p">,</span><span class="n">zeros</span>
+<span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">rand</span><span class="p">,</span><span class="n">seed</span>
+
+<span class="c"># Input Settings</span>
+<span class="c"># Algorithm (T1, T2_individual, T2_synchronised)</span>
+<span class="n">alg</span> <span class="o">=</span> <span class="s">&#39;T1&#39;</span>
+
+<span class="c"># Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,</span>
+<span class="c"># c - norm cubic, gc - gershgorin cubic)</span>
+<span class="n">mod</span> <span class="o">=</span> <span class="s">&#39;c&#39;</span>
+
+<span class="c"># Tolerance</span>
+<span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-2</span>
+
+<span class="c"># Set up sum of sins test function</span>
+<span class="c"># Dimension</span>
+<span class="n">D</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="c"># Constraints</span>
+<span class="n">l</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="n">u</span> <span class="o">=</span> <span class="mi">1</span><span class="o">*</span><span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">D</span><span class="p">))</span>
+<span class="n">lc</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="n">uc</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c"># Required functions</span>
+<span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="c"># Generate 10*D sample points for RBF approximation</span>
+<span class="n">seed</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c"># !!Sample points have to be the same on all processors!!</span>
+<span class="n">pts</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="o">*</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+
+<span class="c"># Scale points so they lie in [l,u]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">D</span><span class="p">):</span>
+    <span class="n">pts</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="n">pts</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span>
+
+<span class="c"># Name objective function</span>
+<span class="n">f</span><span class="o">.</span><span class="n">__name__</span> <span class="o">=</span> <span class="s">&#39;RBF Sum of Sins&#39;</span>
+
+<span class="c"># Run oBB</span>
+<span class="n">xs</span><span class="p">,</span> <span class="n">fxs</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">itr</span> <span class="o">=</span> <span class="n">obb_rbf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">pts</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">alg</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="p">,</span> <span class="n">lc</span><span class="o">=</span><span class="n">lc</span><span class="p">,</span> <span class="n">uc</span><span class="o">=</span><span class="n">uc</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note the use of obb_rbf instead of obb and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sins_rbf.py, to run it see <a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a>.</p>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
@@ -211,7 +273,7 @@
 <table class="docutils citation" frame="void" id="fgf2012" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[FGF2012]</a></td><td><ol class="first last upperalpha simple" start="10">
+<tr><td class="label">[FGF2012]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id5">2</a>)</em> <ol class="last upperalpha simple" start="10">
 <li><ol class="first upperalpha" start="13">
 <li>Fowkes, N. I. M. Gould and C. L. Farmer. (2012) &#8220;A Branch and Bound Algorithm for the Global Optimization of Hessian Lipschitz Continuous Functions&#8221;, Journal of Global Optimization, pp. 1-25. ISSN 0925-5001. <a class="reference external" href="http://dx.doi.org/10.1007/s10898-012-9937-9">http://dx.doi.org/10.1007/s10898-012-9937-9</a></li>
 </ol>
@@ -238,6 +300,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#optional-parameters">Optional Parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-of-use">Example of Use</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-rbf-layer">Using the RBF Layer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rbf-layer-example">RBF Layer Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -274,7 +338,7 @@
           
     <div class="footer">
         &copy; Copyright 2013, J. M. Fowkes.
-      Last updated on 09 Jul, 2013.
+      Last updated on 25 Jul, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
         </div>

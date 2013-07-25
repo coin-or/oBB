@@ -1,2 +1,3 @@
 
-v0.1a, 5/7/2013 -- Initial alpha release. 
+v0.1a,  5/7/2013 -- Initial alpha release. 
+v0.2a, 26/7/2013 -- Added RBF Layer.

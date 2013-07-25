@@ -28,7 +28,7 @@ oBB requires the user to write a python script file which defines the functions 
 If using a first order model, the following functions are required:
 
 * **f(x)** - returns objective function :math:`f` at point :math:`x` (scalar)
-* **g(x)** - returns gradient :math:`\nabla_x f` of objective function at :math:`x` (numpy vector)
+* **g(x)** - returns gradient :math:`\nabla_x f` of objective function at :math:`x` (1D numpy array)
 
 and the bounding function:
 
@@ -36,7 +36,7 @@ and the bounding function:
 
 For a second order model we also require:
 
-* **H(x)** - returns Hessian :math:`\nabla_{xx} f` of objective function at :math:`x` (numpy matrix)
+* **H(x)** - returns Hessian :math:`\nabla_{xx} f` of objective function at :math:`x` (2D numpy array)
 
 and rather than bndH the bounding function:
 
@@ -151,7 +151,72 @@ Note that if using the MPICH2 implementation of MPI we first need to start an mp
 
 but this is not necessary for other MPI implmentations, e.g. OpenMPI.
 
-And that's all there is to it!
+And that's all there is to it! Well, almost...
+
+Using the RBF Layer
+-------------------
+oBB can optionally approximate the objective function :math:`f` by a radial basis function (RBF) surrogate and optimize the approximation instead (see [FGF2012]_ for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which the objective function should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.
+
+As before, the user is required to write a python script file which defines the functions and parameters necessary to solve the problem. In addition to the approximation model, algorithm type parameters and objective function described in `How to use oBB`_ only an :math:`n` by :math:`m` numpy array of :math:`m` points at which to sample the objective function needs to be specified.
+
+See the `RBF Layer Example`_ below for an in-depth worked example in python.
+
+RBF Layer Example
+-----------------
+Suppose we wish to solve an RBF approximation to the problem give in the `Example of Use`_ section:
+
+  .. math::
+
+    &\min_{x \in \mathcal{R}^n} \sum_{i=1}^n \sin(x_i) \\
+    \text{s.t. } \; &-1 \le x_i \le 1 \; \; \forall i=1,\dotsc,n \\
+    \text{and }  \; &-1 \le \sum_{i=1}^nx_i \le 1 
+
+We can code this up in a python script file, let's call it sins_rbf.py as follows:  
+
+  .. code-block:: python
+  
+	# Example RBF Layer code for oBB
+	from obb import obb_rbf
+	from numpy import sin,ones,zeros
+	from numpy.random import rand,seed
+
+	# Input Settings
+	# Algorithm (T1, T2_individual, T2_synchronised)
+	alg = 'T1'
+
+	# Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic, 
+	# c - norm cubic, gc - gershgorin cubic)
+	mod = 'c'
+
+	# Tolerance
+	tol = 1e-2
+
+	# Set up sum of sins test function
+	# Dimension
+	D = 2
+	# Constraints
+	l = -1*ones(D)
+	u = 1*ones(D)
+	A = ones((1,D))
+	lc = -1; uc = 1
+	# Required functions
+	f = lambda x: sum(sin(x))
+
+	# Generate 10*D sample points for RBF approximation
+	seed(5) # !!Sample points have to be the same on all processors!! 
+	pts = rand(10*D, D)
+
+	# Scale points so they lie in [l,u]
+	for i in range(0,D):
+	    pts[:,i] = l[i] + (u[i]-l[i])*pts[:,i]
+
+	# Name objective function
+	f.__name__ = 'RBF Sum of Sins'
+
+	# Run oBB
+	xs, fxs, tol, itr = obb_rbf(f, pts, l, u, alg, mod, A=A, lc=lc, uc=uc, tol=tol)
+
+Note the use of obb_rbf instead of obb and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sins_rbf.py, to run it see `Running the Algorithm`_. 
 
 References
 ----------

@@ -20,7 +20,7 @@ setup(
     author='J. Fowkes',
     author_email='jaroslav.fowkes@ed.ac.uk',
     packages=['obb', 'obb.test'],
-    scripts=['bin/sins.sh','bin/sins.py'],
+    scripts=['bin/sins.sh','bin/sins.py','bin/sins_rbf.sh','bin/sins_rbf.py'],
     url='http://pypi.python.org/pypi/oBB/',
     license='LGPLv2',
     long_description=open('README.txt').read(),
