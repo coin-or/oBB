@@ -21,10 +21,6 @@ def fit_rbf(fun, x):
     for i in range(0,N):
 	P[i,:] = hstack(( array([1]), x[i,:] ))
 
-    # Write out P
-    import config
-    config.P = P
-
     # Scaling parameters
     tl = ones(D)
 
@@ -45,6 +41,7 @@ def fit_rbf(fun, x):
     a = solve(A,b)
     
     # Write relevant global variables
+    import config
     config.N = N
     config.D = D
     config.a = a

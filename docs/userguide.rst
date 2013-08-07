@@ -16,7 +16,7 @@ where the domain :math:`\mathcal{D}` is convex, compact and the objective functi
 
 oBB uses local first or second order Taylor type approximations over balls within a parallel branch and bound framework. As with all branch and bound algorithms, the curse of dimensionality limits its use to low dimensional problems. The choice of whether to use first or second order approximations is down to the user  (see `How to use oBB`_). 
 
-For an in-depth technical description of the algorithm see the tech-report [CFG2013]_ and the paper [FGF2012]_.
+For an in-depth technical description of the algorithm see the tech-report [CFG2013]_ and the paper [FGF2013]_.
 
 How to use oBB
 --------------
@@ -155,7 +155,7 @@ And that's all there is to it! Well, almost...
 
 Using the RBF Layer
 -------------------
-oBB can optionally approximate the objective function :math:`f` by a radial basis function (RBF) surrogate and optimize the approximation instead (see [FGF2012]_ for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which the objective function should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.
+oBB can optionally approximate the objective function :math:`f` by a radial basis function (RBF) surrogate and optimize the approximation instead (see [FGF2013]_ for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which the objective function should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.
 
 As before, the user is required to write a python script file which defines the functions and parameters necessary to solve the problem. In addition to the approximation model, algorithm type parameters and objective function described in `How to use oBB`_ only an :math:`n` by :math:`m` numpy array of :math:`m` points at which to sample the objective function needs to be specified.
 
@@ -218,11 +218,39 @@ We can code this up in a python script file, let's call it sins_rbf.py as follow
 
 Note the use of obb_rbf instead of obb and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sins_rbf.py, to run it see `Running the Algorithm`_. 
 
+RBF Layer for the COCONUT Test Set
+----------------------------------
+oBB comes with a set of pre-computed RBF approximations to selected functions from the `COCONUT test set <http://www.mat.univie.ac.at/~neum/glopt/coconut/Benchmark/Benchmark.html>`_ that were used to produce the numerical results in the paper [CFG2013]_. In order to optimze these approximations using oBB, the user is required to write a python script file which defines the desired function and tolerance (see [CFG2013]_ for a list of all 31 functions available). For example, to optimize an RBF approximation to the 'hs041' function the user could write the following python script file, let's call it coconut.py: 
+
+    .. code-block:: python
+  
+	# Example COCONUT RBF code for oBB
+	from obb import obb_rbf_coconut
+
+	# Input Settings
+	# Algorithm (T1, T2_individual, T2_synchronised)
+	alg = 'T1'
+
+	# Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic, 
+	# c - norm cubic, gc - gershgorin cubic)	
+	mod = 'c'
+
+	# Tolerance (positive number e.g. 1e-2 or '12hr')
+	tol = '12hr'
+
+	# Choose RBF approximation from COCONUT test
+	f = 'hs041'
+
+	# Run oBB
+	xs, fxs, tol, itr = obb_rbf_coconut(f, alg, mod, tol=tol)
+  
+Note the use of obb_rbf_coconut and the optional 12hr tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see [CFG2013]_ for details). Of course one can also specific a desired tolerance (e.g. 1e-2) as before. This file is included in oBB as coconut.py, to run it see `Running the Algorithm`_. 
+
 References
 ----------
 
 .. [CFG2013]   
-   C. Cartis, J. M. Fowkes and N. I. M. Gould. (2013) "Branching and Bounding Improvements for Global Optimization Algorithms with Lipschitz Continuity Properties", ERGO Technical Report, no. 13-010, pp. 1-33. http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html
+   Cartis, C., Fowkes, J. M. and Gould, N. I. M. (2013) 'Branching and Bounding Improvements for Global Optimization Algorithms with Lipschitz Continuity Properties', *ERGO Technical Report*, no. 13-010, pp. 1-33. http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html
 
-.. [FGF2012]   
-   J. M. Fowkes, N. I. M. Gould and C. L. Farmer. (2012) "A Branch and Bound Algorithm for the Global Optimization of Hessian Lipschitz Continuous Functions", Journal of Global Optimization, pp. 1-25. ISSN 0925-5001. http://dx.doi.org/10.1007/s10898-012-9937-9 
+.. [FGF2013]   
+   Fowkes, J. M. , Gould,  N. I. M. and Farmer, C. L. (2013) 'A Branch and Bound Algorithm for the Global Optimization of Hessian Lipschitz Continuous Functions', *Journal of Global Optimization*, vol. 56, no. 4, pp. 1791-1815. http://dx.doi.org/10.1007/s10898-012-9937-9 

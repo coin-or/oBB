@@ -65,7 +65,7 @@
 </div></blockquote>
 <p>where the domain <span class="math">\(\mathcal{D}\)</span> is convex, compact and the objective function <span class="math">\(f\)</span> has Lipschitz continuous gradient or Hessian. oBB does not need to know the Lipschitz constants explicitly, it merely requires the user to supply elementwise bounds on the Hessian or derivative tensor of the objective function (see <a class="reference internal" href="#how-to-use-obb">How to use oBB</a>).</p>
 <p>oBB uses local first or second order Taylor type approximations over balls within a parallel branch and bound framework. As with all branch and bound algorithms, the curse of dimensionality limits its use to low dimensional problems. The choice of whether to use first or second order approximations is down to the user  (see <a class="reference internal" href="#how-to-use-obb">How to use oBB</a>).</p>
-<p>For an in-depth technical description of the algorithm see the tech-report <a class="reference internal" href="#cfg2013">[CFG2013]</a> and the paper <a class="reference internal" href="#fgf2012">[FGF2012]</a>.</p>
+<p>For an in-depth technical description of the algorithm see the tech-report <a class="reference internal" href="#cfg2013">[CFG2013]</a> and the paper <a class="reference internal" href="#fgf2013">[FGF2013]</a>.</p>
 </div>
 <div class="section" id="how-to-use-obb">
 <h2>How to use oBB<a class="headerlink" href="#how-to-use-obb" title="Permalink to this headline">¶</a></h2>
@@ -199,7 +199,7 @@
 </div>
 <div class="section" id="using-the-rbf-layer">
 <h2>Using the RBF Layer<a class="headerlink" href="#using-the-rbf-layer" title="Permalink to this headline">¶</a></h2>
-<p>oBB can optionally approximate the objective function <span class="math">\(f\)</span> by a radial basis function (RBF) surrogate and optimize the approximation instead (see <a class="reference internal" href="#fgf2012">[FGF2012]</a> for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which the objective function should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.</p>
+<p>oBB can optionally approximate the objective function <span class="math">\(f\)</span> by a radial basis function (RBF) surrogate and optimize the approximation instead (see <a class="reference internal" href="#fgf2013">[FGF2013]</a> for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which the objective function should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.</p>
 <p>As before, the user is required to write a python script file which defines the functions and parameters necessary to solve the problem. In addition to the approximation model, algorithm type parameters and objective function described in <a class="reference internal" href="#how-to-use-obb">How to use oBB</a> only an <span class="math">\(n\)</span> by <span class="math">\(m\)</span> numpy array of <span class="math">\(m\)</span> points at which to sample the objective function needs to be specified.</p>
 <p>See the <a class="reference internal" href="#rbf-layer-example">RBF Layer Example</a> below for an in-depth worked example in python.</p>
 </div>
@@ -259,27 +259,46 @@
 </div></blockquote>
 <p>Note the use of obb_rbf instead of obb and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sins_rbf.py, to run it see <a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a>.</p>
 </div>
+<div class="section" id="rbf-layer-for-the-coconut-test-set">
+<h2>RBF Layer for the COCONUT Test Set<a class="headerlink" href="#rbf-layer-for-the-coconut-test-set" title="Permalink to this headline">¶</a></h2>
+<p>oBB comes with a set of pre-computed RBF approximations to selected functions from the <a class="reference external" href="http://www.mat.univie.ac.at/~neum/glopt/coconut/Benchmark/Benchmark.html">COCONUT test set</a> that were used to produce the numerical results in the paper <a class="reference internal" href="#cfg2013">[CFG2013]</a>. In order to optimze these approximations using oBB, the user is required to write a python script file which defines the desired function and tolerance (see <a class="reference internal" href="#cfg2013">[CFG2013]</a> for a list of all 31 functions available). For example, to optimize an RBF approximation to the &#8216;hs041&#8217; function the user could write the following python script file, let&#8217;s call it coconut.py:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="c"># Example COCONUT RBF code for oBB</span>
+<span class="kn">from</span> <span class="nn">obb</span> <span class="kn">import</span> <span class="n">obb_rbf_coconut</span>
+
+<span class="c"># Input Settings</span>
+<span class="c"># Algorithm (T1, T2_individual, T2_synchronised)</span>
+<span class="n">alg</span> <span class="o">=</span> <span class="s">&#39;T1&#39;</span>
+
+<span class="c"># Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,</span>
+<span class="c"># c - norm cubic, gc - gershgorin cubic)</span>
+<span class="n">mod</span> <span class="o">=</span> <span class="s">&#39;c&#39;</span>
+
+<span class="c"># Tolerance (positive number e.g. 1e-2 or &#39;12hr&#39;)</span>
+<span class="n">tol</span> <span class="o">=</span> <span class="s">&#39;12hr&#39;</span>
+
+<span class="c"># Choose RBF approximation from COCONUT test</span>
+<span class="n">f</span> <span class="o">=</span> <span class="s">&#39;hs041&#39;</span>
+
+<span class="c"># Run oBB</span>
+<span class="n">xs</span><span class="p">,</span> <span class="n">fxs</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">itr</span> <span class="o">=</span> <span class="n">obb_rbf_coconut</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">alg</span><span class="p">,</span> <span class="n">mod</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note the use of obb_rbf_coconut and the optional 12hr tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see <a class="reference internal" href="#cfg2013">[CFG2013]</a> for details). Of course one can also specific a desired tolerance (e.g. 1e-2) as before. This file is included in oBB as coconut.py, to run it see <a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a>.</p>
+</div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
 <table class="docutils citation" frame="void" id="cfg2013" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[CFG2013]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>, <a class="fn-backref" href="#id4">3</a>)</em> <ol class="last upperalpha simple" start="3">
-<li>Cartis, J. M. Fowkes and N. I. M. Gould. (2013) &#8220;Branching and Bounding Improvements for Global Optimization Algorithms with Lipschitz Continuity Properties&#8221;, ERGO Technical Report, no. 13-010, pp. 1-33. <a class="reference external" href="http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html">http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html</a></li>
-</ol>
-</td></tr>
+<tr><td class="label">[CFG2013]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>, <a class="fn-backref" href="#id4">3</a>, <a class="fn-backref" href="#id6">4</a>, <a class="fn-backref" href="#id7">5</a>, <a class="fn-backref" href="#id8">6</a>)</em> Cartis, C., Fowkes, J. M. and Gould, N. I. M. (2013) &#8216;Branching and Bounding Improvements for Global Optimization Algorithms with Lipschitz Continuity Properties&#8217;, <em>ERGO Technical Report</em>, no. 13-010, pp. 1-33. <a class="reference external" href="http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html">http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="fgf2012" rules="none">
+<table class="docutils citation" frame="void" id="fgf2013" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[FGF2012]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id5">2</a>)</em> <ol class="last upperalpha simple" start="10">
-<li><ol class="first upperalpha" start="13">
-<li>Fowkes, N. I. M. Gould and C. L. Farmer. (2012) &#8220;A Branch and Bound Algorithm for the Global Optimization of Hessian Lipschitz Continuous Functions&#8221;, Journal of Global Optimization, pp. 1-25. ISSN 0925-5001. <a class="reference external" href="http://dx.doi.org/10.1007/s10898-012-9937-9">http://dx.doi.org/10.1007/s10898-012-9937-9</a></li>
-</ol>
-</li>
-</ol>
-</td></tr>
+<tr><td class="label">[FGF2013]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id5">2</a>)</em> Fowkes, J. M. , Gould,  N. I. M. and Farmer, C. L. (2013) &#8216;A Branch and Bound Algorithm for the Global Optimization of Hessian Lipschitz Continuous Functions&#8217;, <em>Journal of Global Optimization</em>, vol. 56, no. 4, pp. 1791-1815. <a class="reference external" href="http://dx.doi.org/10.1007/s10898-012-9937-9">http://dx.doi.org/10.1007/s10898-012-9937-9</a></td></tr>
 </tbody>
 </table>
 </div>
@@ -302,6 +321,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#using-the-rbf-layer">Using the RBF Layer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#rbf-layer-example">RBF Layer Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rbf-layer-for-the-coconut-test-set">RBF Layer for the COCONUT Test Set</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -338,7 +358,7 @@
           
     <div class="footer">
         &copy; Copyright 2013, J. M. Fowkes.
-      Last updated on 25 Jul, 2013.
+      Last updated on 06 Aug, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
         </div>

@@ -260,3 +260,166 @@ def obb_rbf(f, pts, l, u, alg, mod, A=None, lc=None, uc=None, tol=1e-2, heur=0, 
 		print('Processor %i Number of subproblems solved: %d ') % (rank,boundw.calls)
 	
 	return xs, fxs, tol, itr	
+
+# obb_rbf_coconut: Main Function with RBF Layer on COCONUT test set 
+#
+# Principal arguments are:
+# f - RBF approximation from COCONUT test set to optimize
+# alg - algorithm type (T1, T2_individual, T2_synchronised)
+# mod - model type (q - norm quadratic, c - norm cubic, g/Hz/lbH/E0/Ediag -  min eig. quadratic, 
+# 		   gc - gershgorin cubic)
+#
+# Optional arguments are:
+# tol - tolerance 
+# heur - heuristic lattice (0 - off, 1 - on)
+# toltype - tolerance type (r - relative, a - absolute)
+# vis - visualisation (0 - off, 1 - on)
+#
+def obb_rbf_coconut(f, alg, mod, tol=1e-2, heur=0, toltype='r', vis=0, countf=1, countsp=1):
+
+	# MPI
+	from mpi4py import MPI
+
+	# MPI comm
+	comm = MPI.COMM_WORLD
+	rank = comm.Get_rank()
+
+	# Version number
+	from version import __version__
+
+	# Circle class 
+	from circle import circle
+
+	# Model type
+	if(mod in ['g','Hz','lbH','E0','Ediag','q']):
+		from lboundme_loc import bound
+	elif(mod in ['gc','c']):
+		from lboundgc_loc import bound
+	else:
+		raise RuntimeError('Model must be Norm Quadratic (q), Norm Cubic (c), Min Eigenvalue Type Quadratic (g, Hz, lbH, E0, Ediag) or Gershgorin Cubic (gc).')	
+
+	# Algorithm
+	if(alg == 'T1'):
+		from T1 import runpar
+	elif(alg == 'T2_individual'):
+		from T2_individual import runpar
+	elif(alg == 'T2_synchronised'):	
+		from T2_synchronised import runpar
+	else:
+		raise RuntimeError('Algorithm must be T1, T2_individual or T2_synchronised.')	
+		
+	# RBF Layer
+	# Load RBF surrogate
+	from numpy import load
+	from pkg_resources import resource_stream
+	pth = resource_stream('obb','coconut/'+str(f))
+	
+	# Load data
+	data = load(pth)
+	N = data['N']
+	D = data['D']
+	a = data['a']
+	x = data['x']
+	l = data['l']
+	u = data['u']
+	tl = data['tl']
+	tl2 = data['tl2']
+	Ac = data['Ac']
+	lc = data['lc']
+	uc = data['uc']
+	if(Ac.shape[0] == 0):
+		Ac = None
+		lc = None
+		uc = None
+
+	# Set up relevant global variables
+	import config 
+	config.D = D
+	config.N = N
+	config.a = a
+	config.tl = tl
+	config.tl2 = tl2
+	config.x = x
+	
+	# Load tolerance for 12hrs on serial if requested
+	if(tol == '12hr'):
+	    	tol = load(resource_stream('obb','coconut_tol'))[str(f)]
+		toltype = 'a'
+	
+	# Set up RBF function, gradient and Hessian
+	from rbf_funcs import frdl, grdl, hrdl
+	
+	# Import RBF Bounding Methods
+	from rbf_bounds import getkgc as bndH
+	from rbf_bounds import getkhc as bndT
+		
+	# Define decorator for counting function calls
+	def count_calls(fn):
+		def wrapper(*args, **kwargs):
+			wrapper.calls += 1
+			return fn(*args, **kwargs)
+		wrapper.calls = 0
+		wrapper.__name__= fn.__name__
+		return wrapper
+
+	# Optionally count RBF evals
+	if(countf == 1):
+
+		@count_calls
+		def frdlw(x):
+			return frdl(x)
+	else:
+		frdlw = frdl
+
+	# Optionally count subproblems solved
+	if(countsp == 1):
+	
+		@count_calls
+		def boundw(*a,**kw):
+			return bound(*a,**kw)
+	else:
+		boundw = bound
+		
+	# Master Process
+	if(rank == 0):
+
+		# Imports
+		from time import localtime, strftime
+		from numpy import size
+	
+		# Get time
+		t = localtime()
+
+		# Get number of processors
+		numprocs = comm.Get_size()	
+
+		# Output basic info
+		print('****************************************************')
+		print('* Trust Region Optimization using Branch and Bound *')
+		print('* Time: %02d:%02d:%02d  Date: %s   Ver: %s *') % (t[3], t[4], t[5], strftime("%d %B %Y",t),__version__)
+		print('****************************************************\n')
+
+		# Output problem details
+		print('Problem Details: \n----------------')
+		print('Using RBF Layer, number of samples: %d') % N
+		print('Dimension: %d \nObjective Function: %s ') % (D, str(f))
+		print('l: '),
+		print l
+		print('u: '),
+		print u 
+		print('Model Type: %s') % mod
+		print('Number of Processes: %i') % numprocs
+
+		# Run TRS Overlap code
+		print('\nStarting Optimization...')
+		
+	# All processes run selected algorithm
+	xs, fxs, tol, itr = runpar(frdlw, grdl, hrdl, (bndH,mod), (bndT,mod), l, u, boundw, circle, A=Ac, lc=lc, uc=uc, Tol=tol, Heur=heur, TolType=toltype, Vis=vis)
+	  
+	if(countf == 1):
+		print('Processor %i Number of RBF surrogate evaluations: %d ') % (rank,frdlw.calls)
+
+	if(countsp == 1):
+		print('Processor %i Number of subproblems solved: %d ') % (rank,boundw.calls)
+	
+	return xs, fxs, tol, itr	
