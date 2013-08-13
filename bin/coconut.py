@@ -9,20 +9,20 @@ alg = 'T1'
 # gc - gershgorin cubic)
 mod = 'c'
 
-# Tolerance (positive number e.g. 1e-2 or '12hr')
-tol = '12hr'
-
-# Heuristic lattice (0 - off, 1 - on)
-heur = 0
+# Tolerance (can also be '12hr')
+tol = 1e-2
 
 # Tolerance type (r - relative, a - absolute)
-toltype = 'a'
+toltype = 'r'
 
 # Visualisation !!Requires matplotlib!! (0 - off, 1 - on)
 vis = 0
+
+# QP solver (cvxopt, quadprog)
+qpsolver = 'cvxopt'
 
 # Choose RBF approximation from COCONUT test
 f = 'hs041'
 
 # Run oBB
-xs, fxs, tol, itr = obb_rbf_coconut(f, alg, mod, tol=tol, heur=heur, toltype=toltype, vis=vis)
+xs, fxs, tol, itr = obb_rbf_coconut(f, alg, mod, tol=tol, toltype=toltype, vis=vis, qpsolver=qpsolver)

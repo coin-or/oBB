@@ -1,7 +1,9 @@
 include *.txt
-include docs/latex/*.pdf
+include docs/latex/oBB.pdf
+include docs/html/*
+include docs/html/_static/*
+include docs/html/_sources/*
+include quadprog/*
+include pyquadprog/*
 include obb/coconut/*
 include obb/coconut_tol
-#include obb/*.pyf
-#include obb/*.f90
-#include obb/.f2py_f2cmap

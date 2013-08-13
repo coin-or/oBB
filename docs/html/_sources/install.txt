@@ -5,32 +5,26 @@ Requirements
 ------------
 oBB requires the following software to be installed:
 
-* Python 2.6 to 2.7 (http://www.python.org/)
-* A working implementation of MPI-2 (e.g. OpenMPI, http://www.open-mpi.org/)
+* `Python 2.6 to 2.7 <http://www.python.org/>`_
+* A working implementation of MPI-2 (e.g. `OpenMPI <http://www.open-mpi.org/>`_ or `MPICH <http://www.mpich.org/>`_)
 
-.. * NAG Fortran Library, tested with Mark 23 FLL6I23DCL  (http://www.nag.co.uk/)
+Additionally, the following python packages should be installed (these will be installed automatically if using `pip <http://www.pip-installer.org/>`_, see `Installation using pip`_):
 
-Additionally, the following python packages should be installed (these will be installed automatically if using *pip*, see `Installation using pip (recommended)`_):
+* `NumPy 1.3.0 or higher <http://www.numpy.org/>`_ 
+* `MPI for Python 1.3 or higher <http://mpi4py.scipy.org/>`_
+* `CVXOPT 1.1.3 or higher <http://cvxopt.org/>`_ 
 
-* NumPy 1.3.0 or higher (http://www.numpy.org/)
-* MPI for Python 1.3 or higher (http://mpi4py.scipy.org/) 
-* CVXOPT 1.1.3 or higher (http://cvxopt.org/)
+Optionally, `matplotlib 1.1.0 or higher <http://www.matplotlib.org/>`_ may be manually installed for visualising the algorithm in 2D.
 
-Optionally, the following software may be manually installed for added functionality:
-
-.. * SymPy 0.7.1 or higher (http://www.sympy.org/) - for automatically calculating derivatives
-
-* matplotlib 1.1.0 or higher (http://www.matplotlib.org/) - for visualising the algorithm in 2D
-
-Installation using pip (recommended)
---------------------------------------
-For easy installation, use *pip* (http://www.pip-installer.org/):
+Installation using pip
+----------------------
+For easy installation, use `pip <http://www.pip-installer.org/>`_:
 
  .. code-block:: bash
 
     $ [sudo] pip install obb
 
-or alternatively *easy_install* (deprecated):
+or alternatively *easy_install*:
 
  .. code-block:: bash
 
@@ -59,7 +53,7 @@ and then build and install manually using:
  .. code-block:: bash
 
     $ python setup.py build
-    $ python setup.py install
+    $ [sudo] python setup.py install
 
 If you do not have root privileges or you want to install oBB for your private use, you can use:
 
@@ -71,31 +65,11 @@ instead.
 
 Uninstallation
 --------------
-If oBB was installed using *pip* you can uninstall as follows:
+If oBB was installed using `pip <http://www.pip-installer.org/>`_ you can uninstall as follows:
 
  .. code-block:: bash
 
     $ [sudo] pip uninstall obb
 
 If oBB was installed manually you have to remove the installed files by hand (located in your python site-packages directory).
-
-.. Compiling the QP Solver Interface
-   ---------------------------------
-   The QP solver interface should be compiled using f2py (part of NumPy). 
-
-   First of all, make sure f2py can find your fortran compiler. The command::
-
-     $ f2py -c --help-fcompiler
-
-   will list the fortran compilers available on your platform. Pick a suitable fotran compiler, e.g. intelem.
-
-   You can then compile qpsolver.f90 using::
-  
-     $ f2py -c --fcompiler=intelem qpsolver.pyf -I$nag_dir/nag_interface_blocks qpsolver.f90 $nag_dir/lib/libnag_mkl.so
-  
-   where $nag_dir is the NAG library installation directory. See the NAG library *User's Note* for more details on compiling and linking against the NAG library.
-
-   The QP solver with linear constraints, qpsolver_linear.f90, should be compiled similarly::
-
-     $ f2py -c --fcompiler=intelem qpsolver_lincon.pyf -I$nag_dir/nag_interface_blocks qpsolver_lincon.f90 $nag_dir/lib/libnag_mkl.so
 

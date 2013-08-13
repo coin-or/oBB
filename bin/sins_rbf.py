@@ -1,21 +1,18 @@
 # Example RBF Layer code for oBB
 from obb import obb_rbf
-from numpy import sin,ones,zeros
+from numpy import sin, ones
 from numpy.random import rand,seed
 
 # Input Settings
 # Algorithm (T1, T2_individual, T2_synchronised)
 alg = 'T1'
 
-# Model type (q - norm quadratic, c - norm cubic, g/Hz/lbH/E0/Ediag - min eig. quadratic, 
-# gc - gershgorin cubic)
+# Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic, 
+# c - norm cubic, gc - gershgorin cubic)
 mod = 'c'
 
 # Tolerance
 tol = 1e-2
-
-# Heuristic lattice (0 - off, 1 - on)
-heur = 0
 
 # Tolerance type (r - relative, a - absolute)
 toltype = 'r'
@@ -23,14 +20,17 @@ toltype = 'r'
 # Visualisation !!Requires matplotlib!! (0 - off, 1 - on)
 vis = 0
 
+# QP solver (cvxopt, quadprog)
+qpsolver = 'cvxopt'
+
 # Set up sum of sins test function
 # Dimension
 D = 2
 # Constraints
 l = -1*ones(D)
 u = 1*ones(D)
-A = ones((1,D))
-lc = -1; uc = 1
+A = -1*ones((1,D))
+b = 1
 # Required functions
 f = lambda x: sum(sin(x))
 
@@ -46,4 +46,4 @@ for i in range(0,D):
 f.__name__ = 'RBF Sum of Sins'
 
 # Run oBB
-xs, fxs, tol, itr = obb_rbf(f, pts, l, u, alg, mod, A=A, lc=lc, uc=uc, tol=tol, heur=heur, toltype=toltype, vis=vis)
+xs, fxs, tol, itr = obb_rbf(f, pts, l, u, alg, mod, A=A, b=b, tol=tol, toltype=toltype, vis=vis, qpsolver=qpsolver)

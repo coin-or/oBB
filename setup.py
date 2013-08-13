@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # Setup script for oBB.
-from setuptools import setup
+from setuptools import setup, Extension
 from sys import version_info, exit
+from numpy import get_include
 
 # Make sure the correct version of Python is installed.
 if (version_info[:2] < (2,6))or(version_info[0] == 3):
@@ -11,6 +12,13 @@ if (version_info[:2] < (2,6))or(version_info[0] == 3):
 
 # Get package version
 exec(open('obb/version.py').read())
+
+# Setup QuadProg++ Extension
+ext_modules = [Extension('PyQuadProg',
+                          sources=['pyquadprog/PyQuadProg.cpp','quadprog/QuadProg++.cc','quadprog/Array.cc'],
+			  include_dirs=['pyquadprog','quadprog',get_include()],
+			  language='c++'
+			  )]
 
 # Setup package
 setup(
@@ -23,6 +31,7 @@ setup(
     scripts=['bin/sins.sh','bin/sins.py','bin/sins_rbf.sh','bin/sins_rbf.py','bin/coconut.sh','bin/coconut.py'],
     include_package_data=True,
     package_data={'obb': ['obb/coconut/*','obb/coconut_tol']},
+    ext_modules=ext_modules,
     url='http://pypi.python.org/pypi/oBB/',
     license='LGPLv2',
     long_description=open('README.txt').read(),
@@ -30,7 +39,6 @@ setup(
         "numpy >= 1.3.0",
         "mpi4py >= 1.3",
         "cvxopt >= 1.1.3",
-        #"sympy >= 0.7.1",
         #"matplotlib >= 1.1.0",
     ],
     classifiers=[

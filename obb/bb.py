@@ -13,17 +13,19 @@
 # alg - algorithm type (T1, T2_individual, T2_synchronised)
 # mod - model type (q - norm quadratic, c - norm cubic, g/Hz/lbH/E0/Ediag -  min eig. quadratic, 
 # 		   gc - gershgorin cubic)
-# A - constraint matrix
-# lc - constraint lower bound 
-# uc - constraint upper bounds 
+# A - inequality constraint matrix
+# b - inequality constraint upper bound
+# E - equality constraint matrix
+# d - equality constraint upper bound
 #
 # Optional arguments are:
 # tol - tolerance 
 # heur - heuristic lattice (0 - off, 1 - on)
 # toltype - tolerance type (r - relative, a - absolute)
 # vis - visualisation (0 - off, 1 - on)
+# qpsolver - QP solver (quadprog, cvxopt) 
 #
-def obb(f, g, H, bndH, bndT, l, u, alg, mod, A=None, lc=None, uc=None, tol=1e-2, heur=0, toltype='r', vis=0, countf=1, countsp=1):
+def obb(f, g, H, bndH, bndT, l, u, alg, mod, A=None, b=None, E=None, d=None, tol=1e-2, heur=0, toltype='r', vis=0, qpsolver='cvxopt', countf=1, countsp=1):
 
 	# MPI
 	from mpi4py import MPI
@@ -104,10 +106,9 @@ def obb(f, g, H, bndH, bndT, l, u, alg, mod, A=None, lc=None, uc=None, tol=1e-2,
 		# Output problem details
 		print('Problem Details: \n----------------')
 		print('Dimension: %d \nObjective Function: %s ') % (len(l), f.__name__)
-		print('l: '),
-		print l
-		print('u: '),
-		print u 
+		print 'l:', l, '\nu:', u
+		if(A != None): print 'A:', A, '\nb:', b
+		if(E != None): print 'E:', E, '\nd:', d
 		print('Model Type: %s') % mod
 		print('Number of Processes: %i') % numprocs
 
@@ -115,7 +116,7 @@ def obb(f, g, H, bndH, bndT, l, u, alg, mod, A=None, lc=None, uc=None, tol=1e-2,
 		print('\nStarting Optimization...')
 		
 	# All processes run selected algorithm
-	xs, fxs, tol, itr = runpar(fw, g, H, (bndH,mod), (bndT,mod), l, u, boundw, circle, A=A, lc=lc, uc=uc, Tol=tol, Heur=heur, TolType=toltype, Vis=vis)
+	xs, fxs, tol, itr = runpar(fw, g, H, (bndH,mod), (bndT,mod), l, u, boundw, circle, A=A, b=b, E=E, d=d, Tol=tol, Heur=heur, TolType=toltype, Vis=vis, qpsolver=qpsolver)
 	  
 	if(countf == 1):
 		print('Processor %i Number of function evaluations: %d ') % (rank,fw.calls)
@@ -144,8 +145,9 @@ def obb(f, g, H, bndH, bndT, l, u, alg, mod, A=None, lc=None, uc=None, tol=1e-2,
 # heur - heuristic lattice (0 - off, 1 - on)
 # toltype - tolerance type (r - relative, a - absolute)
 # vis - visualisation (0 - off, 1 - on)
+# qpsolver - QP solver (quadprog, cvxopt) 
 #
-def obb_rbf(f, pts, l, u, alg, mod, A=None, lc=None, uc=None, tol=1e-2, heur=0, toltype='r', vis=0, countf=1, countsp=1):
+def obb_rbf(f, pts, l, u, alg, mod,  A=None, b=None, E=None, d=None, tol=1e-2, heur=0, toltype='r', vis=0, qpsolver='cvxopt', countf=1, countsp=1):
 
 	# MPI
 	from mpi4py import MPI
@@ -240,10 +242,9 @@ def obb_rbf(f, pts, l, u, alg, mod, A=None, lc=None, uc=None, tol=1e-2, heur=0, 
 		print('Problem Details: \n----------------')
 		print('Using RBF Layer, number of samples: %d') % size(pts,0)
 		print('Dimension: %d \nObjective Function: %s ') % (len(l), f.__name__)
-		print('l: '),
-		print l
-		print('u: '),
-		print u 
+		print 'l:', l, '\nu:', u
+		if(A != None): print 'A:', A, '\nb:', b
+		if(E != None): print 'E:', E, '\nd:', d
 		print('Model Type: %s') % mod
 		print('Number of Processes: %i') % numprocs
 
@@ -251,7 +252,7 @@ def obb_rbf(f, pts, l, u, alg, mod, A=None, lc=None, uc=None, tol=1e-2, heur=0, 
 		print('\nStarting Optimization...')
 		
 	# All processes run selected algorithm
-	xs, fxs, tol, itr = runpar(frdlw, grdl, hrdl, (bndH,mod), (bndT,mod), l, u, boundw, circle, A=A, lc=lc, uc=uc, Tol=tol, Heur=heur, TolType=toltype, Vis=vis)
+	xs, fxs, tol, itr = runpar(frdlw, grdl, hrdl, (bndH,mod), (bndT,mod), l, u, boundw, circle, A=A, b=b, E=E, d=d, Tol=tol, Heur=heur, TolType=toltype, Vis=vis, qpsolver=qpsolver)
 	  
 	if(countf == 1):
 		print('Processor %i Number of RBF surrogate evaluations: %d ') % (rank,frdlw.calls)
@@ -274,8 +275,9 @@ def obb_rbf(f, pts, l, u, alg, mod, A=None, lc=None, uc=None, tol=1e-2, heur=0, 
 # heur - heuristic lattice (0 - off, 1 - on)
 # toltype - tolerance type (r - relative, a - absolute)
 # vis - visualisation (0 - off, 1 - on)
+# qpsolver - QP solver (quadprog, cvxopt) 
 #
-def obb_rbf_coconut(f, alg, mod, tol=1e-2, heur=0, toltype='r', vis=0, countf=1, countsp=1):
+def obb_rbf_coconut(f, alg, mod, tol=1e-2, heur=0, toltype='r', vis=0, qpsolver='cvxopt', countf=1, countsp=1):
 
 	# MPI
 	from mpi4py import MPI
@@ -310,7 +312,7 @@ def obb_rbf_coconut(f, alg, mod, tol=1e-2, heur=0, toltype='r', vis=0, countf=1,
 		
 	# RBF Layer
 	# Load RBF surrogate
-	from numpy import load
+	from numpy import load, hstack, vstack
 	from pkg_resources import resource_stream
 	pth = resource_stream('obb','coconut/'+str(f))
 	
@@ -324,13 +326,10 @@ def obb_rbf_coconut(f, alg, mod, tol=1e-2, heur=0, toltype='r', vis=0, countf=1,
 	u = data['u']
 	tl = data['tl']
 	tl2 = data['tl2']
-	Ac = data['Ac']
-	lc = data['lc']
-	uc = data['uc']
-	if(Ac.shape[0] == 0):
-		Ac = None
-		lc = None
-		uc = None
+	A = data['A']
+	b = data['b']
+	E = data['E']
+	d = data['d']
 
 	# Set up relevant global variables
 	import config 
@@ -403,10 +402,9 @@ def obb_rbf_coconut(f, alg, mod, tol=1e-2, heur=0, toltype='r', vis=0, countf=1,
 		print('Problem Details: \n----------------')
 		print('Using RBF Layer, number of samples: %d') % N
 		print('Dimension: %d \nObjective Function: %s ') % (D, str(f))
-		print('l: '),
-		print l
-		print('u: '),
-		print u 
+		print 'l:', l, '\nu:', u
+		if(A.shape[0] != 0): print 'A:', A, '\nb:', b
+		if(E.shape[0] != 0): print 'E:', E, '\nd:', d
 		print('Model Type: %s') % mod
 		print('Number of Processes: %i') % numprocs
 
@@ -414,7 +412,7 @@ def obb_rbf_coconut(f, alg, mod, tol=1e-2, heur=0, toltype='r', vis=0, countf=1,
 		print('\nStarting Optimization...')
 		
 	# All processes run selected algorithm
-	xs, fxs, tol, itr = runpar(frdlw, grdl, hrdl, (bndH,mod), (bndT,mod), l, u, boundw, circle, A=Ac, lc=lc, uc=uc, Tol=tol, Heur=heur, TolType=toltype, Vis=vis)
+	xs, fxs, tol, itr = runpar(frdlw, grdl, hrdl, (bndH,mod), (bndT,mod), l, u, boundw, circle, A=A, b=b, E=E, d=d, Tol=tol, Heur=heur, TolType=toltype, Vis=vis, qpsolver=qpsolver)
 	  
 	if(countf == 1):
 		print('Processor %i Number of RBF surrogate evaluations: %d ') % (rank,frdlw.calls)

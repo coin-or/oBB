@@ -8,11 +8,12 @@ oBB is designed to solve the global optimization problem
 
   .. math::
 
-    &\min_{x \in \mathcal{R}^n} f(x) \\
+    &\min_{x \in \mathbb{R}^n} f(x) \\
     \text{s.t. } \; &l \le x \le u \\
-    \text{and } \; &lc \le Ax \le uc
+    \text{and } \;  &Ax \le b \\
+		    &Ex = d
 
-where the domain :math:`\mathcal{D}` is convex, compact and the objective function :math:`f` has Lipschitz continuous gradient or Hessian. oBB does not need to know the Lipschitz constants explicitly, it merely requires the user to supply elementwise bounds on the Hessian or derivative tensor of the objective function (see `How to use oBB`_).
+where the objective function :math:`f` has Lipschitz continuous gradient or Hessian. oBB does not need to know the Lipschitz constants explicitly, it merely requires the user to supply elementwise bounds on the Hessian or derivative tensor of the objective function (see `How to use oBB`_). The linear inequality constraints :math:`Ax \le b` and equality constraints :math:`Ex = d` are optional but the bound constraints :math:`l \le x \le u` are required.
 
 oBB uses local first or second order Taylor type approximations over balls within a parallel branch and bound framework. As with all branch and bound algorithms, the curse of dimensionality limits its use to low dimensional problems. The choice of whether to use first or second order approximations is down to the user  (see `How to use oBB`_). 
 
@@ -20,59 +21,65 @@ For an in-depth technical description of the algorithm see the tech-report [CFG2
 
 How to use oBB
 --------------
-oBB requires the user to write a python script file which defines the functions and parameters necessary to solve the problem. These are determined by the choice of a first or second order approximation model (see [CFG2013]_ for details):
+oBB requires the user to write a python script file that defines the functions and parameters necessary to solve the global optimization problem and then passes them to the main **obb** function (see `Example of Use`_). The necessary functions are determined by the choice of a first or second order approximation model. The following approximation models can be passed to oBB's **obb** function using the **mod** argument (see [CFG2013]_ for details):
 
-* First order models: *q* - norm based,  *g*, *Hz*, *lbH*, *E0*, *Ediag* - minimum eigenvalue based
-* Second order models: *c* - norm based, *gc* - minimum eigenvalue based
+* First order models: **'q'** - norm based,  **'g'**, **'Hz'**, **'lbH'**, **'E0'**, **'Ediag'** - minimum eigenvalue based
+* Second order models: **'c'** - norm based, **'gc'** - minimum eigenvalue based
 
-If using a first order model, the following functions are required:
+If using a first order model, the user is required to write the following functions:
 
 * **f(x)** - returns objective function :math:`f` at point :math:`x` (scalar)
-* **g(x)** - returns gradient :math:`\nabla_x f` of objective function at :math:`x` (1D numpy array)
+* **g(x)** - returns gradient :math:`\nabla_x f` of objective function at :math:`x` (numpy 1D-array)
 
-and the bounding function:
+along with the bounding function:
 
-* **bndH(l,u)** - returns two numpy matrices of elementwise lower and upper bounds on the Hessian :math:`\nabla_{xx} f` of the objective function over :math:`[l,u]`
+* **bndH(l,u)** - returns two numpy 2D-arrays of elementwise lower and upper bounds on the Hessian :math:`\nabla_{xx} f` of the objective function over :math:`[l,u]`
 
-For a second order model we also require:
+For a second order model the user is additionally required to write the function:
 
-* **H(x)** - returns Hessian :math:`\nabla_{xx} f` of objective function at :math:`x` (2D numpy array)
+* **H(x)** - returns Hessian :math:`\nabla_{xx} f` of objective function at :math:`x` (numpy 2D-array)
 
-and rather than bndH the bounding function:
+and rather than **bndH** the bounding function:
 
-* **bndT(l,u)** - returns two third order numpy tensors of elementwise lower and upper bounds on the derivative tensor :math:`\nabla_{xxx} f` of the objective function over :math:`[l,u]`
+* **bndT(l,u)** - returns two numpy 3D-arrays of elementwise lower and upper bounds on the derivative tensor :math:`\nabla_{xxx} f` of the objective function over :math:`[l,u]`
 
-We now need only specify the type of parallel branch and bound algorithm to use (again, see [CFG2013]_ for details):
+The type of parallel branch and bound algorithm to use should be passed to oBB's **obb** function using the **alg** argument and can be one of the following (see [CFG2013]_ for details):
 
-* *T1* - bounds in parallel
-* *T2_individual*, *T2_synchronised* - tree in parallel
+* **'T1'** - bounds in parallel
+* **'T2_individual'**, **'T2_synchronised'** - tree in parallel
 
 See `Example of Use`_ for an in-depth worked example in python.
 
-Optional Parameters
--------------------
-oBB allows the user to specify several optional parameters to control the behaviour of the algorithm:
+Optional Arguments
+------------------
+oBB allows the user to specify several optional arguments that control the behaviour of the algorithm:
 
-* *tol* - objective function tolerance (e.g. 1e-2, the default)
-* *toltype* - tolerance type (r - relative [default], a - absolute)
-* *countf* - count objective function evaluations (0 - off, 1 - on [default])
-* *countsp* - count subproblem evaluations (0 - off, 1 - on [default])
+* **tol** - objective function tolerance (e.g. **1e-2**, the default)
+* **toltype** - tolerance type (**'r'** - relative [default], **'a'** - absolute)
+* **countf** - count objective function evaluations (**0** - off, **1** - on [default])
+* **countsp** - count subproblem evaluations (**0** - off, **1** - on [default])
 
-and if matplotlib (http://www.matplotlib.org/) is installed:
+and if `matplotlib <http://www.matplotlib.org/>`_ is installed:
 
-* vis - visualisation of the algorithm in 2D (0 - off [default], 1 - on)
+* **vis** - visualisation of the algorithm in 2D (**0** - off [default], **1** - on)
 
-Note that the linear constraint parameters :math:`A, lc` and  :math:`uc` are also optional as the optimization problem is only required to be bound constrained.
+Note that the inequality constraint arguments :math:`A, b` and  equality constraint arguments :math:`E, d` are also optional as the optimization problem is only required to be bound constrained.
+
+The user can also specify the QP solver that the algorithm calls to obtain feasible upper bounds (see [CFG2013]_ for details). At present the user can choose from `CVXOPT's qp solver <http://cvxopt.org/>`_ or the `QuadProg++ solver <http://github.com/mpy/PyQuadProg/>`_ using the optional argument:    
+
+* **qpsolver** - QP solver to use (**'cvxopt'** - CVXOPT's qp [default], **'quadprog'** - QuadProg++)
+
+Note that the QuadProg++ solver is faster as it is written in C++ but has very limited error handling and may not work in all cases. The CVXOPT solver is slower as it is written entirely in Python but considerably more stable.
 
 Example of Use
 --------------
-Suppose we wish to solve the following problem:
+Suppose we wish to solve the following global optimization problem:
 
   .. math::
 
-    &\min_{x \in \mathcal{R}^n} \sum_{i=1}^n \sin(x_i) \\
+    &\min_{x \in \mathbb{R}^n} \sum_{i=1}^n \sin(x_i) \\
     \text{s.t. } \; &-1 \le x_i \le 1 \; \; \forall i=1,\dotsc,n \\
-    \text{and }  \; &-1 \le \sum_{i=1}^nx_i \le 1
+    \text{and }  \; &\sum_{i=1}^n -x_i \le 1
 
 One can see that the gradient :math:`g`, Hessian :math:`H` and third order derivative tensor :math:`T` are given by
 
@@ -90,60 +97,60 @@ We can code this up in a python script file, let's call it sins.py as follows:
 
   .. code-block:: python
   
-    # Example code for oBB
-    from obb import obb
-    from numpy import sin,cos,diag,ones,zeros
+      # Example code for oBB
+      from obb import obb
+      from numpy import sin, cos, diag, ones, zeros
 
-    # Input Settings
-    # Algorithm (T1, T2_individual, T2_synchronised)
-    alg = 'T2_synchronised'
+      # Input Settings
+      # Algorithm (T1, T2_individual, T2_synchronised)
+      alg = 'T1'
 
-    # Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic, 
-    # c - norm cubic, gc - gershgorin cubic)
-    mod = 'c'
+      # Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic, 
+      # c - norm cubic, gc - gershgorin cubic)
+      mod = 'c'
 
-    # Tolerance
-    tol = 1e-2
+      # Tolerance
+      tol = 1e-2
 
-    # Tensor diagonal function
-    def diagt(v):
-	T = zeros((D,D,D))
-	for i in range(0,D):
-		T[i,i,i] = v[i]
-	return T
+      # Tensor diagonal function
+      def diagt(v):
+	  T = zeros((D,D,D))
+	  for i in range(0,D):
+		  T[i,i,i] = v[i]
+	  return T
 
-    # Set up sum of sins test function
-    # Dimension
-    D = 2 
-    # Constraints
-    l = -1*ones(D)
-    u = 1*ones(D)
-    A = ones((1,D))
-    lc = -1; uc = 1
-    # Required functions
-    f = lambda x: sum(sin(x))
-    g = lambda x: cos(x)
-    H = lambda x: diag(-sin(x))
-    bndH = lambda l,u: (diag(-ones(D)), diag(ones(D)))
-    bndT = lambda l,u: (diagt(-ones(D)), diagt(ones(D)))
+      # Set up sum of sins test function
+      # Dimension
+      D = 2
+      # Constraints
+      l = -1*ones(D)
+      u = 1*ones(D)
+      A = -1*ones((1,D))
+      b = 1
+      # Required functions
+      f = lambda x: sum(sin(x))
+      g = lambda x: cos(x)
+      H = lambda x: diag(-sin(x))
+      bndH = lambda l,u: (diag(-ones(D)), diag(ones(D)))
+      bndT = lambda l,u: (diagt(-ones(D)), diagt(ones(D)))
 
-    # Name objective function
-    f.__name__ = 'Sum of Sins'
+      # Name objective function
+      f.__name__ = 'Sum of Sins'
 
-    # Run oBB
-    xs, fxs, tol, itr = obb(f, g, H, bndH, bndT, l, u, alg, mod, A=A, lc=lc, uc=uc, tol=tol)
-
-This file is included in oBB as sins.py.
+      # Run oBB
+      xs, fxs, tol, itr = obb(f, g, H, bndH, bndT, l, u, alg, mod, A=A, b=b, tol=tol)
+      
+This file is included in oBB as sins.py, to run it see `Running the Algorithm`_.
 
 Running the Algorithm
 ---------------------
-To run the user-created python script file (e.g. sins.py) we need to execute it using MPI's mpiexec command, specifying the number of processor cores with the -n option. For example, to run oBB on four processor cores we simply execute the following shell command:
+To run the user-created python script file (e.g. sins.py, see `Example of Use`_) we need to execute it using MPI's mpiexec command, specifying the number of processor cores with the -n option. For example, to run oBB on four processor cores we simply execute the following shell command:
 
   .. code-block:: bash
 
      $ mpiexec -n 4 python sins.py
 
-Note that if using the MPICH2 implementation of MPI we first need to start an mpd daemon in the background:
+Note that if using the MPICH implementation of MPI we first need to start an mpd daemon in the background:
 
  .. code-block:: bash
 
@@ -151,25 +158,19 @@ Note that if using the MPICH2 implementation of MPI we first need to start an mp
 
 but this is not necessary for other MPI implmentations, e.g. OpenMPI.
 
-And that's all there is to it! Well, almost...
-
 Using the RBF Layer
 -------------------
-oBB can optionally approximate the objective function :math:`f` by a radial basis function (RBF) surrogate and optimize the approximation instead (see [FGF2013]_ for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which the objective function should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.
+oBB can optionally approximate the objective function :math:`f` by a radial basis function (RBF) surrogate and optimize the approximation instead (see [FGF2013]_ for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which it should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.
 
-As before, the user is required to write a python script file which defines the functions and parameters necessary to solve the problem. In addition to the approximation model, algorithm type parameters and objective function described in `How to use oBB`_ only an :math:`n` by :math:`m` numpy array of :math:`m` points at which to sample the objective function needs to be specified.
+As before, the user is required to write a python script file that defines the functions and parameters necessary to solve the problem and then passes them to the **obb_rbf** function. In addition to the approximation model, algorithm type and objective function arguments described in `How to use oBB`_ only an :math:`n` by :math:`m` numpy array of :math:`m` points at which to sample the objective function needs to be passed to the **obb_rbf** function using the **pts** argument. 
 
-See the `RBF Layer Example`_ below for an in-depth worked example in python.
-
-RBF Layer Example
------------------
-Suppose we wish to solve an RBF approximation to the problem give in the `Example of Use`_ section:
+For example, suppose we wish to solve an RBF approximation to the problem given in the `Example of Use`_ section:
 
   .. math::
 
-    &\min_{x \in \mathcal{R}^n} \sum_{i=1}^n \sin(x_i) \\
+    &\min_{x \in \mathbb{R}^n} \sum_{i=1}^n \sin(x_i) \\
     \text{s.t. } \; &-1 \le x_i \le 1 \; \; \forall i=1,\dotsc,n \\
-    \text{and }  \; &-1 \le \sum_{i=1}^nx_i \le 1 
+    \text{and }  \; &\sum_{i=1}^n -x_i \le 1
 
 We can code this up in a python script file, let's call it sins_rbf.py as follows:  
 
@@ -177,8 +178,8 @@ We can code this up in a python script file, let's call it sins_rbf.py as follow
   
 	# Example RBF Layer code for oBB
 	from obb import obb_rbf
-	from numpy import sin,ones,zeros
-	from numpy.random import rand,seed
+	from numpy import sin, ones
+	from numpy.random import rand, seed
 
 	# Input Settings
 	# Algorithm (T1, T2_individual, T2_synchronised)
@@ -197,8 +198,8 @@ We can code this up in a python script file, let's call it sins_rbf.py as follow
 	# Constraints
 	l = -1*ones(D)
 	u = 1*ones(D)
-	A = ones((1,D))
-	lc = -1; uc = 1
+	A = -1*ones((1,D))
+	b = 1
 	# Required functions
 	f = lambda x: sum(sin(x))
 
@@ -214,13 +215,13 @@ We can code this up in a python script file, let's call it sins_rbf.py as follow
 	f.__name__ = 'RBF Sum of Sins'
 
 	# Run oBB
-	xs, fxs, tol, itr = obb_rbf(f, pts, l, u, alg, mod, A=A, lc=lc, uc=uc, tol=tol)
-
-Note the use of obb_rbf instead of obb and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sins_rbf.py, to run it see `Running the Algorithm`_. 
+	xs, fxs, tol, itr = obb_rbf(f, pts, l, u, alg, mod, A=A, b=b, tol=tol)
+		
+Note the use of **obb_rbf** instead of **obb** and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sins_rbf.py, to run it see `Running the Algorithm`_. 
 
 RBF Layer for the COCONUT Test Set
 ----------------------------------
-oBB comes with a set of pre-computed RBF approximations to selected functions from the `COCONUT test set <http://www.mat.univie.ac.at/~neum/glopt/coconut/Benchmark/Benchmark.html>`_ that were used to produce the numerical results in the paper [CFG2013]_. In order to optimze these approximations using oBB, the user is required to write a python script file which defines the desired function and tolerance (see [CFG2013]_ for a list of all 31 functions available). For example, to optimize an RBF approximation to the 'hs041' function the user could write the following python script file, let's call it coconut.py: 
+oBB comes with a set of pre-computed RBF approximations to selected functions from the `COCONUT test set <http://www.mat.univie.ac.at/~neum/glopt/coconut/Benchmark/Benchmark.html>`_ that were used to produce the numerical results in the paper [CFG2013]_. In order to optimize these approximations using oBB, the user is required to write a python script file that defines the desired function and tolerance and then passes them to the **obb_rbf_coconut** function (see [CFG2013]_ for a list of all 31 functions available). For example, to optimize an RBF approximation to the **'hs041'** function the user could write the following python script file, let's call it coconut.py: 
 
     .. code-block:: python
   
@@ -235,8 +236,8 @@ oBB comes with a set of pre-computed RBF approximations to selected functions fr
 	# c - norm cubic, gc - gershgorin cubic)	
 	mod = 'c'
 
-	# Tolerance (positive number e.g. 1e-2 or '12hr')
-	tol = '12hr'
+	# Tolerance (can also be '12hr')
+	tol = 1e-2
 
 	# Choose RBF approximation from COCONUT test
 	f = 'hs041'
@@ -244,7 +245,7 @@ oBB comes with a set of pre-computed RBF approximations to selected functions fr
 	# Run oBB
 	xs, fxs, tol, itr = obb_rbf_coconut(f, alg, mod, tol=tol)
   
-Note the use of obb_rbf_coconut and the optional 12hr tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see [CFG2013]_ for details). Of course one can also specific a desired tolerance (e.g. 1e-2) as before. This file is included in oBB as coconut.py, to run it see `Running the Algorithm`_. 
+Note the use of **obb_rbf_coconut** as the calling function and the optional **'12hr'** tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see [CFG2013]_ for details). This file is included in oBB as coconut.py, to run it see `Running the Algorithm`_. 
 
 References
 ----------

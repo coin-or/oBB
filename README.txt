@@ -15,27 +15,21 @@ oBB requires the following software to be installed:
 * Python 2.6 to 2.7 (http://www.python.org/)
 * A working implementation of MPI-2 (e.g. OpenMPI, http://www.open-mpi.org/)
 
-.. * NAG Fortran Library, tested with Mark 23 FLL6I23DCL  (http://www.nag.co.uk/)
-
-Additionally, the following python packages should be installed (these will be installed automatically if using *pip*, see `Installation using pip (recommended)`_):
+Additionally, the following python packages should be installed (these will be installed automatically if using *pip*, see `Installation using pip`_):
 
 * NumPy 1.3.0 or higher (http://www.numpy.org/)
 * MPI for Python 1.3 or higher (http://mpi4py.scipy.org/) 
 * CVXOPT 1.1.3 or higher (http://cvxopt.org/)
 
-Optionally, the following software may be manually installed for added functionality:
+Optionally, matplotlib 1.1.0 or higher (http://www.matplotlib.org/) may be manually installed for visualising the algorithm in 2D.
 
-.. * SymPy 0.7.1 or higher (http://www.sympy.org/) - for automatically calculating derivatives
-
-* matplotlib 1.1.0 or higher (http://www.matplotlib.org/) - for visualising the algorithm in 2D
-
-Installation using pip (recommended)
---------------------------------------
+Installation using pip
+----------------------
 For easy installation, use *pip* (http://www.pip-installer.org/)::
 
     $ [sudo] pip install obb
 
-or alternatively *easy_install* (deprecated)::
+or alternatively *easy_install*::
 
     $ [sudo] easy_install obb
     
@@ -56,7 +50,7 @@ Alternatively, you can download the source code and unpack as follows::
 and then build and install manually using::
 
     $ python setup.py build
-    $ python setup.py install
+    $ [sudo] python setup.py install
 
 If you do not have root privileges or you want to install oBB for your private use, you can use::
 

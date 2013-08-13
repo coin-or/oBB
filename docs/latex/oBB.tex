@@ -10,13 +10,14 @@
 \usepackage{longtable}
 \usepackage{sphinx}
 \usepackage{multirow}
+\usepackage{amsmath,amssymb}
 
 
 \title{oBB Documentation}
-\date{August 06, 2013}
-\release{0.1a}
+\date{13 August, 2013}
+\release{0.4a}
 \author{J. Fowkes}
-\newcommand{\sphinxlogo}{}
+\newcommand{\sphinxlogo}{\includegraphics{p1.pdf}\par}
 \renewcommand{\releasename}{Release}
 \makeindex
 
@@ -33,7 +34,7 @@
 
 \expandafter\def\csname PYG@tok@gd\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
 \expandafter\def\csname PYG@tok@gu\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
-\expandafter\def\csname PYG@tok@gt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PYG@tok@gt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.25,0.82}{##1}}}
 \expandafter\def\csname PYG@tok@gs\endcsname{\let\PYG@bf=\textbf}
 \expandafter\def\csname PYG@tok@gr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
 \expandafter\def\csname PYG@tok@cm\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
@@ -44,7 +45,7 @@
 \expandafter\def\csname PYG@tok@ge\endcsname{\let\PYG@it=\textit}
 \expandafter\def\csname PYG@tok@vc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
 \expandafter\def\csname PYG@tok@il\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@go\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.20,0.20,0.20}{##1}}}
+\expandafter\def\csname PYG@tok@go\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.19,0.19,0.19}{##1}}}
 \expandafter\def\csname PYG@tok@cp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
 \expandafter\def\csname PYG@tok@gi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
 \expandafter\def\csname PYG@tok@gh\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
@@ -103,9 +104,6 @@
 \def\PYGZsh{\char`\#}
 \def\PYGZpc{\char`\%}
 \def\PYGZdl{\char`\$}
-\def\PYGZhy{\char`\-}
-\def\PYGZsq{\char`\'}
-\def\PYGZdq{\char`\"}
 \def\PYGZti{\char`\~}
 % for compatibility with earlier versions
 \def\PYGZat{@}
@@ -120,6 +118,10 @@
 \phantomsection\label{index::doc}
 
 
+\textbf{Release:} 0.4a
+
+\textbf{Date:} 13 August, 2013
+
 oBB is an algorithm for the parallel global optimization of functions with Lipchitz continuous gradient or Hessian.
 
 \begin{notice}{warning}{Warning:}
@@ -128,44 +130,39 @@ oBB is currently undergoing testing and may not work as expected.
 
 
 \chapter{Installing oBB}
-\label{install:installing-obb}\label{install::doc}\label{install:obb-documentation}
+\label{install:installing-obb}\label{install::doc}\label{install:overlapping-branch-and-bound}
 
 \section{Requirements}
 \label{install:requirements}
 oBB requires the following software to be installed:
 \begin{itemize}
 \item {} 
-Python 2.6 to 2.7 (\href{http://www.python.org/}{http://www.python.org/})
+\href{http://www.python.org/}{Python 2.6 to 2.7}
 
 \item {} 
-A working implementation of MPI-2 (e.g. OpenMPI, \href{http://www.open-mpi.org/}{http://www.open-mpi.org/})
+A working implementation of MPI-2 (e.g. \href{http://www.open-mpi.org/}{OpenMPI} or \href{http://www.mpich.org/}{MPICH})
 
 \end{itemize}
 
-Additionally, the following python packages should be installed (these will be installed automatically if using \emph{pip}, see {\hyperref[install:installation-using-pip-recommended]{Installation using pip (recommended)}}):
+Additionally, the following python packages should be installed (these will be installed automatically if using \href{http://www.pip-installer.org/}{pip}, see {\hyperref[install:installation-using-pip]{Installation using pip}}):
 \begin{itemize}
 \item {} 
-NumPy 1.3.0 or higher (\href{http://www.numpy.org/}{http://www.numpy.org/})
+\href{http://www.numpy.org/}{NumPy 1.3.0 or higher}
 
 \item {} 
-MPI for Python 1.3 or higher (\href{http://mpi4py.scipy.org/}{http://mpi4py.scipy.org/})
+\href{http://mpi4py.scipy.org/}{MPI for Python 1.3 or higher}
 
 \item {} 
-CVXOPT 1.1.3 or higher (\href{http://cvxopt.org/}{http://cvxopt.org/})
+\href{http://cvxopt.org/}{CVXOPT 1.1.3 or higher}
 
 \end{itemize}
 
-Optionally, the following software may be manually installed for added functionality:
-\begin{itemize}
-\item {} 
-matplotlib 1.1.0 or higher (\href{http://www.matplotlib.org/}{http://www.matplotlib.org/}) - for visualising the algorithm in 2D
-
-\end{itemize}
+Optionally, \href{http://www.matplotlib.org/}{matplotlib 1.1.0 or higher} may be manually installed for visualising the algorithm in 2D.
 
 
-\section{Installation using pip (recommended)}
-\label{install:installation-using-pip-recommended}
-For easy installation, use \emph{pip} (\href{http://www.pip-installer.org/}{http://www.pip-installer.org/}):
+\section{Installation using pip}
+\label{install:installation-using-pip}
+For easy installation, use \href{http://www.pip-installer.org/}{pip}:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -173,7 +170,7 @@ For easy installation, use \emph{pip} (\href{http://www.pip-installer.org/}{http
 \end{Verbatim}
 \end{quote}
 
-or alternatively \emph{easy\_install} (deprecated):
+or alternatively \emph{easy\_install}:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -185,7 +182,7 @@ If you do not have root privileges or you want to install oBB for your private u
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }pip install \PYGZhy{}\PYGZhy{}user obb
+\PYG{n+nv}{\PYGZdl{} }pip install --user obb
 \end{Verbatim}
 \end{quote}
 
@@ -198,9 +195,9 @@ Alternatively, you can download the source code and unpack as follows:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }wget http://pypi.python.org/packages/source/o/oBB/oBB\PYGZhy{}X.X.tar.gz
-\PYG{n+nv}{\PYGZdl{} }tar \PYGZhy{}xzvf oBB\PYGZhy{}X.X.tar.gz
-\PYG{n+nv}{\PYGZdl{} }\PYG{n+nb}{cd }oBB\PYGZhy{}X.X
+\PYG{n+nv}{\PYGZdl{} }wget http://pypi.python.org/packages/source/o/oBB/oBB-X.X.tar.gz
+\PYG{n+nv}{\PYGZdl{} }tar -xzvf oBB-X.X.tar.gz
+\PYG{n+nv}{\PYGZdl{} }\PYG{n+nb}{cd }oBB-X.X
 \end{Verbatim}
 \end{quote}
 
@@ -209,7 +206,7 @@ and then build and install manually using:
 
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{n+nv}{\PYGZdl{} }python setup.py build
-\PYG{n+nv}{\PYGZdl{} }python setup.py install
+\PYG{n+nv}{\PYGZdl{} }\PYG{o}{[}sudo\PYG{o}{]} python setup.py install
 \end{Verbatim}
 \end{quote}
 
@@ -217,7 +214,7 @@ If you do not have root privileges or you want to install oBB for your private u
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }python setup.py install \PYGZhy{}\PYGZhy{}user
+\PYG{n+nv}{\PYGZdl{} }python setup.py install --user
 \end{Verbatim}
 \end{quote}
 
@@ -226,7 +223,7 @@ instead.
 
 \section{Uninstallation}
 \label{install:uninstallation}
-If oBB was installed using \emph{pip} you can uninstall as follows:
+If oBB was installed using \href{http://www.pip-installer.org/}{pip} you can uninstall as follows:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -247,12 +244,13 @@ This section describes the main interface to oBB and how to use it.
 oBB is designed to solve the global optimization problem
 \begin{quote}
 \begin{gather}
-\begin{split}&\min_{x \in \mathcal{R}^n} f(x) \\
+\begin{split}&\min_{x \in \mathbb{R}^n} f(x) \\
 \text{s.t. } \; &l \le x \le u \\
-\text{and } \; &lc \le Ax \le uc\end{split}\notag
+\text{and } \;  &Ax \le b \\
+                &Ex = d\end{split}\notag
 \end{gather}\end{quote}
 
-where the domain $\mathcal{D}$ is convex, compact and the objective function $f$ has Lipschitz continuous gradient or Hessian. oBB does not need to know the Lipschitz constants explicitly, it merely requires the user to supply elementwise bounds on the Hessian or derivative tensor of the objective function (see {\hyperref[userguide:how-to-use-obb]{How to use oBB}}).
+where the objective function $f$ has Lipschitz continuous gradient or Hessian. oBB does not need to know the Lipschitz constants explicitly, it merely requires the user to supply elementwise bounds on the Hessian or derivative tensor of the objective function (see {\hyperref[userguide:how-to-use-obb]{How to use oBB}}). The linear inequality constraints $Ax \le b$ and equality constraints $Ex = d$ are optional but the bound constraints $l \le x \le u$ are required.
 
 oBB uses local first or second order Taylor type approximations over balls within a parallel branch and bound framework. As with all branch and bound algorithms, the curse of dimensionality limits its use to low dimensional problems. The choice of whether to use first or second order approximations is down to the user  (see {\hyperref[userguide:how-to-use-obb]{How to use oBB}}).
 
@@ -261,96 +259,105 @@ For an in-depth technical description of the algorithm see the tech-report {\hyp
 
 \section{How to use oBB}
 \label{userguide:how-to-use-obb}
-oBB requires the user to write a python script file which defines the functions and parameters necessary to solve the problem. These are determined by the choice of a first or second order approximation model (see {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}} for details):
+oBB requires the user to write a python script file that defines the functions and parameters necessary to solve the global optimization problem and then passes them to the main \textbf{obb} function (see {\hyperref[userguide:example-of-use]{Example of Use}}). The necessary functions are determined by the choice of a first or second order approximation model. The following approximation models can be passed to oBB's \textbf{obb} function using the \textbf{mod} argument (see {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}} for details):
 \begin{itemize}
 \item {} 
-First order models: \emph{q} - norm based,  \emph{g}, \emph{Hz}, \emph{lbH}, \emph{E0}, \emph{Ediag} - minimum eigenvalue based
+First order models: \textbf{`q'} - norm based,  \textbf{`g'}, \textbf{`Hz'}, \textbf{`lbH'}, \textbf{`E0'}, \textbf{`Ediag'} - minimum eigenvalue based
 
 \item {} 
-Second order models: \emph{c} - norm based, \emph{gc} - minimum eigenvalue based
+Second order models: \textbf{`c'} - norm based, \textbf{`gc'} - minimum eigenvalue based
 
 \end{itemize}
 
-If using a first order model, the following functions are required:
+If using a first order model, the user is required to write the following functions:
 \begin{itemize}
 \item {} 
 \textbf{f(x)} - returns objective function $f$ at point $x$ (scalar)
 
 \item {} 
-\textbf{g(x)} - returns gradient $\nabla_x f$ of objective function at $x$ (1D numpy array)
+\textbf{g(x)} - returns gradient $\nabla_x f$ of objective function at $x$ (numpy 1D-array)
 
 \end{itemize}
 
-and the bounding function:
+along with the bounding function:
 \begin{itemize}
 \item {} 
-\textbf{bndH(l,u)} - returns two numpy matrices of elementwise lower and upper bounds on the Hessian $\nabla_{xx} f$ of the objective function over $[l,u]$
+\textbf{bndH(l,u)} - returns two numpy 2D-arrays of elementwise lower and upper bounds on the Hessian $\nabla_{xx} f$ of the objective function over $[l,u]$
 
 \end{itemize}
 
-For a second order model we also require:
+For a second order model the user is additionally required to write the function:
 \begin{itemize}
 \item {} 
-\textbf{H(x)} - returns Hessian $\nabla_{xx} f$ of objective function at $x$ (2D numpy array)
+\textbf{H(x)} - returns Hessian $\nabla_{xx} f$ of objective function at $x$ (numpy 2D-array)
 
 \end{itemize}
 
-and rather than bndH the bounding function:
+and rather than \textbf{bndH} the bounding function:
 \begin{itemize}
 \item {} 
-\textbf{bndT(l,u)} - returns two third order numpy tensors of elementwise lower and upper bounds on the derivative tensor $\nabla_{xxx} f$ of the objective function over $[l,u]$
+\textbf{bndT(l,u)} - returns two numpy 3D-arrays of elementwise lower and upper bounds on the derivative tensor $\nabla_{xxx} f$ of the objective function over $[l,u]$
 
 \end{itemize}
 
-We now need only specify the type of parallel branch and bound algorithm to use (again, see {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}} for details):
+The type of parallel branch and bound algorithm to use should be passed to oBB's \textbf{obb} function using the \textbf{alg} argument and can be one of the following (see {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}} for details):
 \begin{itemize}
 \item {} 
-\emph{T1} - bounds in parallel
+\textbf{`T1'} - bounds in parallel
 
 \item {} 
-\emph{T2\_individual}, \emph{T2\_synchronised} - tree in parallel
+\textbf{`T2\_individual'}, \textbf{`T2\_synchronised'} - tree in parallel
 
 \end{itemize}
 
 See {\hyperref[userguide:example-of-use]{Example of Use}} for an in-depth worked example in python.
 
 
-\section{Optional Parameters}
-\label{userguide:optional-parameters}
-oBB allows the user to specify several optional parameters to control the behaviour of the algorithm:
+\section{Optional Arguments}
+\label{userguide:optional-arguments}
+oBB allows the user to specify several optional arguments that control the behaviour of the algorithm:
 \begin{itemize}
 \item {} 
-\emph{tol} - objective function tolerance (e.g. 1e-2, the default)
+\textbf{tol} - objective function tolerance (e.g. \textbf{1e-2}, the default)
 
 \item {} 
-\emph{toltype} - tolerance type (r - relative {[}default{]}, a - absolute)
+\textbf{toltype} - tolerance type (\textbf{`r'} - relative {[}default{]}, \textbf{`a'} - absolute)
 
 \item {} 
-\emph{countf} - count objective function evaluations (0 - off, 1 - on {[}default{]})
+\textbf{countf} - count objective function evaluations (\textbf{0} - off, \textbf{1} - on {[}default{]})
 
 \item {} 
-\emph{countsp} - count subproblem evaluations (0 - off, 1 - on {[}default{]})
+\textbf{countsp} - count subproblem evaluations (\textbf{0} - off, \textbf{1} - on {[}default{]})
 
 \end{itemize}
 
-and if matplotlib (\href{http://www.matplotlib.org/}{http://www.matplotlib.org/}) is installed:
+and if \href{http://www.matplotlib.org/}{matplotlib} is installed:
 \begin{itemize}
 \item {} 
-vis - visualisation of the algorithm in 2D (0 - off {[}default{]}, 1 - on)
+\textbf{vis} - visualisation of the algorithm in 2D (\textbf{0} - off {[}default{]}, \textbf{1} - on)
 
 \end{itemize}
 
-Note that the linear constraint parameters $A, lc$ and  $uc$ are also optional as the optimization problem is only required to be bound constrained.
+Note that the inequality constraint arguments $A, b$ and  equality constraint arguments $E, d$ are also optional as the optimization problem is only required to be bound constrained.
+
+The user can also specify the QP solver that the algorithm calls to obtain feasible upper bounds (see {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}} for details). At present the user can choose from \href{http://cvxopt.org/}{CVXOPT's qp solver} or the \href{http://github.com/mpy/PyQuadProg/}{QuadProg++ solver} using the optional argument:
+\begin{itemize}
+\item {} 
+\textbf{qpsolver} - QP solver to use (\textbf{`cvxopt'} - CVXOPT's qp {[}default{]}, \textbf{`quadprog'} - QuadProg++)
+
+\end{itemize}
+
+Note that the QuadProg++ solver is faster as it is written in C++ but has very limited error handling and may not work in all cases. The CVXOPT solver is slower as it is written entirely in Python but considerably more stable.
 
 
 \section{Example of Use}
 \label{userguide:example-of-use}
-Suppose we wish to solve the following problem:
+Suppose we wish to solve the following global optimization problem:
 \begin{quote}
 \begin{gather}
-\begin{split}&\min_{x \in \mathcal{R}^n} \sum_{i=1}^n \sin(x_i) \\
+\begin{split}&\min_{x \in \mathbb{R}^n} \sum_{i=1}^n \sin(x_i) \\
 \text{s.t. } \; &-1 \le x_i \le 1 \; \; \forall i=1,\dotsc,n \\
-\text{and }  \; &-1 \le \sum_{i=1}^nx_i \le 1\end{split}\notag
+\text{and }  \; &\sum_{i=1}^n -x_i \le 1\end{split}\notag
 \end{gather}\end{quote}
 
 One can see that the gradient $g$, Hessian $H$ and third order derivative tensor $T$ are given by
@@ -371,18 +378,18 @@ We can code this up in a python script file, let's call it sins.py as follows:
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{c}{\PYGZsh{} Example code for oBB}
 \PYG{k+kn}{from} \PYG{n+nn}{obb} \PYG{k+kn}{import} \PYG{n}{obb}
-\PYG{k+kn}{from} \PYG{n+nn}{numpy} \PYG{k+kn}{import} \PYG{n}{sin}\PYG{p}{,}\PYG{n}{cos}\PYG{p}{,}\PYG{n}{diag}\PYG{p}{,}\PYG{n}{ones}\PYG{p}{,}\PYG{n}{zeros}
+\PYG{k+kn}{from} \PYG{n+nn}{numpy} \PYG{k+kn}{import} \PYG{n}{sin}\PYG{p}{,} \PYG{n}{cos}\PYG{p}{,} \PYG{n}{diag}\PYG{p}{,} \PYG{n}{ones}\PYG{p}{,} \PYG{n}{zeros}
 
 \PYG{c}{\PYGZsh{} Input Settings}
 \PYG{c}{\PYGZsh{} Algorithm (T1, T2\PYGZus{}individual, T2\PYGZus{}synchronised)}
-\PYG{n}{alg} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{T2\PYGZus{}synchronised}\PYG{l+s}{\PYGZsq{}}
+\PYG{n}{alg} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{T1}\PYG{l+s}{'}
 
-\PYG{c}{\PYGZsh{} Model type (q \PYGZhy{} norm quadratic, g/Hz/lbH/E0/Ediag \PYGZhy{} min eig. quadratic,}
-\PYG{c}{\PYGZsh{} c \PYGZhy{} norm cubic, gc \PYGZhy{} gershgorin cubic)}
-\PYG{n}{mod} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{c}\PYG{l+s}{\PYGZsq{}}
+\PYG{c}{\PYGZsh{} Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,}
+\PYG{c}{\PYGZsh{} c - norm cubic, gc - gershgorin cubic)}
+\PYG{n}{mod} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{c}\PYG{l+s}{'}
 
 \PYG{c}{\PYGZsh{} Tolerance}
-\PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}2}
+\PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mf}{1e-2}
 
 \PYG{c}{\PYGZsh{} Tensor diagonal function}
 \PYG{k}{def} \PYG{n+nf}{diagt}\PYG{p}{(}\PYG{n}{v}\PYG{p}{)}\PYG{p}{:}
@@ -395,39 +402,39 @@ We can code this up in a python script file, let's call it sins.py as follows:
 \PYG{c}{\PYGZsh{} Dimension}
 \PYG{n}{D} \PYG{o}{=} \PYG{l+m+mi}{2}
 \PYG{c}{\PYGZsh{} Constraints}
-\PYG{n}{l} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
+\PYG{n}{l} \PYG{o}{=} \PYG{o}{-}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
 \PYG{n}{u} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
-\PYG{n}{A} \PYG{o}{=} \PYG{n}{ones}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}
-\PYG{n}{lc} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{;} \PYG{n}{uc} \PYG{o}{=} \PYG{l+m+mi}{1}
+\PYG{n}{A} \PYG{o}{=} \PYG{o}{-}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{b} \PYG{o}{=} \PYG{l+m+mi}{1}
 \PYG{c}{\PYGZsh{} Required functions}
 \PYG{n}{f} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
 \PYG{n}{g} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{cos}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
-\PYG{n}{H} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{diag}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
-\PYG{n}{bndH} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{l}\PYG{p}{,}\PYG{n}{u}\PYG{p}{:} \PYG{p}{(}\PYG{n}{diag}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{diag}\PYG{p}{(}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
-\PYG{n}{bndT} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{l}\PYG{p}{,}\PYG{n}{u}\PYG{p}{:} \PYG{p}{(}\PYG{n}{diagt}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{diagt}\PYG{p}{(}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{H} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{diag}\PYG{p}{(}\PYG{o}{-}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{bndH} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{l}\PYG{p}{,}\PYG{n}{u}\PYG{p}{:} \PYG{p}{(}\PYG{n}{diag}\PYG{p}{(}\PYG{o}{-}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{diag}\PYG{p}{(}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{bndT} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{l}\PYG{p}{,}\PYG{n}{u}\PYG{p}{:} \PYG{p}{(}\PYG{n}{diagt}\PYG{p}{(}\PYG{o}{-}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{diagt}\PYG{p}{(}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
 
 \PYG{c}{\PYGZsh{} Name objective function}
-\PYG{n}{f}\PYG{o}{.}\PYG{n}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{Sum of Sins}\PYG{l+s}{\PYGZsq{}}
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{Sum of Sins}\PYG{l+s}{'}
 
 \PYG{c}{\PYGZsh{} Run oBB}
-\PYG{n}{xs}\PYG{p}{,} \PYG{n}{fxs}\PYG{p}{,} \PYG{n}{tol}\PYG{p}{,} \PYG{n}{itr} \PYG{o}{=} \PYG{n}{obb}\PYG{p}{(}\PYG{n}{f}\PYG{p}{,} \PYG{n}{g}\PYG{p}{,} \PYG{n}{H}\PYG{p}{,} \PYG{n}{bndH}\PYG{p}{,} \PYG{n}{bndT}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n}{u}\PYG{p}{,} \PYG{n}{alg}\PYG{p}{,} \PYG{n}{mod}\PYG{p}{,} \PYG{n}{A}\PYG{o}{=}\PYG{n}{A}\PYG{p}{,} \PYG{n}{lc}\PYG{o}{=}\PYG{n}{lc}\PYG{p}{,} \PYG{n}{uc}\PYG{o}{=}\PYG{n}{uc}\PYG{p}{,} \PYG{n}{tol}\PYG{o}{=}\PYG{n}{tol}\PYG{p}{)}
+\PYG{n}{xs}\PYG{p}{,} \PYG{n}{fxs}\PYG{p}{,} \PYG{n}{tol}\PYG{p}{,} \PYG{n}{itr} \PYG{o}{=} \PYG{n}{obb}\PYG{p}{(}\PYG{n}{f}\PYG{p}{,} \PYG{n}{g}\PYG{p}{,} \PYG{n}{H}\PYG{p}{,} \PYG{n}{bndH}\PYG{p}{,} \PYG{n}{bndT}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n}{u}\PYG{p}{,} \PYG{n}{alg}\PYG{p}{,} \PYG{n}{mod}\PYG{p}{,} \PYG{n}{A}\PYG{o}{=}\PYG{n}{A}\PYG{p}{,} \PYG{n}{b}\PYG{o}{=}\PYG{n}{b}\PYG{p}{,} \PYG{n}{tol}\PYG{o}{=}\PYG{n}{tol}\PYG{p}{)}
 \end{Verbatim}
 \end{quote}
 
-This file is included in oBB as sins.py.
+This file is included in oBB as sins.py, to run it see {\hyperref[userguide:running-the-algorithm]{Running the Algorithm}}.
 
 
 \section{Running the Algorithm}
 \label{userguide:running-the-algorithm}
-To run the user-created python script file (e.g. sins.py) we need to execute it using MPI's mpiexec command, specifying the number of processor cores with the -n option. For example, to run oBB on four processor cores we simply execute the following shell command:
+To run the user-created python script file (e.g. sins.py, see {\hyperref[userguide:example-of-use]{Example of Use}}) we need to execute it using MPI's mpiexec command, specifying the number of processor cores with the -n option. For example, to run oBB on four processor cores we simply execute the following shell command:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }mpiexec \PYGZhy{}n 4 python sins.py
+\PYG{n+nv}{\PYGZdl{} }mpiexec -n 4 python sins.py
 \end{Verbatim}
 \end{quote}
 
-Note that if using the MPICH2 implementation of MPI we first need to start an mpd daemon in the background:
+Note that if using the MPICH implementation of MPI we first need to start an mpd daemon in the background:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -437,26 +444,19 @@ Note that if using the MPICH2 implementation of MPI we first need to start an mp
 
 but this is not necessary for other MPI implmentations, e.g. OpenMPI.
 
-And that's all there is to it! Well, almost...
-
 
 \section{Using the RBF Layer}
 \label{userguide:using-the-rbf-layer}
-oBB can optionally approximate the objective function $f$ by a radial basis function (RBF) surrogate and optimize the approximation instead (see {\hyperref[userguide:fgf2013]{{[}FGF2013{]}}} for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which the objective function should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.
+oBB can optionally approximate the objective function $f$ by a radial basis function (RBF) surrogate and optimize the approximation instead (see {\hyperref[userguide:fgf2013]{{[}FGF2013{]}}} for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which it should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.
 
-As before, the user is required to write a python script file which defines the functions and parameters necessary to solve the problem. In addition to the approximation model, algorithm type parameters and objective function described in {\hyperref[userguide:how-to-use-obb]{How to use oBB}} only an $n$ by $m$ numpy array of $m$ points at which to sample the objective function needs to be specified.
+As before, the user is required to write a python script file that defines the functions and parameters necessary to solve the problem and then passes them to the \textbf{obb\_rbf} function. In addition to the approximation model, algorithm type and objective function arguments described in {\hyperref[userguide:how-to-use-obb]{How to use oBB}} only an $n$ by $m$ numpy array of $m$ points at which to sample the objective function needs to be passed to the \textbf{obb\_rbf} function using the \textbf{pts} argument.
 
-See the {\hyperref[userguide:rbf-layer-example]{RBF Layer Example}} below for an in-depth worked example in python.
-
-
-\section{RBF Layer Example}
-\label{userguide:rbf-layer-example}
-Suppose we wish to solve an RBF approximation to the problem give in the {\hyperref[userguide:example-of-use]{Example of Use}} section:
+For example, suppose we wish to solve an RBF approximation to the problem given in the {\hyperref[userguide:example-of-use]{Example of Use}} section:
 \begin{quote}
 \begin{gather}
-\begin{split}&\min_{x \in \mathcal{R}^n} \sum_{i=1}^n \sin(x_i) \\
+\begin{split}&\min_{x \in \mathbb{R}^n} \sum_{i=1}^n \sin(x_i) \\
 \text{s.t. } \; &-1 \le x_i \le 1 \; \; \forall i=1,\dotsc,n \\
-\text{and }  \; &-1 \le \sum_{i=1}^nx_i \le 1\end{split}\notag
+\text{and }  \; &\sum_{i=1}^n -x_i \le 1\end{split}\notag
 \end{gather}\end{quote}
 
 We can code this up in a python script file, let's call it sins\_rbf.py as follows:
@@ -465,28 +465,28 @@ We can code this up in a python script file, let's call it sins\_rbf.py as follo
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{c}{\PYGZsh{} Example RBF Layer code for oBB}
 \PYG{k+kn}{from} \PYG{n+nn}{obb} \PYG{k+kn}{import} \PYG{n}{obb\PYGZus{}rbf}
-\PYG{k+kn}{from} \PYG{n+nn}{numpy} \PYG{k+kn}{import} \PYG{n}{sin}\PYG{p}{,}\PYG{n}{ones}\PYG{p}{,}\PYG{n}{zeros}
-\PYG{k+kn}{from} \PYG{n+nn}{numpy.random} \PYG{k+kn}{import} \PYG{n}{rand}\PYG{p}{,}\PYG{n}{seed}
+\PYG{k+kn}{from} \PYG{n+nn}{numpy} \PYG{k+kn}{import} \PYG{n}{sin}\PYG{p}{,} \PYG{n}{ones}
+\PYG{k+kn}{from} \PYG{n+nn}{numpy.random} \PYG{k+kn}{import} \PYG{n}{rand}\PYG{p}{,} \PYG{n}{seed}
 
 \PYG{c}{\PYGZsh{} Input Settings}
 \PYG{c}{\PYGZsh{} Algorithm (T1, T2\PYGZus{}individual, T2\PYGZus{}synchronised)}
-\PYG{n}{alg} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{T1}\PYG{l+s}{\PYGZsq{}}
+\PYG{n}{alg} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{T1}\PYG{l+s}{'}
 
-\PYG{c}{\PYGZsh{} Model type (q \PYGZhy{} norm quadratic, g/Hz/lbH/E0/Ediag \PYGZhy{} min eig. quadratic,}
-\PYG{c}{\PYGZsh{} c \PYGZhy{} norm cubic, gc \PYGZhy{} gershgorin cubic)}
-\PYG{n}{mod} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{c}\PYG{l+s}{\PYGZsq{}}
+\PYG{c}{\PYGZsh{} Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,}
+\PYG{c}{\PYGZsh{} c - norm cubic, gc - gershgorin cubic)}
+\PYG{n}{mod} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{c}\PYG{l+s}{'}
 
 \PYG{c}{\PYGZsh{} Tolerance}
-\PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}2}
+\PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mf}{1e-2}
 
 \PYG{c}{\PYGZsh{} Set up sum of sins test function}
 \PYG{c}{\PYGZsh{} Dimension}
 \PYG{n}{D} \PYG{o}{=} \PYG{l+m+mi}{2}
 \PYG{c}{\PYGZsh{} Constraints}
-\PYG{n}{l} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
+\PYG{n}{l} \PYG{o}{=} \PYG{o}{-}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
 \PYG{n}{u} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
-\PYG{n}{A} \PYG{o}{=} \PYG{n}{ones}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}
-\PYG{n}{lc} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{;} \PYG{n}{uc} \PYG{o}{=} \PYG{l+m+mi}{1}
+\PYG{n}{A} \PYG{o}{=} \PYG{o}{-}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{b} \PYG{o}{=} \PYG{l+m+mi}{1}
 \PYG{c}{\PYGZsh{} Required functions}
 \PYG{n}{f} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
 
@@ -496,22 +496,22 @@ We can code this up in a python script file, let's call it sins\_rbf.py as follo
 
 \PYG{c}{\PYGZsh{} Scale points so they lie in [l,u]}
 \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{n}{D}\PYG{p}{)}\PYG{p}{:}
-    \PYG{n}{pts}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{l}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{+} \PYG{p}{(}\PYG{n}{u}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}}\PYG{n}{l}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{p}{)}\PYG{o}{*}\PYG{n}{pts}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,}\PYG{n}{i}\PYG{p}{]}
+    \PYG{n}{pts}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{l}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{+} \PYG{p}{(}\PYG{n}{u}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{-}\PYG{n}{l}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{p}{)}\PYG{o}{*}\PYG{n}{pts}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,}\PYG{n}{i}\PYG{p}{]}
 
 \PYG{c}{\PYGZsh{} Name objective function}
-\PYG{n}{f}\PYG{o}{.}\PYG{n}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{RBF Sum of Sins}\PYG{l+s}{\PYGZsq{}}
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{RBF Sum of Sins}\PYG{l+s}{'}
 
 \PYG{c}{\PYGZsh{} Run oBB}
-\PYG{n}{xs}\PYG{p}{,} \PYG{n}{fxs}\PYG{p}{,} \PYG{n}{tol}\PYG{p}{,} \PYG{n}{itr} \PYG{o}{=} \PYG{n}{obb\PYGZus{}rbf}\PYG{p}{(}\PYG{n}{f}\PYG{p}{,} \PYG{n}{pts}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n}{u}\PYG{p}{,} \PYG{n}{alg}\PYG{p}{,} \PYG{n}{mod}\PYG{p}{,} \PYG{n}{A}\PYG{o}{=}\PYG{n}{A}\PYG{p}{,} \PYG{n}{lc}\PYG{o}{=}\PYG{n}{lc}\PYG{p}{,} \PYG{n}{uc}\PYG{o}{=}\PYG{n}{uc}\PYG{p}{,} \PYG{n}{tol}\PYG{o}{=}\PYG{n}{tol}\PYG{p}{)}
+\PYG{n}{xs}\PYG{p}{,} \PYG{n}{fxs}\PYG{p}{,} \PYG{n}{tol}\PYG{p}{,} \PYG{n}{itr} \PYG{o}{=} \PYG{n}{obb\PYGZus{}rbf}\PYG{p}{(}\PYG{n}{f}\PYG{p}{,} \PYG{n}{pts}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n}{u}\PYG{p}{,} \PYG{n}{alg}\PYG{p}{,} \PYG{n}{mod}\PYG{p}{,} \PYG{n}{A}\PYG{o}{=}\PYG{n}{A}\PYG{p}{,} \PYG{n}{b}\PYG{o}{=}\PYG{n}{b}\PYG{p}{,} \PYG{n}{tol}\PYG{o}{=}\PYG{n}{tol}\PYG{p}{)}
 \end{Verbatim}
 \end{quote}
 
-Note the use of obb\_rbf instead of obb and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sins\_rbf.py, to run it see {\hyperref[userguide:running-the-algorithm]{Running the Algorithm}}.
+Note the use of \textbf{obb\_rbf} instead of \textbf{obb} and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sins\_rbf.py, to run it see {\hyperref[userguide:running-the-algorithm]{Running the Algorithm}}.
 
 
 \section{RBF Layer for the COCONUT Test Set}
 \label{userguide:rbf-layer-for-the-coconut-test-set}
-oBB comes with a set of pre-computed RBF approximations to selected functions from the \href{http://www.mat.univie.ac.at/~neum/glopt/coconut/Benchmark/Benchmark.html}{COCONUT test set} that were used to produce the numerical results in the paper {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}}. In order to optimze these approximations using oBB, the user is required to write a python script file which defines the desired function and tolerance (see {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}} for a list of all 31 functions available). For example, to optimize an RBF approximation to the `hs041' function the user could write the following python script file, let's call it coconut.py:
+oBB comes with a set of pre-computed RBF approximations to selected functions from the \href{http://www.mat.univie.ac.at/~neum/glopt/coconut/Benchmark/Benchmark.html}{COCONUT test set} that were used to produce the numerical results in the paper {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}}. In order to optimize these approximations using oBB, the user is required to write a python script file that defines the desired function and tolerance and then passes them to the \textbf{obb\_rbf\_coconut} function (see {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}} for a list of all 31 functions available). For example, to optimize an RBF approximation to the \textbf{`hs041'} function the user could write the following python script file, let's call it coconut.py:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -520,24 +520,24 @@ oBB comes with a set of pre-computed RBF approximations to selected functions fr
 
 \PYG{c}{\PYGZsh{} Input Settings}
 \PYG{c}{\PYGZsh{} Algorithm (T1, T2\PYGZus{}individual, T2\PYGZus{}synchronised)}
-\PYG{n}{alg} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{T1}\PYG{l+s}{\PYGZsq{}}
+\PYG{n}{alg} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{T1}\PYG{l+s}{'}
 
-\PYG{c}{\PYGZsh{} Model type (q \PYGZhy{} norm quadratic, g/Hz/lbH/E0/Ediag \PYGZhy{} min eig. quadratic,}
-\PYG{c}{\PYGZsh{} c \PYGZhy{} norm cubic, gc \PYGZhy{} gershgorin cubic)}
-\PYG{n}{mod} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{c}\PYG{l+s}{\PYGZsq{}}
+\PYG{c}{\PYGZsh{} Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,}
+\PYG{c}{\PYGZsh{} c - norm cubic, gc - gershgorin cubic)}
+\PYG{n}{mod} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{c}\PYG{l+s}{'}
 
-\PYG{c}{\PYGZsh{} Tolerance (positive number e.g. 1e\PYGZhy{}2 or \PYGZsq{}12hr\PYGZsq{})}
-\PYG{n}{tol} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{12hr}\PYG{l+s}{\PYGZsq{}}
+\PYG{c}{\PYGZsh{} Tolerance (can also be '12hr')}
+\PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mf}{1e-2}
 
 \PYG{c}{\PYGZsh{} Choose RBF approximation from COCONUT test}
-\PYG{n}{f} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{hs041}\PYG{l+s}{\PYGZsq{}}
+\PYG{n}{f} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{hs041}\PYG{l+s}{'}
 
 \PYG{c}{\PYGZsh{} Run oBB}
 \PYG{n}{xs}\PYG{p}{,} \PYG{n}{fxs}\PYG{p}{,} \PYG{n}{tol}\PYG{p}{,} \PYG{n}{itr} \PYG{o}{=} \PYG{n}{obb\PYGZus{}rbf\PYGZus{}coconut}\PYG{p}{(}\PYG{n}{f}\PYG{p}{,} \PYG{n}{alg}\PYG{p}{,} \PYG{n}{mod}\PYG{p}{,} \PYG{n}{tol}\PYG{o}{=}\PYG{n}{tol}\PYG{p}{)}
 \end{Verbatim}
 \end{quote}
 
-Note the use of obb\_rbf\_coconut and the optional 12hr tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}} for details). Of course one can also specific a desired tolerance (e.g. 1e-2) as before. This file is included in oBB as coconut.py, to run it see {\hyperref[userguide:running-the-algorithm]{Running the Algorithm}}.
+Note the use of \textbf{obb\_rbf\_coconut} as the calling function and the optional \textbf{`12hr'} tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}} for details). This file is included in oBB as coconut.py, to run it see {\hyperref[userguide:running-the-algorithm]{Running the Algorithm}}.
 
 
 \section{References}

@@ -1,6 +1,6 @@
 from __future__ import division
 # Overlapping Branch and Bound, data parallel algorithm
-def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, lc=None, uc=None, Tol=1e-2, Heur=0, TolType='r', Vis=0, SD=1, Rtol=1e-15, TimeQP=0, TimeWidle=0, solver='cvxopt'):
+def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None, Tol=1e-2, Heur=0, TolType='r', Vis=0, SD=1, Rtol=1e-15, TimeQP=0, TimeWidle=0, qpsolver='cvxopt'):
 
 	# Optional Inputs
 	# Tolerance 
@@ -11,7 +11,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, lc=None, uc=None, Tol=1
 	# Radius Tolerance
 	# Time Worker Idling (0 - off, 1 - on)
 	# Time QP solves (0 - off, 1 - on)
-	# QP Solver (cvxopt, nag) 
+	# QP Solver (quadprog, cvxopt, nag) 
 
 	# MPI
 	from mpi4py import MPI
@@ -30,62 +30,46 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, lc=None, uc=None, Tol=1
 		numprocs = comm.Get_size()
 
 		# Import necessary functions
-		from numpy import array, pi, sqrt, dot, identity, hstack, vstack
+		from numpy import array, pi, sqrt, dot, identity, hstack, vstack, empty, inf
 		from numpy.linalg import norm
 		from time import time
 		from itertools import product
 		from sys import float_info
 
-		# NAG QP solver (fast!)
-		if(solver == 'nag'):
-			if(A == None):
+		# Initialise empty arrays
+		if(A == None):
+		      A = empty((0,D))
+		      b = empty(0)
+		
+		if(E == None):
+		      E = empty((0,D))
+		      d = empty(0)
+
+		# QuadProg++ solver (fast!)
+		if(qpsolver == 'quadprog'):
+		
+			# Import QuadProg++ solver
+			from PyQuadProg import PyQuadProg
 				
-				# Import QP solver
-				from qpsolver import qpsolver
-				
-				# Check if circle has feasible point
-				def mfeasible(c):
-			
-					# Solve QP to check feasibility
-					mxopt = c.xc.copy()
-					mr = qpsolver(2*identity(D),-2*c.xc,l,u,mxopt,D)
-					mr = mr + dot(c.xc,c.xc)
-			
-					# Check if point lies inside domain
-					if(mr < (c.r**2)):
-						mf = 1    
-					else:
-						mf = 0
-						mxopt = None 
-			
-					return mf, mxopt	
-				
-			else:	
-				# Import QP Solver
-				from qpsolver_lincon import qpsolver_lincon
-				
-				# No. of linear constraints
-				nclin = A.shape[0] 
-				
-				# Check if circle has feasible point
-				def mfeasible(c):
-			
-					# Solve QP to check feasibility
-					mxopt = c.xc.copy()
-					mr = qpsolver_lincon(2*identity(D),-2*c.xc,hstack([l,lc]),hstack([u,uc]),mxopt,A,D,nclin)
-					mr = mr + dot(c.xc,c.xc)
-			
-					# Check if point lies inside domain
-					if(mr < (c.r**2)):
-						mf = 1    
-					else:
-						mf = 0
-						mxopt = None 
-			
-					return mf, mxopt	
-					
+			# Check if circle has feasible point
+			def mfeasible(c):
+		
+				# Solve QP to check feasibility
+				sol = PyQuadProg(2*identity(D),-2*c.xc,E.transpose(),-1*d,vstack([identity(D),-1*identity(D),-1*A]).transpose(),hstack([-l,u,b]))
+				mxopt = sol.x.getArray()
+				mr = dot(mxopt,mxopt) + dot(mxopt,-2*c.xc) + dot(c.xc,c.xc)
+		
+				# Check if point lies inside domain
+				if(mr < (c.r**2)):
+					mf = 1    
+				else:
+					mf = 0
+					mxopt = None 
+		
+				return mf, mxopt
+		
 		# CVXOPT QP solver (slow)
-		elif(solver == 'cvxopt'):
+		elif(qpsolver == 'cvxopt'):
 		
 			# Import cvxopt solver
 			from cvxopt import matrix
@@ -96,46 +80,47 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, lc=None, uc=None, Tol=1
 			options['abstol'] = 1e-9
 			options['reltol'] = 1e-8
 			options['feastol'] = 1e-9
-			
-			if(A == None):
-			
-				# Check if circle has feasible point
-				def mfeasible(c):
-			
-					# Solve QP to check feasibility
-					sol = qp(matrix(2*identity(D)),matrix(-2*c.xc),matrix(vstack([-1*identity(D),identity(D)])),matrix(hstack([-l,u])))
-					mxopt = array(sol['x']).flatten()
-					mr = sol['primal objective']
-					mr = mr + dot(c.xc,c.xc)
-			
-					# Check if point lies inside domain
-					if(mr < (c.r**2)):
-						mf = 1 
-					else:
-						mf = 0
-						mxopt = None 
-			
-					return mf, mxopt
-					
-			else:
 				
-				# Check if circle has feasible point
-				def mfeasible(c):
+			# Check if circle has feasible point
+			def mfeasible(c):
+		
+				# Solve QP to check feasibility
+				sol = qp(matrix(2*identity(D)),matrix(-2*c.xc),matrix(vstack([-1*identity(D),identity(D),A])),matrix(hstack([-l,u,b])),matrix(E),matrix(d))
+				mxopt = array(sol['x']).flatten()
+				mr = sol['primal objective']
+				mr = mr + dot(c.xc,c.xc)
+		
+				# Check if point lies inside domain
+				if(mr < (c.r**2)):
+					mf = 1    
+				else:
+					mf = 0
+					mxopt = None 
+		
+				return mf, mxopt
+		
+		# NAG QP solver (fast!)
+		elif(qpsolver == 'nag'):
 			
-					# Solve QP to check feasibility
-					sol = qp(matrix(2*identity(D)),matrix(-2*c.xc),matrix(vstack([-1*identity(D),identity(D),-1*A,A])),matrix(hstack([-l,u,-lc,uc])))
-					mxopt = array(sol['x']).flatten()
-					mr = sol['primal objective']
-					mr = mr + dot(c.xc,c.xc)
+			# Import QP Solver
+			from qpsolver_lincon import qpsolver_lincon
 			
-					# Check if point lies inside domain
-					if(mr < (c.r**2)):
-						mf = 1    
-					else:
-						mf = 0
-						mxopt = None 
-			
-					return mf, mxopt
+			# Check if circle has feasible point
+			def mfeasible(c):
+		
+				# Solve QP to check feasibility
+				mxopt = c.xc.copy()
+				mr = qpsolver_lincon(2*identity(D),-2*c.xc,hstack([l,-inf,d]),hstack([u,b,d]),mxopt,vstack([A,E]),D,A.shape[0]+E.shape[0])
+				mr = mr + dot(c.xc,c.xc)
+		
+				# Check if point lies inside domain
+				if(mr < (c.r**2)):
+					mf = 1    
+				else:
+					mf = 0
+					mxopt = None 
+		
+				return mf, mxopt	
   
   		# Visualisation
 		if(Vis == 1):
