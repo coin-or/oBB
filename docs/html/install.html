@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.4a',
+        VERSION:     '0.5b',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -119,6 +119,23 @@
 </div></blockquote>
 <p>instead.</p>
 </div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>oBB includes a command line test script to check that the installation was successfull. To run the test simply type the following into your shell:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>test_obb
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will run oBB using MPI on one processor for a simple 2D sum of sins problem (see <a class="reference external" href="userguide.html#example-of-use">Example of Use</a>).</p>
+<p>Note that if using the MPICH implementation of MPI we first need to start an mpd daemon in the background:</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mpd &amp;
+</pre></div>
+</div>
+</div></blockquote>
+<p>but this is not necessary for other MPI implementations, e.g. OpenMPI.</p>
+</div>
 <div class="section" id="uninstallation">
 <h2>Uninstallation<a class="headerlink" href="#uninstallation" title="Permalink to this headline">¶</a></h2>
 <p>If oBB was installed using <a class="reference external" href="http://www.pip-installer.org/">pip</a> you can uninstall as follows:</p>
@@ -143,6 +160,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation-using-pip">Installation using pip</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#manual-installation">Manual installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#uninstallation">Uninstallation</a></li>
 </ul>
 </li>
@@ -182,7 +200,7 @@
           
     <div class="footer">
         &copy; Copyright 2013, J. M. Fowkes.
-      Last updated on 13 Aug, 2013.
+      Last updated on 09 Sep, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
         </div>

@@ -58,6 +58,20 @@ If you do not have root privileges or you want to install oBB for your private u
     
 instead.    
 
+Testing
+-------
+oBB includes a command line test script to check that the installation was successfull. To run the test simply type the following into your shell::
+
+    $ test_obb
+
+This will run oBB using MPI on one processor for a simple 2D sum of sins problem.
+
+Note that if using the MPICH implementation of MPI we first need to start an mpd daemon in the background::
+
+    $ mpd &
+
+but this is not necessary for other MPI implementations, e.g. OpenMPI.
+
 Uninstallation
 --------------
 If oBB was installed using *pip* you can uninstall as follows::

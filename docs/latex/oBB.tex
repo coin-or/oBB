@@ -14,9 +14,9 @@
 
 
 \title{oBB Documentation}
-\date{13 August, 2013}
-\release{0.4a}
-\author{J. Fowkes}
+\date{09 September, 2013}
+\release{0.5b}
+\author{J. M. Fowkes}
 \newcommand{\sphinxlogo}{\includegraphics{p1.pdf}\par}
 \renewcommand{\releasename}{Release}
 \makeindex
@@ -34,7 +34,7 @@
 
 \expandafter\def\csname PYG@tok@gd\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
 \expandafter\def\csname PYG@tok@gu\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
-\expandafter\def\csname PYG@tok@gt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.25,0.82}{##1}}}
+\expandafter\def\csname PYG@tok@gt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
 \expandafter\def\csname PYG@tok@gs\endcsname{\let\PYG@bf=\textbf}
 \expandafter\def\csname PYG@tok@gr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
 \expandafter\def\csname PYG@tok@cm\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
@@ -45,7 +45,7 @@
 \expandafter\def\csname PYG@tok@ge\endcsname{\let\PYG@it=\textit}
 \expandafter\def\csname PYG@tok@vc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
 \expandafter\def\csname PYG@tok@il\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@go\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.19,0.19,0.19}{##1}}}
+\expandafter\def\csname PYG@tok@go\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.20,0.20,0.20}{##1}}}
 \expandafter\def\csname PYG@tok@cp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
 \expandafter\def\csname PYG@tok@gi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
 \expandafter\def\csname PYG@tok@gh\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
@@ -104,6 +104,9 @@
 \def\PYGZsh{\char`\#}
 \def\PYGZpc{\char`\%}
 \def\PYGZdl{\char`\$}
+\def\PYGZhy{\char`\-}
+\def\PYGZsq{\char`\'}
+\def\PYGZdq{\char`\"}
 \def\PYGZti{\char`\~}
 % for compatibility with earlier versions
 \def\PYGZat{@}
@@ -118,15 +121,13 @@
 \phantomsection\label{index::doc}
 
 
-\textbf{Release:} 0.4a
+\textbf{Release:} 0.5b
 
-\textbf{Date:} 13 August, 2013
+\textbf{Date:} 09 September, 2013
+
+\textbf{Author:} \href{mailto:jaroslav.fowkes@ed.ac.uk}{J. M. Fowkes}
 
 oBB is an algorithm for the parallel global optimization of functions with Lipchitz continuous gradient or Hessian.
-
-\begin{notice}{warning}{Warning:}
-oBB is currently undergoing testing and may not work as expected.
-\end{notice}
 
 
 \chapter{Installing oBB}
@@ -182,7 +183,7 @@ If you do not have root privileges or you want to install oBB for your private u
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }pip install --user obb
+\PYG{n+nv}{\PYGZdl{} }pip install \PYGZhy{}\PYGZhy{}user obb
 \end{Verbatim}
 \end{quote}
 
@@ -195,9 +196,9 @@ Alternatively, you can download the source code and unpack as follows:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }wget http://pypi.python.org/packages/source/o/oBB/oBB-X.X.tar.gz
-\PYG{n+nv}{\PYGZdl{} }tar -xzvf oBB-X.X.tar.gz
-\PYG{n+nv}{\PYGZdl{} }\PYG{n+nb}{cd }oBB-X.X
+\PYG{n+nv}{\PYGZdl{} }wget http://pypi.python.org/packages/source/o/oBB/oBB\PYGZhy{}X.X.tar.gz
+\PYG{n+nv}{\PYGZdl{} }tar \PYGZhy{}xzvf oBB\PYGZhy{}X.X.tar.gz
+\PYG{n+nv}{\PYGZdl{} }\PYG{n+nb}{cd }oBB\PYGZhy{}X.X
 \end{Verbatim}
 \end{quote}
 
@@ -214,11 +215,34 @@ If you do not have root privileges or you want to install oBB for your private u
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }python setup.py install --user
+\PYG{n+nv}{\PYGZdl{} }python setup.py install \PYGZhy{}\PYGZhy{}user
 \end{Verbatim}
 \end{quote}
 
 instead.
+
+
+\section{Testing}
+\label{install:testing}
+oBB includes a command line test script to check that the installation was successfull. To run the test simply type the following into your shell:
+\begin{quote}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nv}{\PYGZdl{} }test\PYGZus{}obb
+\end{Verbatim}
+\end{quote}
+
+This will run oBB using MPI on one processor for a simple 2D sum of sins problem (see Example of Use).
+
+Note that if using the MPICH implementation of MPI we first need to start an mpd daemon in the background:
+\begin{quote}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nv}{\PYGZdl{} }mpd \PYGZam{}
+\end{Verbatim}
+\end{quote}
+
+but this is not necessary for other MPI implementations, e.g. OpenMPI.
 
 
 \section{Uninstallation}
@@ -382,14 +406,14 @@ We can code this up in a python script file, let's call it sins.py as follows:
 
 \PYG{c}{\PYGZsh{} Input Settings}
 \PYG{c}{\PYGZsh{} Algorithm (T1, T2\PYGZus{}individual, T2\PYGZus{}synchronised)}
-\PYG{n}{alg} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{T1}\PYG{l+s}{'}
+\PYG{n}{alg} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{T1}\PYG{l+s}{\PYGZsq{}}
 
-\PYG{c}{\PYGZsh{} Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,}
-\PYG{c}{\PYGZsh{} c - norm cubic, gc - gershgorin cubic)}
-\PYG{n}{mod} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{c}\PYG{l+s}{'}
+\PYG{c}{\PYGZsh{} Model type (q \PYGZhy{} norm quadratic, g/Hz/lbH/E0/Ediag \PYGZhy{} min eig. quadratic,}
+\PYG{c}{\PYGZsh{} c \PYGZhy{} norm cubic, gc \PYGZhy{} gershgorin cubic)}
+\PYG{n}{mod} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{c}\PYG{l+s}{\PYGZsq{}}
 
 \PYG{c}{\PYGZsh{} Tolerance}
-\PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mf}{1e-2}
+\PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}2}
 
 \PYG{c}{\PYGZsh{} Tensor diagonal function}
 \PYG{k}{def} \PYG{n+nf}{diagt}\PYG{p}{(}\PYG{n}{v}\PYG{p}{)}\PYG{p}{:}
@@ -402,19 +426,19 @@ We can code this up in a python script file, let's call it sins.py as follows:
 \PYG{c}{\PYGZsh{} Dimension}
 \PYG{n}{D} \PYG{o}{=} \PYG{l+m+mi}{2}
 \PYG{c}{\PYGZsh{} Constraints}
-\PYG{n}{l} \PYG{o}{=} \PYG{o}{-}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
+\PYG{n}{l} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
 \PYG{n}{u} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
-\PYG{n}{A} \PYG{o}{=} \PYG{o}{-}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{A} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}
 \PYG{n}{b} \PYG{o}{=} \PYG{l+m+mi}{1}
 \PYG{c}{\PYGZsh{} Required functions}
 \PYG{n}{f} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
 \PYG{n}{g} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{cos}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
-\PYG{n}{H} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{diag}\PYG{p}{(}\PYG{o}{-}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
-\PYG{n}{bndH} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{l}\PYG{p}{,}\PYG{n}{u}\PYG{p}{:} \PYG{p}{(}\PYG{n}{diag}\PYG{p}{(}\PYG{o}{-}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{diag}\PYG{p}{(}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
-\PYG{n}{bndT} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{l}\PYG{p}{,}\PYG{n}{u}\PYG{p}{:} \PYG{p}{(}\PYG{n}{diagt}\PYG{p}{(}\PYG{o}{-}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{diagt}\PYG{p}{(}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{H} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n}{diag}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{bndH} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{l}\PYG{p}{,}\PYG{n}{u}\PYG{p}{:} \PYG{p}{(}\PYG{n}{diag}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{diag}\PYG{p}{(}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{bndT} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{l}\PYG{p}{,}\PYG{n}{u}\PYG{p}{:} \PYG{p}{(}\PYG{n}{diagt}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{,} \PYG{n}{diagt}\PYG{p}{(}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}\PYG{p}{)}
 
 \PYG{c}{\PYGZsh{} Name objective function}
-\PYG{n}{f}\PYG{o}{.}\PYG{n}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{Sum of Sins}\PYG{l+s}{'}
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{Sum of Sins}\PYG{l+s}{\PYGZsq{}}
 
 \PYG{c}{\PYGZsh{} Run oBB}
 \PYG{n}{xs}\PYG{p}{,} \PYG{n}{fxs}\PYG{p}{,} \PYG{n}{tol}\PYG{p}{,} \PYG{n}{itr} \PYG{o}{=} \PYG{n}{obb}\PYG{p}{(}\PYG{n}{f}\PYG{p}{,} \PYG{n}{g}\PYG{p}{,} \PYG{n}{H}\PYG{p}{,} \PYG{n}{bndH}\PYG{p}{,} \PYG{n}{bndT}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n}{u}\PYG{p}{,} \PYG{n}{alg}\PYG{p}{,} \PYG{n}{mod}\PYG{p}{,} \PYG{n}{A}\PYG{o}{=}\PYG{n}{A}\PYG{p}{,} \PYG{n}{b}\PYG{o}{=}\PYG{n}{b}\PYG{p}{,} \PYG{n}{tol}\PYG{o}{=}\PYG{n}{tol}\PYG{p}{)}
@@ -430,7 +454,7 @@ To run the user-created python script file (e.g. sins.py, see {\hyperref[usergui
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }mpiexec -n 4 python sins.py
+\PYG{n+nv}{\PYGZdl{} }mpiexec \PYGZhy{}n 4 python sins.py
 \end{Verbatim}
 \end{quote}
 
@@ -442,7 +466,7 @@ Note that if using the MPICH implementation of MPI we first need to start an mpd
 \end{Verbatim}
 \end{quote}
 
-but this is not necessary for other MPI implmentations, e.g. OpenMPI.
+but this is not necessary for other MPI implementations, e.g. OpenMPI.
 
 
 \section{Using the RBF Layer}
@@ -470,22 +494,22 @@ We can code this up in a python script file, let's call it sins\_rbf.py as follo
 
 \PYG{c}{\PYGZsh{} Input Settings}
 \PYG{c}{\PYGZsh{} Algorithm (T1, T2\PYGZus{}individual, T2\PYGZus{}synchronised)}
-\PYG{n}{alg} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{T1}\PYG{l+s}{'}
+\PYG{n}{alg} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{T1}\PYG{l+s}{\PYGZsq{}}
 
-\PYG{c}{\PYGZsh{} Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,}
-\PYG{c}{\PYGZsh{} c - norm cubic, gc - gershgorin cubic)}
-\PYG{n}{mod} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{c}\PYG{l+s}{'}
+\PYG{c}{\PYGZsh{} Model type (q \PYGZhy{} norm quadratic, g/Hz/lbH/E0/Ediag \PYGZhy{} min eig. quadratic,}
+\PYG{c}{\PYGZsh{} c \PYGZhy{} norm cubic, gc \PYGZhy{} gershgorin cubic)}
+\PYG{n}{mod} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{c}\PYG{l+s}{\PYGZsq{}}
 
 \PYG{c}{\PYGZsh{} Tolerance}
-\PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mf}{1e-2}
+\PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}2}
 
 \PYG{c}{\PYGZsh{} Set up sum of sins test function}
 \PYG{c}{\PYGZsh{} Dimension}
 \PYG{n}{D} \PYG{o}{=} \PYG{l+m+mi}{2}
 \PYG{c}{\PYGZsh{} Constraints}
-\PYG{n}{l} \PYG{o}{=} \PYG{o}{-}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
+\PYG{n}{l} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
 \PYG{n}{u} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{n}{D}\PYG{p}{)}
-\PYG{n}{A} \PYG{o}{=} \PYG{o}{-}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}
+\PYG{n}{A} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{*}\PYG{n}{ones}\PYG{p}{(}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{D}\PYG{p}{)}\PYG{p}{)}
 \PYG{n}{b} \PYG{o}{=} \PYG{l+m+mi}{1}
 \PYG{c}{\PYGZsh{} Required functions}
 \PYG{n}{f} \PYG{o}{=} \PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{sin}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}\PYG{p}{)}
@@ -496,10 +520,10 @@ We can code this up in a python script file, let's call it sins\_rbf.py as follo
 
 \PYG{c}{\PYGZsh{} Scale points so they lie in [l,u]}
 \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{n}{D}\PYG{p}{)}\PYG{p}{:}
-    \PYG{n}{pts}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{l}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{+} \PYG{p}{(}\PYG{n}{u}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{-}\PYG{n}{l}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{p}{)}\PYG{o}{*}\PYG{n}{pts}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,}\PYG{n}{i}\PYG{p}{]}
+    \PYG{n}{pts}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{l}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{+} \PYG{p}{(}\PYG{n}{u}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{o}{\PYGZhy{}}\PYG{n}{l}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}\PYG{p}{)}\PYG{o}{*}\PYG{n}{pts}\PYG{p}{[}\PYG{p}{:}\PYG{p}{,}\PYG{n}{i}\PYG{p}{]}
 
 \PYG{c}{\PYGZsh{} Name objective function}
-\PYG{n}{f}\PYG{o}{.}\PYG{n}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{RBF Sum of Sins}\PYG{l+s}{'}
+\PYG{n}{f}\PYG{o}{.}\PYG{n}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{RBF Sum of Sins}\PYG{l+s}{\PYGZsq{}}
 
 \PYG{c}{\PYGZsh{} Run oBB}
 \PYG{n}{xs}\PYG{p}{,} \PYG{n}{fxs}\PYG{p}{,} \PYG{n}{tol}\PYG{p}{,} \PYG{n}{itr} \PYG{o}{=} \PYG{n}{obb\PYGZus{}rbf}\PYG{p}{(}\PYG{n}{f}\PYG{p}{,} \PYG{n}{pts}\PYG{p}{,} \PYG{n}{l}\PYG{p}{,} \PYG{n}{u}\PYG{p}{,} \PYG{n}{alg}\PYG{p}{,} \PYG{n}{mod}\PYG{p}{,} \PYG{n}{A}\PYG{o}{=}\PYG{n}{A}\PYG{p}{,} \PYG{n}{b}\PYG{o}{=}\PYG{n}{b}\PYG{p}{,} \PYG{n}{tol}\PYG{o}{=}\PYG{n}{tol}\PYG{p}{)}
@@ -520,17 +544,17 @@ oBB comes with a set of pre-computed RBF approximations to selected functions fr
 
 \PYG{c}{\PYGZsh{} Input Settings}
 \PYG{c}{\PYGZsh{} Algorithm (T1, T2\PYGZus{}individual, T2\PYGZus{}synchronised)}
-\PYG{n}{alg} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{T1}\PYG{l+s}{'}
+\PYG{n}{alg} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{T1}\PYG{l+s}{\PYGZsq{}}
 
-\PYG{c}{\PYGZsh{} Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,}
-\PYG{c}{\PYGZsh{} c - norm cubic, gc - gershgorin cubic)}
-\PYG{n}{mod} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{c}\PYG{l+s}{'}
+\PYG{c}{\PYGZsh{} Model type (q \PYGZhy{} norm quadratic, g/Hz/lbH/E0/Ediag \PYGZhy{} min eig. quadratic,}
+\PYG{c}{\PYGZsh{} c \PYGZhy{} norm cubic, gc \PYGZhy{} gershgorin cubic)}
+\PYG{n}{mod} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{c}\PYG{l+s}{\PYGZsq{}}
 
-\PYG{c}{\PYGZsh{} Tolerance (can also be '12hr')}
-\PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mf}{1e-2}
+\PYG{c}{\PYGZsh{} Tolerance (can also be \PYGZsq{}12hr\PYGZsq{})}
+\PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}2}
 
 \PYG{c}{\PYGZsh{} Choose RBF approximation from COCONUT test}
-\PYG{n}{f} \PYG{o}{=} \PYG{l+s}{'}\PYG{l+s}{hs041}\PYG{l+s}{'}
+\PYG{n}{f} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}}\PYG{l+s}{hs041}\PYG{l+s}{\PYGZsq{}}
 
 \PYG{c}{\PYGZsh{} Run oBB}
 \PYG{n}{xs}\PYG{p}{,} \PYG{n}{fxs}\PYG{p}{,} \PYG{n}{tol}\PYG{p}{,} \PYG{n}{itr} \PYG{o}{=} \PYG{n}{obb\PYGZus{}rbf\PYGZus{}coconut}\PYG{p}{(}\PYG{n}{f}\PYG{p}{,} \PYG{n}{alg}\PYG{p}{,} \PYG{n}{mod}\PYG{p}{,} \PYG{n}{tol}\PYG{o}{=}\PYG{n}{tol}\PYG{p}{)}
@@ -540,8 +564,20 @@ oBB comes with a set of pre-computed RBF approximations to selected functions fr
 Note the use of \textbf{obb\_rbf\_coconut} as the calling function and the optional \textbf{`12hr'} tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}} for details). This file is included in oBB as coconut.py, to run it see {\hyperref[userguide:running-the-algorithm]{Running the Algorithm}}.
 
 
+\section{Acknowledgements}
+\label{userguide:acknowledgements}
+This work was supported by EPSRC grants EP/I028854/1 and NAIS EP/G036136/1 (PI: \href{http://www.maths.ox.ac.uk/people/profiles/coralia.cartis}{Dr C. Cartis}).
+We are also grateful to \href{http://www.numerical.rl.ac.uk/people/nimg/}{Prof Nick Gould} for his help and advice during development.
+
+
 \section{References}
 \label{userguide:references}
+
+\chapter{Acknowledgements}
+\label{index:acknowledgements}
+This work was supported by EPSRC grants EP/I028854/1 and NAIS EP/G036136/1 (PI: \href{http://www.maths.ox.ac.uk/people/profiles/coralia.cartis}{Dr C. Cartis}).
+We are also grateful to \href{http://www.numerical.rl.ac.uk/people/nimg/}{Prof Nick Gould} for his help and advice during development.
+
 \begin{thebibliography}{CFG2013}
 \bibitem[CFG2013]{CFG2013}{\phantomsection\label{userguide:cfg2013} 
 Cartis, C., Fowkes, J. M. and Gould, N. I. M. (2013) `Branching and Bounding Improvements for Global Optimization Algorithms with Lipschitz Continuity Properties', \emph{ERGO Technical Report}, no. 13-010, pp. 1-33. \href{http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html}{http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html}

@@ -63,6 +63,24 @@ If you do not have root privileges or you want to install oBB for your private u
     
 instead.    
 
+Testing
+-------
+oBB includes a command line test script to check that the installation was successfull. To run the test simply type the following into your shell:
+
+ .. code-block:: bash
+
+    $ test_obb
+
+This will run oBB using MPI on one processor for a simple 2D sum of sins problem (see `Example of Use <userguide.html#example-of-use>`_).
+
+Note that if using the MPICH implementation of MPI we first need to start an mpd daemon in the background:
+
+ .. code-block:: bash
+
+    $ mpd &
+
+but this is not necessary for other MPI implementations, e.g. OpenMPI.
+
 Uninstallation
 --------------
 If oBB was installed using `pip <http://www.pip-installer.org/>`_ you can uninstall as follows:
@@ -72,4 +90,5 @@ If oBB was installed using `pip <http://www.pip-installer.org/>`_ you can uninst
     $ [sudo] pip uninstall obb
 
 If oBB was installed manually you have to remove the installed files by hand (located in your python site-packages directory).
+
 

@@ -156,7 +156,7 @@ Note that if using the MPICH implementation of MPI we first need to start an mpd
 
     $ mpd &
 
-but this is not necessary for other MPI implmentations, e.g. OpenMPI.
+but this is not necessary for other MPI implementations, e.g. OpenMPI.
 
 Using the RBF Layer
 -------------------
@@ -246,6 +246,11 @@ oBB comes with a set of pre-computed RBF approximations to selected functions fr
 	xs, fxs, tol, itr = obb_rbf_coconut(f, alg, mod, tol=tol)
   
 Note the use of **obb_rbf_coconut** as the calling function and the optional **'12hr'** tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see [CFG2013]_ for details). This file is included in oBB as coconut.py, to run it see `Running the Algorithm`_. 
+
+Acknowledgements
+----------------
+This work was supported by EPSRC grants EP/I028854/1 and NAIS EP/G036136/1 (PI: `Dr C. Cartis <http://www.maths.ox.ac.uk/people/profiles/coralia.cartis>`_).
+We are also grateful to `Prof Nick Gould <http://www.numerical.rl.ac.uk/people/nimg/>`_ for his help and advice during development.
 
 References
 ----------

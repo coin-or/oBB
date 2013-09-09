@@ -194,7 +194,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'oBB.tex', u'oBB Documentation',
-   u'J. Fowkes', 'manual'),
+   u'J. M. Fowkes', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

@@ -10,10 +10,9 @@ Overlapping Branch and Bound
 
 **Date:** |today|
 
+**Author:** `J. M. Fowkes <jaroslav.fowkes@ed.ac.uk>`_
 
 oBB is an algorithm for the parallel global optimization of functions with Lipchitz continuous gradient or Hessian.
-
-.. WARNING:: oBB is currently undergoing testing and may not work as expected.
 
 .. toctree::
    :maxdepth: 2
@@ -21,7 +20,10 @@ oBB is an algorithm for the parallel global optimization of functions with Lipch
    install
    userguide
   
-.. tutorial
+Acknowledgements
+----------------
+This work was supported by EPSRC grants EP/I028854/1 and NAIS EP/G036136/1 (PI: `Dr C. Cartis <http://www.maths.ox.ac.uk/people/profiles/coralia.cartis>`_).
+We are also grateful to `Prof Nick Gould <http://www.numerical.rl.ac.uk/people/nimg/>`_ for his help and advice during development.
    
 .. Indices and tables
    ==================
