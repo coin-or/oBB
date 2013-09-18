@@ -4,3 +4,4 @@ v0.2a, 26/7/2013 -- Added RBF Layer.
 v0.3a, 5/8/2013 -- Added COCONUT test set.
 v0.4a, 9/8/2013 -- Added QuadProg++ solver. Added support for equality constraints.
 v0.5b, 9/9/2013 -- Added test code and updated documentation
+v0.6b, 18/9/2013 -- Minor updates and bugfixes

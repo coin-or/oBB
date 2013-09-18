@@ -63,14 +63,19 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 		if(D == 2):
 				lat = array([[0., 0.], [1., 0.], [-1., 0.],
 				[0.5, sqrt(3.)/2.], [-0.5, sqrt(3.)/2.],
-				[0.5, -sqrt(3.)/2.], [-0.5, -sqrt(3.)/2.]])
+				[0.5, -sqrt(3.)/2.], [-0.5, -sqrt(3.)/2.]])	
 		elif(D == 3):
-			lat = loadtxt('d3p')
+			lat = loadtxt('d3')
 		elif(D == 4):
-			lat = loadtxt('d4p')			
+			lat = loadtxt('d4')
+		elif(D == 5):
+			lat = loadtxt('d5')		
 		elif(D == 6):
-			lat = loadtxt('e6p')	
-								
+			lat = loadtxt('e6')
+		elif(D == 7):
+			lat = loadtxt('e7')
+		elif(D == 8):
+			lat = loadtxt('e8')							
 		else:
 			raise RuntimeError('A lattice for '+str(D)+' Dimensions has yet to be provided.')
 	

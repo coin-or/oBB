@@ -14,8 +14,8 @@
 
 
 \title{oBB Documentation}
-\date{09 September, 2013}
-\release{0.5b}
+\date{18 September, 2013}
+\release{0.6b}
 \author{J. M. Fowkes}
 \newcommand{\sphinxlogo}{\includegraphics{p1.pdf}\par}
 \renewcommand{\releasename}{Release}
@@ -121,9 +121,9 @@
 \phantomsection\label{index::doc}
 
 
-\textbf{Release:} 0.5b
+\textbf{Release:} 0.6b
 
-\textbf{Date:} 09 September, 2013
+\textbf{Date:} 18 September, 2013
 
 \textbf{Author:} \href{mailto:jaroslav.fowkes@ed.ac.uk}{J. M. Fowkes}
 
@@ -163,7 +163,7 @@ Optionally, \href{http://www.matplotlib.org/}{matplotlib 1.1.0 or higher} may be
 
 \section{Installation using pip}
 \label{install:installation-using-pip}
-For easy installation, use \href{http://www.pip-installer.org/}{pip}:
+For easy installation, use \href{http://www.pip-installer.org/}{pip} as root:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -188,6 +188,16 @@ If you do not have root privileges or you want to install oBB for your private u
 \end{quote}
 
 which will install oBB in your home directory.
+
+Note that if an older install of oBB is present on your system you can use:
+\begin{quote}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nv}{\PYGZdl{} }\PYG{o}{[}sudo\PYG{o}{]} pip install \PYGZhy{}\PYGZhy{}upgrade obb
+\end{Verbatim}
+\end{quote}
+
+to upgrade oBB to the latest version.
 
 
 \section{Manual installation}
@@ -232,9 +242,9 @@ oBB includes a command line test script to check that the installation was succe
 \end{Verbatim}
 \end{quote}
 
-This will run oBB using MPI on one processor for a simple 2D sum of sins problem (see Example of Use).
+This will run oBB using MPI on one processor core for a simple 2D sum of sines problem (see Example of Use).
 
-Note that if using the MPICH implementation of MPI we first need to start an mpd daemon in the background:
+Note that if using the MPICH implementation of MPI you first need to start an mpd daemon in the background:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -396,7 +406,7 @@ where $diagt$ is the tensor diagonal function (i.e. $diagt(v)$ places the vector
 
 It is straightforward to obtain elementwise bounds on the Hessian matrix $H$ and third order derivative tensor $T$ as both $sin$ and $cos$ can be bounded below and above by -1 and 1 respectively.
 
-We can code this up in a python script file, let's call it sins.py as follows:
+We can code this up in a python script file, let's call it sines.py as follows:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -422,7 +432,7 @@ We can code this up in a python script file, let's call it sins.py as follows:
             \PYG{n}{T}\PYG{p}{[}\PYG{n}{i}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{v}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
     \PYG{k}{return} \PYG{n}{T}
 
-\PYG{c}{\PYGZsh{} Set up sum of sins test function}
+\PYG{c}{\PYGZsh{} Set up sum of sines test function}
 \PYG{c}{\PYGZsh{} Dimension}
 \PYG{n}{D} \PYG{o}{=} \PYG{l+m+mi}{2}
 \PYG{c}{\PYGZsh{} Constraints}
@@ -445,16 +455,16 @@ We can code this up in a python script file, let's call it sins.py as follows:
 \end{Verbatim}
 \end{quote}
 
-This file is included in oBB as sins.py, to run it see {\hyperref[userguide:running-the-algorithm]{Running the Algorithm}}.
+This file is included in oBB as sines.py, to run it see {\hyperref[userguide:running-the-algorithm]{Running the Algorithm}}.
 
 
 \section{Running the Algorithm}
 \label{userguide:running-the-algorithm}
-To run the user-created python script file (e.g. sins.py, see {\hyperref[userguide:example-of-use]{Example of Use}}) we need to execute it using MPI's mpiexec command, specifying the number of processor cores with the -n option. For example, to run oBB on four processor cores we simply execute the following shell command:
+To run the user-created python script file (e.g. sines.py, see {\hyperref[userguide:example-of-use]{Example of Use}}) we need to execute it using MPI's mpiexec command, specifying the number of processor cores with the -n option. For example, to run oBB on four processor cores we simply execute the following shell command:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }mpiexec \PYGZhy{}n 4 python sins.py
+\PYG{n+nv}{\PYGZdl{} }mpiexec \PYGZhy{}n 4 python sines.py
 \end{Verbatim}
 \end{quote}
 
@@ -483,7 +493,7 @@ For example, suppose we wish to solve an RBF approximation to the problem given 
 \text{and }  \; &\sum_{i=1}^n -x_i \le 1\end{split}\notag
 \end{gather}\end{quote}
 
-We can code this up in a python script file, let's call it sins\_rbf.py as follows:
+We can code this up in a python script file, let's call it sines\_rbf.py as follows:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -503,7 +513,7 @@ We can code this up in a python script file, let's call it sins\_rbf.py as follo
 \PYG{c}{\PYGZsh{} Tolerance}
 \PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mf}{1e\PYGZhy{}2}
 
-\PYG{c}{\PYGZsh{} Set up sum of sins test function}
+\PYG{c}{\PYGZsh{} Set up sum of sines test function}
 \PYG{c}{\PYGZsh{} Dimension}
 \PYG{n}{D} \PYG{o}{=} \PYG{l+m+mi}{2}
 \PYG{c}{\PYGZsh{} Constraints}
@@ -530,7 +540,7 @@ We can code this up in a python script file, let's call it sins\_rbf.py as follo
 \end{Verbatim}
 \end{quote}
 
-Note the use of \textbf{obb\_rbf} instead of \textbf{obb} and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sins\_rbf.py, to run it see {\hyperref[userguide:running-the-algorithm]{Running the Algorithm}}.
+Note the use of \textbf{obb\_rbf} instead of \textbf{obb} and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sines\_rbf.py, to run it see {\hyperref[userguide:running-the-algorithm]{Running the Algorithm}}.
 
 
 \section{RBF Layer for the COCONUT Test Set}
@@ -566,8 +576,8 @@ Note the use of \textbf{obb\_rbf\_coconut} as the calling function and the optio
 
 \section{Acknowledgements}
 \label{userguide:acknowledgements}
-This work was supported by EPSRC grants EP/I028854/1 and NAIS EP/G036136/1 (PI: \href{http://www.maths.ox.ac.uk/people/profiles/coralia.cartis}{Dr C. Cartis}).
-We are also grateful to \href{http://www.numerical.rl.ac.uk/people/nimg/}{Prof Nick Gould} for his help and advice during development.
+This work was supported by EPSRC grants \href{http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/I028854/1}{EP/I028854/1} (PI: \href{http://www.maths.ox.ac.uk/people/profiles/coralia.cartis}{Dr Coralia Cartis}) and NAIS \href{http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/G036136/1}{EP/G036136/1}.
+We are also grateful to \href{http://www.numerical.rl.ac.uk/people/nimg/}{Prof Nick Gould} for his help and advice during development and Mehdi Towhidi for providing us with his \href{http://github.com/mpy/PyQuadProg}{PyQuadProg code}.
 
 
 \section{References}
@@ -575,8 +585,8 @@ We are also grateful to \href{http://www.numerical.rl.ac.uk/people/nimg/}{Prof N
 
 \chapter{Acknowledgements}
 \label{index:acknowledgements}
-This work was supported by EPSRC grants EP/I028854/1 and NAIS EP/G036136/1 (PI: \href{http://www.maths.ox.ac.uk/people/profiles/coralia.cartis}{Dr C. Cartis}).
-We are also grateful to \href{http://www.numerical.rl.ac.uk/people/nimg/}{Prof Nick Gould} for his help and advice during development.
+This work was supported by EPSRC grants \href{http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/I028854/1}{EP/I028854/1} (PI: \href{http://www.maths.ox.ac.uk/people/profiles/coralia.cartis}{Dr Coralia Cartis}) and NAIS \href{http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/G036136/1}{EP/G036136/1}.
+We are also grateful to \href{http://www.numerical.rl.ac.uk/people/nimg/}{Prof Nick Gould} for his help and advice during development and Mehdi Towhidi for providing us with his \href{http://github.com/mpy/PyQuadProg}{PyQuadProg code}.
 
 \begin{thebibliography}{CFG2013}
 \bibitem[CFG2013]{CFG2013}{\phantomsection\label{userguide:cfg2013} 

@@ -93,7 +93,7 @@ where :math:`diagt` is the tensor diagonal function (i.e. :math:`diagt(v)` place
 
 It is straightforward to obtain elementwise bounds on the Hessian matrix :math:`H` and third order derivative tensor :math:`T` as both :math:`sin` and :math:`cos` can be bounded below and above by -1 and 1 respectively. 
 
-We can code this up in a python script file, let's call it sins.py as follows:  
+We can code this up in a python script file, let's call it sines.py as follows:  
 
   .. code-block:: python
   
@@ -119,7 +119,7 @@ We can code this up in a python script file, let's call it sins.py as follows:
 		  T[i,i,i] = v[i]
 	  return T
 
-      # Set up sum of sins test function
+      # Set up sum of sines test function
       # Dimension
       D = 2
       # Constraints
@@ -140,15 +140,15 @@ We can code this up in a python script file, let's call it sins.py as follows:
       # Run oBB
       xs, fxs, tol, itr = obb(f, g, H, bndH, bndT, l, u, alg, mod, A=A, b=b, tol=tol)
       
-This file is included in oBB as sins.py, to run it see `Running the Algorithm`_.
+This file is included in oBB as sines.py, to run it see `Running the Algorithm`_.
 
 Running the Algorithm
 ---------------------
-To run the user-created python script file (e.g. sins.py, see `Example of Use`_) we need to execute it using MPI's mpiexec command, specifying the number of processor cores with the -n option. For example, to run oBB on four processor cores we simply execute the following shell command:
+To run the user-created python script file (e.g. sines.py, see `Example of Use`_) we need to execute it using MPI's mpiexec command, specifying the number of processor cores with the -n option. For example, to run oBB on four processor cores we simply execute the following shell command:
 
   .. code-block:: bash
 
-     $ mpiexec -n 4 python sins.py
+     $ mpiexec -n 4 python sines.py
 
 Note that if using the MPICH implementation of MPI we first need to start an mpd daemon in the background:
 
@@ -172,7 +172,7 @@ For example, suppose we wish to solve an RBF approximation to the problem given 
     \text{s.t. } \; &-1 \le x_i \le 1 \; \; \forall i=1,\dotsc,n \\
     \text{and }  \; &\sum_{i=1}^n -x_i \le 1
 
-We can code this up in a python script file, let's call it sins_rbf.py as follows:  
+We can code this up in a python script file, let's call it sines_rbf.py as follows:  
 
   .. code-block:: python
   
@@ -192,7 +192,7 @@ We can code this up in a python script file, let's call it sins_rbf.py as follow
 	# Tolerance
 	tol = 1e-2
 
-	# Set up sum of sins test function
+	# Set up sum of sines test function
 	# Dimension
 	D = 2
 	# Constraints
@@ -217,7 +217,7 @@ We can code this up in a python script file, let's call it sins_rbf.py as follow
 	# Run oBB
 	xs, fxs, tol, itr = obb_rbf(f, pts, l, u, alg, mod, A=A, b=b, tol=tol)
 		
-Note the use of **obb_rbf** instead of **obb** and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sins_rbf.py, to run it see `Running the Algorithm`_. 
+Note the use of **obb_rbf** instead of **obb** and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sines_rbf.py, to run it see `Running the Algorithm`_. 
 
 RBF Layer for the COCONUT Test Set
 ----------------------------------
@@ -249,8 +249,8 @@ Note the use of **obb_rbf_coconut** as the calling function and the optional **'
 
 Acknowledgements
 ----------------
-This work was supported by EPSRC grants EP/I028854/1 and NAIS EP/G036136/1 (PI: `Dr C. Cartis <http://www.maths.ox.ac.uk/people/profiles/coralia.cartis>`_).
-We are also grateful to `Prof Nick Gould <http://www.numerical.rl.ac.uk/people/nimg/>`_ for his help and advice during development.
+This work was supported by EPSRC grants `EP/I028854/1 <http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/I028854/1>`_ (PI: `Dr Coralia Cartis <http://www.maths.ox.ac.uk/people/profiles/coralia.cartis>`_) and NAIS `EP/G036136/1 <http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/G036136/1>`_.
+We are also grateful to `Prof Nick Gould <http://www.numerical.rl.ac.uk/people/nimg/>`_ for his help and advice during development and Mehdi Towhidi for providing us with his `PyQuadProg code <http://github.com/mpy/PyQuadProg>`_.
 
 References
 ----------

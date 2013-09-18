@@ -29,7 +29,7 @@ def diagt(v):
 	    T[i,i,i] = v[i]
     return T
 
-# Set up sum of sins test function
+# Set up sum of sines test function
 # Dimension
 D = 2
 # Constraints

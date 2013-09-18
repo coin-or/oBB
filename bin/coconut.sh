@@ -1,1 +1,3 @@
-mpiexec -n 4 python /usr/bin/coconut.py
+#!/bin/bash
+
+mpiexec -n 4 python coconut.py

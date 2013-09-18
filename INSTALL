@@ -25,7 +25,7 @@ Optionally, matplotlib 1.1.0 or higher (http://www.matplotlib.org/) may be manua
 
 Installation using pip
 ----------------------
-For easy installation, use *pip* (http://www.pip-installer.org/)::
+For easy installation, use *pip* (http://www.pip-installer.org/) as root::
 
     $ [sudo] pip install obb
 
@@ -38,6 +38,12 @@ If you do not have root privileges or you want to install oBB for your private u
     $ pip install --user obb
       
 which will install oBB in your home directory.
+
+Note that if an older install of oBB is present on your system you can use::
+
+    $ [sudo] pip install --upgrade obb
+      
+to upgrade oBB to the latest version.
 
 Manual installation
 -------------------
@@ -64,9 +70,9 @@ oBB includes a command line test script to check that the installation was succe
 
     $ test_obb
 
-This will run oBB using MPI on one processor for a simple 2D sum of sins problem.
+This will run oBB using MPI on one processor core for a simple 2D sum of sines problem.
 
-Note that if using the MPICH implementation of MPI we first need to start an mpd daemon in the background::
+Note that if using the MPICH implementation of MPI you first need to start an mpd daemon in the background::
 
     $ mpd &
 

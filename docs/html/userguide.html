@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.5b',
+        VERSION:     '0.6b',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -138,7 +138,7 @@
 </div></blockquote>
 <p>where <span class="math">\(diagt\)</span> is the tensor diagonal function (i.e. <span class="math">\(diagt(v)\)</span> places the vector <span class="math">\(v\)</span> on the diagonal of the tensor).</p>
 <p>It is straightforward to obtain elementwise bounds on the Hessian matrix <span class="math">\(H\)</span> and third order derivative tensor <span class="math">\(T\)</span> as both <span class="math">\(sin\)</span> and <span class="math">\(cos\)</span> can be bounded below and above by -1 and 1 respectively.</p>
-<p>We can code this up in a python script file, let's call it sins.py as follows:</p>
+<p>We can code this up in a python script file, let's call it sines.py as follows:</p>
 <blockquote>
 <div><div class="highlight-python"><div class="highlight"><pre><span class="c"># Example code for oBB</span>
 <span class="kn">from</span> <span class="nn">obb</span> <span class="kn">import</span> <span class="n">obb</span>
@@ -162,7 +162,7 @@
             <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">T</span>
 
-<span class="c"># Set up sum of sins test function</span>
+<span class="c"># Set up sum of sines test function</span>
 <span class="c"># Dimension</span>
 <span class="n">D</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="c"># Constraints</span>
@@ -185,13 +185,13 @@
 </pre></div>
 </div>
 </div></blockquote>
-<p>This file is included in oBB as sins.py, to run it see <a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a>.</p>
+<p>This file is included in oBB as sines.py, to run it see <a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a>.</p>
 </div>
 <div class="section" id="running-the-algorithm">
 <h2>Running the Algorithm<a class="headerlink" href="#running-the-algorithm" title="Permalink to this headline">¶</a></h2>
-<p>To run the user-created python script file (e.g. sins.py, see <a class="reference internal" href="#example-of-use">Example of Use</a>) we need to execute it using MPI's mpiexec command, specifying the number of processor cores with the -n option. For example, to run oBB on four processor cores we simply execute the following shell command:</p>
+<p>To run the user-created python script file (e.g. sines.py, see <a class="reference internal" href="#example-of-use">Example of Use</a>) we need to execute it using MPI's mpiexec command, specifying the number of processor cores with the -n option. For example, to run oBB on four processor cores we simply execute the following shell command:</p>
 <blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mpiexec -n 4 python sins.py
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mpiexec -n 4 python sines.py
 </pre></div>
 </div>
 </div></blockquote>
@@ -214,7 +214,7 @@
 \text{s.t. } \; &amp;-1 \le x_i \le 1 \; \; \forall i=1,\dotsc,n \\
 \text{and }  \; &amp;\sum_{i=1}^n -x_i \le 1\end{split}\]</div>
 </div></blockquote>
-<p>We can code this up in a python script file, let's call it sins_rbf.py as follows:</p>
+<p>We can code this up in a python script file, let's call it sines_rbf.py as follows:</p>
 <blockquote>
 <div><div class="highlight-python"><div class="highlight"><pre><span class="c"># Example RBF Layer code for oBB</span>
 <span class="kn">from</span> <span class="nn">obb</span> <span class="kn">import</span> <span class="n">obb_rbf</span>
@@ -232,7 +232,7 @@
 <span class="c"># Tolerance</span>
 <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-2</span>
 
-<span class="c"># Set up sum of sins test function</span>
+<span class="c"># Set up sum of sines test function</span>
 <span class="c"># Dimension</span>
 <span class="n">D</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="c"># Constraints</span>
@@ -259,7 +259,7 @@
 </pre></div>
 </div>
 </div></blockquote>
-<p>Note the use of <strong>obb_rbf</strong> instead of <strong>obb</strong> and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sins_rbf.py, to run it see <a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a>.</p>
+<p>Note the use of <strong>obb_rbf</strong> instead of <strong>obb</strong> and the need for a random number seed so that the sample points are the same on all processors. This file is included in oBB as sines_rbf.py, to run it see <a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a>.</p>
 </div>
 <div class="section" id="rbf-layer-for-the-coconut-test-set">
 <h2>RBF Layer for the COCONUT Test Set<a class="headerlink" href="#rbf-layer-for-the-coconut-test-set" title="Permalink to this headline">¶</a></h2>
@@ -291,8 +291,8 @@
 </div>
 <div class="section" id="acknowledgements">
 <h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
-<p>This work was supported by EPSRC grants EP/I028854/1 and NAIS EP/G036136/1 (PI: <a class="reference external" href="http://www.maths.ox.ac.uk/people/profiles/coralia.cartis">Dr C. Cartis</a>).
-We are also grateful to <a class="reference external" href="http://www.numerical.rl.ac.uk/people/nimg/">Prof Nick Gould</a> for his help and advice during development.</p>
+<p>This work was supported by EPSRC grants <a class="reference external" href="http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/I028854/1">EP/I028854/1</a> (PI: <a class="reference external" href="http://www.maths.ox.ac.uk/people/profiles/coralia.cartis">Dr Coralia Cartis</a>) and NAIS <a class="reference external" href="http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/G036136/1">EP/G036136/1</a>.
+We are also grateful to <a class="reference external" href="http://www.numerical.rl.ac.uk/people/nimg/">Prof Nick Gould</a> for his help and advice during development and Mehdi Towhidi for providing us with his <a class="reference external" href="http://github.com/mpy/PyQuadProg">PyQuadProg code</a>.</p>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
@@ -365,7 +365,7 @@ We are also grateful to <a class="reference external" href="http://www.numerical
           
     <div class="footer">
         &copy; Copyright 2013, J. M. Fowkes.
-      Last updated on 09 Sep, 2013.
+      Last updated on 18 Sep, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
         </div>

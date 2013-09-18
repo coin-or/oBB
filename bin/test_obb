@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Test oBB on Sum of Sines Example
+echo "Testing oBB on Sum of Sines Example...."
+mpiexec -n 1 python sines.py
+echo "Test completed successfully!"

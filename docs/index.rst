@@ -22,8 +22,8 @@ oBB is an algorithm for the parallel global optimization of functions with Lipch
   
 Acknowledgements
 ----------------
-This work was supported by EPSRC grants EP/I028854/1 and NAIS EP/G036136/1 (PI: `Dr C. Cartis <http://www.maths.ox.ac.uk/people/profiles/coralia.cartis>`_).
-We are also grateful to `Prof Nick Gould <http://www.numerical.rl.ac.uk/people/nimg/>`_ for his help and advice during development.
+This work was supported by EPSRC grants `EP/I028854/1 <http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/I028854/1>`_ (PI: `Dr Coralia Cartis <http://www.maths.ox.ac.uk/people/profiles/coralia.cartis>`_) and NAIS `EP/G036136/1 <http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/G036136/1>`_.
+We are also grateful to `Prof Nick Gould <http://www.numerical.rl.ac.uk/people/nimg/>`_ for his help and advice during development and Mehdi Towhidi for providing us with his `PyQuadProg code <http://github.com/mpy/PyQuadProg>`_.
    
 .. Indices and tables
    ==================

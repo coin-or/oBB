@@ -23,7 +23,7 @@ vis = 0
 # QP solver (cvxopt, quadprog)
 qpsolver = 'cvxopt'
 
-# Set up sum of sins test function
+# Set up sum of sines test function
 # Dimension
 D = 2
 # Constraints

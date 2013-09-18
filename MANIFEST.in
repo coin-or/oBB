@@ -1,5 +1,4 @@
 include AUTHORS CHANGES INSTALL LICENSE README
-include obb/test/*
 include docs/latex/oBB.pdf
 include docs/html/*
 include docs/html/_static/*
