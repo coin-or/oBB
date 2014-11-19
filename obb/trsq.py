@@ -19,11 +19,11 @@ def trsq(Lg, delta, xc, f, g):
 
     # Check if q. ord. root is within trust region
     if (norm(xq1) < delta):
-	bndq1 = fun(xq1)
-	xbq1 = xq1
+        bndq1 = fun(xq1)
+        xbq1 = xq1
     else: # No solution
-	bndq1 = inf
-	xbq1 = inf
+        bndq1 = inf
+        xbq1 = inf
 
     # Case b) Trust-region active
 
@@ -33,28 +33,28 @@ def trsq(Lg, delta, xc, f, g):
     # Define nfq(l) to find quadratic approx. roots
     def nfq(l):
 
-	# Find x(l)
-	xl = -g / (l + Lg)
+        # Find x(l)
+        xl = -g / (l + Lg)
 
-	# Calculate |xl|-delta (for newton stopping rule)
+        # Calculate |xl|-delta (for newton stopping rule)
         xlmd = norm(xl) - delta
 
-	# Calculate f(l) for p=-1
-	fl = 1/norm(xl) - 1/delta
+        # Calculate f(l) for p=-1
+        fl = 1/norm(xl) - 1/delta
 
-	# Find x'(l)
-	xlp = g / ((l + Lg) ** 2) 
+        # Find x'(l)
+        xlp = g / ((l + Lg) ** 2)
 
-	# Calculate f'(l) for p=-1 
-	flp = -dot(xl,xlp) * (dot(xl,xl) ** (-1.5))
+        # Calculate f'(l) for p=-1
+        flp = -dot(xl,xlp) * (dot(xl,xl) ** (-1.5))
 
-	# Calculate increment
-	dl = fl / flp
+        # Calculate increment
+        dl = fl / flp
 
-	# Set Delta
-	Delta = delta
-	
-	return xlmd, dl, Delta
+        # Set Delta
+        Delta = delta
+
+        return xlmd, dl, Delta
 
     # Run newton
     l = newton(nfq, l)
@@ -66,11 +66,10 @@ def trsq(Lg, delta, xc, f, g):
 
     # Return minimum of bndq1 and bndq2
     if (bndq1 < bndq2):
-	bnd = bndq1
-	xb = xbq1 + xc# since x -> x - xc
+        bnd = bndq1
+        xb = xbq1 + xc# since x -> x - xc
     else:
-	bnd = bndq2
-	xb = xbq2 + xc# since x -> x - xc
-    
+        bnd = bndq2
+        xb = xbq2 + xc# since x -> x - xc
+
     return bnd, xb
-    

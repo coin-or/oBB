@@ -5,7 +5,7 @@ from obb import obb_rbf_coconut
 # Algorithm (T1, T2_individual, T2_synchronised)
 alg = 'T1'
 
-# Model type (q - norm quadratic, c - norm cubic, g/Hz/lbH/E0/Ediag - min eig. quadratic, 
+# Model type (q - norm quadratic, c - norm cubic, g/Hz/lbH/E0/Ediag - min eig. quadratic,
 # gc - gershgorin cubic)
 mod = 'c'
 

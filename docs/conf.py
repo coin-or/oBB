@@ -48,7 +48,7 @@ copyright = u'2013, J. M. Fowkes'
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
-# 
+#
 # The short X.Y version.
 version = __version__
 # The full version, including alpha/beta/rc tags.
@@ -176,10 +176,10 @@ htmlhelp_basename = 'oBBdoc'
 # -- Options for LaTeX output --------------------------------------------------
 
 latex_elements = {
-# One sided and british  
+# One sided and british
 'classoptions': ',openany,oneside',
 'babel': '\\usepackage[british]{babel}',
-  
+
 # The paper size ('letterpaper' or 'a4paper').
 #'papersize': 'letterpaper',
 

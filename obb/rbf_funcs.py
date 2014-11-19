@@ -8,11 +8,11 @@ def frdl(s):
 
     # load data
     from config import N, D, a, x, tl
-    
+
     phi = lambda x: norm(dot(diag(tl),x)) ** 3
-    
+
     z = dot(hstack((array([1]), s[0:D])),a[N:N+D+1])
-   
+
     for i in range(0,N):
         z = z + a[i] * phi(s - x[i,:])
 
@@ -47,21 +47,18 @@ def hrdl(s):
 
     def hphi(s):
 
-	nrm_st = norm(dot(diag(tl),s))
-	h = zeros((D,D))
-	for i in range(0,D):
-	    for j in range(0,D):
-		h[i,j] = 3 * tl2[i] * tl2[j] * s[i] * s[j] / nrm_st
-		if (i == j):
-		    h[i,j] = h[i,j] + 3 * tl2[i] * nrm_st
+        nrm_st = norm(dot(diag(tl),s))
+        h = zeros((D,D))
+        for i in range(0,D):
+            for j in range(0,D):
+                h[i,j] = 3 * tl2[i] * tl2[j] * s[i] * s[j] / nrm_st
+                if (i == j):
+                    h[i,j] = h[i,j] + 3 * tl2[i] * nrm_st
 
-	return h
+        return h
 
     z = zeros((D,D))
     for p in range(0,N):
-	z = z + a[p] * hphi(s - x[p,:])
+        z = z + a[p] * hphi(s - x[p,:])
 
     return z
-
-
-

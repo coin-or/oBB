@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -15,8 +13,8 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.6b',
+        URL_ROOT:    './',
+        VERSION:     '0.7b',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -67,11 +65,11 @@
 </div></blockquote>
 <p>where the objective function <span class="math">\(f\)</span> has Lipschitz continuous gradient or Hessian. oBB does not need to know the Lipschitz constants explicitly, it merely requires the user to supply elementwise bounds on the Hessian or derivative tensor of the objective function (see <a class="reference internal" href="#how-to-use-obb">How to use oBB</a>). The linear inequality constraints <span class="math">\(Ax \le b\)</span> and equality constraints <span class="math">\(Ex = d\)</span> are optional but the bound constraints <span class="math">\(l \le x \le u\)</span> are required.</p>
 <p>oBB uses local first or second order Taylor type approximations over balls within a parallel branch and bound framework. As with all branch and bound algorithms, the curse of dimensionality limits its use to low dimensional problems. The choice of whether to use first or second order approximations is down to the user  (see <a class="reference internal" href="#how-to-use-obb">How to use oBB</a>).</p>
-<p>For an in-depth technical description of the algorithm see the tech-report <a class="reference internal" href="#cfg2013">[CFG2013]</a> and the paper <a class="reference internal" href="#fgf2013">[FGF2013]</a>.</p>
+<p>For an in-depth technical description of the algorithm see the tech-report <a class="reference internal" href="#cfg2013" id="id1">[CFG2013]</a> and the paper <a class="reference internal" href="#fgf2013" id="id2">[FGF2013]</a>.</p>
 </div>
 <div class="section" id="how-to-use-obb">
 <h2>How to use oBB<a class="headerlink" href="#how-to-use-obb" title="Permalink to this headline">¶</a></h2>
-<p>oBB requires the user to write a python script file that defines the functions and parameters necessary to solve the global optimization problem and then passes them to the main <strong>obb</strong> function (see <a class="reference internal" href="#example-of-use">Example of Use</a>). The necessary functions are determined by the choice of a first or second order approximation model. The following approximation models can be passed to oBB's <strong>obb</strong> function using the <strong>mod</strong> argument (see <a class="reference internal" href="#cfg2013">[CFG2013]</a> for details):</p>
+<p>oBB requires the user to write a python script file that defines the functions and parameters necessary to solve the global optimization problem and then passes them to the main <strong>obb</strong> function (see <a class="reference internal" href="#example-of-use">Example of Use</a>). The necessary functions are determined by the choice of a first or second order approximation model. The following approximation models can be passed to oBB's <strong>obb</strong> function using the <strong>mod</strong> argument (see <a class="reference internal" href="#cfg2013" id="id3">[CFG2013]</a> for details):</p>
 <ul class="simple">
 <li>First order models: <strong>'q'</strong> - norm based,  <strong>'g'</strong>, <strong>'Hz'</strong>, <strong>'lbH'</strong>, <strong>'E0'</strong>, <strong>'Ediag'</strong> - minimum eigenvalue based</li>
 <li>Second order models: <strong>'c'</strong> - norm based, <strong>'gc'</strong> - minimum eigenvalue based</li>
@@ -93,7 +91,7 @@
 <ul class="simple">
 <li><strong>bndT(l,u)</strong> - returns two numpy 3D-arrays of elementwise lower and upper bounds on the derivative tensor <span class="math">\(\nabla_{xxx} f\)</span> of the objective function over <span class="math">\([l,u]\)</span></li>
 </ul>
-<p>The type of parallel branch and bound algorithm to use should be passed to oBB's <strong>obb</strong> function using the <strong>alg</strong> argument and can be one of the following (see <a class="reference internal" href="#cfg2013">[CFG2013]</a> for details):</p>
+<p>The type of parallel branch and bound algorithm to use should be passed to oBB's <strong>obb</strong> function using the <strong>alg</strong> argument and can be one of the following (see <a class="reference internal" href="#cfg2013" id="id4">[CFG2013]</a> for details):</p>
 <ul class="simple">
 <li><strong>'T1'</strong> - bounds in parallel</li>
 <li><strong>'T2_individual'</strong>, <strong>'T2_synchronised'</strong> - tree in parallel</li>
@@ -114,7 +112,7 @@
 <li><strong>vis</strong> - visualisation of the algorithm in 2D (<strong>0</strong> - off [default], <strong>1</strong> - on)</li>
 </ul>
 <p>Note that the inequality constraint arguments <span class="math">\(A, b\)</span> and  equality constraint arguments <span class="math">\(E, d\)</span> are also optional as the optimization problem is only required to be bound constrained.</p>
-<p>The user can also specify the QP solver that the algorithm calls to obtain feasible upper bounds (see <a class="reference internal" href="#cfg2013">[CFG2013]</a> for details). At present the user can choose from <a class="reference external" href="http://cvxopt.org/">CVXOPT's qp solver</a> or the <a class="reference external" href="http://github.com/mpy/PyQuadProg/">QuadProg++ solver</a> using the optional argument:</p>
+<p>The user can also specify the QP solver that the algorithm calls to obtain feasible upper bounds (see <a class="reference internal" href="#cfg2013" id="id5">[CFG2013]</a> for details). At present the user can choose from <a class="reference external" href="http://cvxopt.org/">CVXOPT's qp solver</a> or the <a class="reference external" href="http://github.com/mpy/PyQuadProg/">QuadProg++ solver</a> using the optional argument:</p>
 <ul class="simple">
 <li><strong>qpsolver</strong> - QP solver to use (<strong>'cvxopt'</strong> - CVXOPT's qp [default], <strong>'quadprog'</strong> - QuadProg++)</li>
 </ul>
@@ -191,13 +189,13 @@
 <h2>Running the Algorithm<a class="headerlink" href="#running-the-algorithm" title="Permalink to this headline">¶</a></h2>
 <p>To run the user-created python script file (e.g. sines.py, see <a class="reference internal" href="#example-of-use">Example of Use</a>) we need to execute it using MPI's mpiexec command, specifying the number of processor cores with the -n option. For example, to run oBB on four processor cores we simply execute the following shell command:</p>
 <blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mpiexec -n 4 python sines.py
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mpiexec -n <span class="m">4</span> python sines.py
 </pre></div>
 </div>
 </div></blockquote>
 <p>Note that if using the MPICH implementation of MPI we first need to start an mpd daemon in the background:</p>
 <blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mpd &amp;
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mpd <span class="p">&amp;</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -205,7 +203,7 @@
 </div>
 <div class="section" id="using-the-rbf-layer">
 <h2>Using the RBF Layer<a class="headerlink" href="#using-the-rbf-layer" title="Permalink to this headline">¶</a></h2>
-<p>oBB can optionally approximate the objective function <span class="math">\(f\)</span> by a radial basis function (RBF) surrogate and optimize the approximation instead (see <a class="reference internal" href="#fgf2013">[FGF2013]</a> for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which it should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.</p>
+<p>oBB can optionally approximate the objective function <span class="math">\(f\)</span> by a radial basis function (RBF) surrogate and optimize the approximation instead (see <a class="reference internal" href="#fgf2013" id="id6">[FGF2013]</a> for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which it should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.</p>
 <p>As before, the user is required to write a python script file that defines the functions and parameters necessary to solve the problem and then passes them to the <strong>obb_rbf</strong> function. In addition to the approximation model, algorithm type and objective function arguments described in <a class="reference internal" href="#how-to-use-obb">How to use oBB</a> only an <span class="math">\(n\)</span> by <span class="math">\(m\)</span> numpy array of <span class="math">\(m\)</span> points at which to sample the objective function needs to be passed to the <strong>obb_rbf</strong> function using the <strong>pts</strong> argument.</p>
 <p>For example, suppose we wish to solve an RBF approximation to the problem given in the <a class="reference internal" href="#example-of-use">Example of Use</a> section:</p>
 <blockquote>
@@ -263,7 +261,7 @@
 </div>
 <div class="section" id="rbf-layer-for-the-coconut-test-set">
 <h2>RBF Layer for the COCONUT Test Set<a class="headerlink" href="#rbf-layer-for-the-coconut-test-set" title="Permalink to this headline">¶</a></h2>
-<p>oBB comes with a set of pre-computed RBF approximations to selected functions from the <a class="reference external" href="http://www.mat.univie.ac.at/~neum/glopt/coconut/Benchmark/Benchmark.html">COCONUT test set</a> that were used to produce the numerical results in the paper <a class="reference internal" href="#cfg2013">[CFG2013]</a>. In order to optimize these approximations using oBB, the user is required to write a python script file that defines the desired function and tolerance and then passes them to the <strong>obb_rbf_coconut</strong> function (see <a class="reference internal" href="#cfg2013">[CFG2013]</a> for a list of all 31 functions available). For example, to optimize an RBF approximation to the <strong>'hs041'</strong> function the user could write the following python script file, let's call it coconut.py:</p>
+<p>oBB comes with a set of pre-computed RBF approximations to selected functions from the <a class="reference external" href="http://www.mat.univie.ac.at/~neum/glopt/coconut/Benchmark/Benchmark.html">COCONUT test set</a> that were used to produce the numerical results in the paper <a class="reference internal" href="#cfg2013" id="id7">[CFG2013]</a>. In order to optimize these approximations using oBB, the user is required to write a python script file that defines the desired function and tolerance and then passes them to the <strong>obb_rbf_coconut</strong> function (see <a class="reference internal" href="#cfg2013" id="id8">[CFG2013]</a> for a list of all 31 functions available). For example, to optimize an RBF approximation to the <strong>'hs041'</strong> function the user could write the following python script file, let's call it coconut.py:</p>
 <blockquote>
 <div><div class="highlight-python"><div class="highlight"><pre><span class="c"># Example COCONUT RBF code for oBB</span>
 <span class="kn">from</span> <span class="nn">obb</span> <span class="kn">import</span> <span class="n">obb_rbf_coconut</span>
@@ -287,7 +285,7 @@
 </pre></div>
 </div>
 </div></blockquote>
-<p>Note the use of <strong>obb_rbf_coconut</strong> as the calling function and the optional <strong>'12hr'</strong> tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see <a class="reference internal" href="#cfg2013">[CFG2013]</a> for details). This file is included in oBB as coconut.py, to run it see <a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a>.</p>
+<p>Note the use of <strong>obb_rbf_coconut</strong> as the calling function and the optional <strong>'12hr'</strong> tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see <a class="reference internal" href="#cfg2013" id="id9">[CFG2013]</a> for details). This file is included in oBB as coconut.py, to run it see <a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a>.</p>
 </div>
 <div class="section" id="acknowledgements">
 <h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
@@ -365,8 +363,8 @@ We are also grateful to <a class="reference external" href="http://www.numerical
           
     <div class="footer">
         &copy; Copyright 2013, J. M. Fowkes.
-      Last updated on 18 Sep, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Last updated on 19 Nov, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
         </div>
         <div class="clearer"></div>

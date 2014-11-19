@@ -41,13 +41,13 @@ setup(
         #"matplotlib >= 1.1.0",
     ],
     classifiers=[
-	"Development Status :: 3 - Alpha",
-	"Intended Audience :: Science/Research",
-	"License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)",
-	"Natural Language :: English",
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Science/Research",
+        "License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)",
+        "Natural Language :: English",
         "Operating System :: POSIX :: Linux",
-        "Programming Language :: Python :: 2.6", 	
-	"Topic :: Scientific/Engineering :: Mathematics",
+        "Programming Language :: Python :: 2.6",
+        "Topic :: Scientific/Engineering :: Mathematics",
     ],
     # NAG library QP solver Fotran extension
     #ext_modules=[Extension('qpsolver',
@@ -59,4 +59,3 @@ setup(
     #                           ),
     #],
     zip_safe=False)
-    

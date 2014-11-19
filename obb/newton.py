@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Newton's Method for finding the root of a scalar function 
+# Newton's Method for finding the root of a scalar function
 def newton(nf, x):
 
-    # Inputs 
+    # Inputs
     # nf - calculates f(x)/df(x) for given x
     # x - initial guess
 
@@ -10,7 +10,7 @@ def newton(nf, x):
     # x - solution (hopefully)
 
     # Parameters
-    #itr = 1 # Iteration count 
+    #itr = 1 # Iteration count
     #mitr = 1000 # Max. iterations
     #Ke = 0.29 # Tolerance
     Ke = 0.01
@@ -33,9 +33,8 @@ def newton(nf, x):
     return x
 
     # % Check if newton runs for ages
-    # if(itr >= mitr): 
-    #     print "Fix me!" 
+    # if(itr >= mitr):
+    #     print "Fix me!"
     #     print x
     #     print Delta
-    #     pause; 
- 
+    #     pause;

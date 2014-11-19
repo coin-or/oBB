@@ -1,3 +1,4 @@
+from __future__ import print_function
 #!/usr/bin/env python
 # Setup script for oBB.
 from setuptools import setup, Extension
@@ -5,10 +6,11 @@ from sys import version_info, exit
 from numpy import get_include
 
 # Make sure the correct version of Python is installed.
-if (version_info[:2] < (2,6))or(version_info[0] == 3):
-    print "oBB requires Python 2.6 to 2.7. Python %d.%d detected" % \
-          version_info[:2]
+if (version_info[:2] < (2,6)):
+    print("oBB requires Python 2.6/2.7 or Python 3. Python %d.%d detected" % version_info[:2])
     exit(-1)
+elif (version_info[0] == 3):
+    print("Support for Python 3 is currently experimental.")
 
 # Get package version
 exec(open('obb/version.py').read())
@@ -16,9 +18,9 @@ exec(open('obb/version.py').read())
 # Setup QuadProg++ Extension
 ext_modules = [Extension('PyQuadProg',
                           sources=['pyquadprog/PyQuadProg.cpp','quadprog/QuadProg++.cc','quadprog/Array.cc'],
-			  include_dirs=['pyquadprog','quadprog',get_include()],
-			  language='c++'
-			  )]
+                          include_dirs=['pyquadprog','quadprog',get_include()],
+                          language='c++'
+                          )]
 
 # Setup package
 setup(
@@ -34,7 +36,8 @@ setup(
     ext_modules=ext_modules,
     url='http://pypi.python.org/pypi/oBB/',
     license='LGPLv3',
-    long_description=open('README').read(),
+    long_description=open('README.rst').read(),
+    use_2to3 = True,
     install_requires=[
         "numpy >= 1.3.0",
         "mpi4py >= 1.3",
@@ -42,13 +45,13 @@ setup(
         #"matplotlib >= 1.1.0",
     ],
     classifiers=[
-	"Development Status :: 4 - Beta",
-	"Intended Audience :: Science/Research",
-	"License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
-	"Natural Language :: English",
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Science/Research",
+        "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+        "Natural Language :: English",
         "Operating System :: POSIX :: Linux",
-        "Programming Language :: Python :: 2.6", 	
-	"Topic :: Scientific/Engineering :: Mathematics",
+        "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 3",
+        "Topic :: Scientific/Engineering :: Mathematics",
     ],
     zip_safe=False)
-    

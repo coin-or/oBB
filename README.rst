@@ -12,7 +12,7 @@ Requirements
 ------------
 oBB requires the following software to be installed:
 
-* Python 2.6 to 2.7 (http://www.python.org/)
+* Python 2.6/2.7 or Python 3 (http://www.python.org/)
 * A working implementation of MPI-2 (e.g. OpenMPI, http://www.open-mpi.org/)
 
 Additionally, the following python packages should be installed (these will be installed automatically if using *pip*, see `Installation using pip`_):
@@ -27,7 +27,7 @@ Installation using pip
 ----------------------
 For easy installation, use *pip* (http://www.pip-installer.org/) as root::
 
-    $ [sudo] pip install obb
+    $ [sudo] pip install --pre obb
 
 or alternatively *easy_install*::
 
@@ -35,13 +35,13 @@ or alternatively *easy_install*::
     
 If you do not have root privileges or you want to install oBB for your private use, you can use::
 
-    $ pip install --user obb
+    $ pip install --pre --user obb
       
 which will install oBB in your home directory.
 
 Note that if an older install of oBB is present on your system you can use::
 
-    $ [sudo] pip install --upgrade obb
+    $ [sudo] pip install --pre --upgrade obb
       
 to upgrade oBB to the latest version.
 

@@ -1,4 +1,4 @@
-include AUTHORS CHANGES INSTALL LICENSE README
+include AUTHORS CHANGES INSTALL LICENSE README.rst
 include docs/latex/oBB.pdf
 include docs/html/*
 include docs/html/_static/*

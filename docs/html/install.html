@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -15,8 +13,8 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.6b',
+        URL_ROOT:    './',
+        VERSION:     '0.7b',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -61,7 +59,7 @@
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
 <p>oBB requires the following software to be installed:</p>
 <ul class="simple">
-<li><a class="reference external" href="http://www.python.org/">Python 2.6 to 2.7</a></li>
+<li><a class="reference external" href="http://www.python.org/">Python 2.6/2.7 or Python 3</a></li>
 <li>A working implementation of MPI-2 (e.g. <a class="reference external" href="http://www.open-mpi.org/">OpenMPI</a> or <a class="reference external" href="http://www.mpich.org/">MPICH</a>)</li>
 </ul>
 <p>Additionally, the following python packages should be installed (these will be installed automatically if using <a class="reference external" href="http://www.pip-installer.org/">pip</a>, see <a class="reference internal" href="#installation-using-pip">Installation using pip</a>):</p>
@@ -76,7 +74,7 @@
 <h2>Installation using pip<a class="headerlink" href="#installation-using-pip" title="Permalink to this headline">¶</a></h2>
 <p>For easy installation, use <a class="reference external" href="http://www.pip-installer.org/">pip</a> as root:</p>
 <blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="o">[</span>sudo<span class="o">]</span> pip install obb
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="o">[</span>sudo<span class="o">]</span> pip install --pre obb
 </pre></div>
 </div>
 </div></blockquote>
@@ -88,14 +86,14 @@
 </div></blockquote>
 <p>If you do not have root privileges or you want to install oBB for your private use, you can use:</p>
 <blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install --user obb
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>pip install --pre --user obb
 </pre></div>
 </div>
 </div></blockquote>
 <p>which will install oBB in your home directory.</p>
 <p>Note that if an older install of oBB is present on your system you can use:</p>
 <blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="o">[</span>sudo<span class="o">]</span> pip install --upgrade obb
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="o">[</span>sudo<span class="o">]</span> pip install --pre --upgrade obb
 </pre></div>
 </div>
 </div></blockquote>
@@ -137,7 +135,7 @@
 <p>This will run oBB using MPI on one processor core for a simple 2D sum of sines problem (see <a class="reference external" href="userguide.html#example-of-use">Example of Use</a>).</p>
 <p>Note that if using the MPICH implementation of MPI you first need to start an mpd daemon in the background:</p>
 <blockquote>
-<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mpd &amp;
+<div><div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>mpd <span class="p">&amp;</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -207,8 +205,8 @@
           
     <div class="footer">
         &copy; Copyright 2013, J. M. Fowkes.
-      Last updated on 18 Sep, 2013.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Last updated on 19 Nov, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
         </div>
         <div class="clearer"></div>

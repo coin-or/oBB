@@ -7,7 +7,7 @@ from numpy.random import rand,seed
 # Algorithm (T1, T2_individual, T2_synchronised)
 alg = 'T1'
 
-# Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic, 
+# Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,
 # c - norm cubic, gc - gershgorin cubic)
 mod = 'c'
 
@@ -35,7 +35,7 @@ b = 1
 f = lambda x: sum(sin(x))
 
 # Generate 10*D sample points for RBF approximation
-seed(5) # !!Sample points have to be the same on all processors!! 
+seed(5) # !!Sample points have to be the same on all processors!!
 pts = rand(10*D, D)
 
 # Scale points so they lie in [l,u]

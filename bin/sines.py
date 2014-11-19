@@ -6,7 +6,7 @@ from numpy import sin, cos, diag, ones, zeros
 # Algorithm (T1, T2_individual, T2_synchronised)
 alg = 'T1'
 
-# Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic, 
+# Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,
 # c - norm cubic, gc - gershgorin cubic)
 mod = 'c'
 
@@ -26,7 +26,7 @@ qpsolver = 'cvxopt'
 def diagt(v):
     T = zeros((D,D,D))
     for i in range(0,D):
-	    T[i,i,i] = v[i]
+        T[i,i,i] = v[i]
     return T
 
 # Set up sum of sines test function

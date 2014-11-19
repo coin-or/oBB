@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Newton's Method for finding the root of a scalar function 
+# Newton's Method for finding the root of a scalar function
 def newtonw(nf, x, xl):
 
-    # Inputs 
+    # Inputs
     # nf - calculates f(x)/df(x) for given x
     # x - initial guess
     # xl - lower bound on x
@@ -24,4 +24,3 @@ def newtonw(nf, x, xl):
         fx, dx, Delta = nf(x)
 
     return x
-

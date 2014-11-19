@@ -13,4 +13,3 @@ ci0 = array([10])
 qp = PyQuadProg(G, g0, CE, ce0, CI, ci0)
 
 print array(qp.x.getArray())
-

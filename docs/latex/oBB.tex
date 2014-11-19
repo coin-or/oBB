@@ -3,6 +3,7 @@
 \documentclass[letterpaper,11pt,openany,oneside]{sphinxmanual}
 \usepackage[utf8]{inputenc}
 \DeclareUnicodeCharacter{00A0}{\nobreakspace}
+\usepackage{cmap}
 \usepackage[T1]{fontenc}
 \usepackage[british]{babel}
 \usepackage{times}
@@ -14,8 +15,8 @@
 
 
 \title{oBB Documentation}
-\date{18 September, 2013}
-\release{0.6b}
+\date{19 November, 2014}
+\release{0.7b}
 \author{J. M. Fowkes}
 \newcommand{\sphinxlogo}{\includegraphics{p1.pdf}\par}
 \renewcommand{\releasename}{Release}
@@ -32,66 +33,67 @@
     \PYG@it{\PYG@bf{\PYG@ff{#1}}}}}}}
 \def\PYG#1#2{\PYG@reset\PYG@toks#1+\relax+\PYG@do{#2}}
 
-\expandafter\def\csname PYG@tok@gd\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
-\expandafter\def\csname PYG@tok@gu\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
-\expandafter\def\csname PYG@tok@gt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
-\expandafter\def\csname PYG@tok@gs\endcsname{\let\PYG@bf=\textbf}
-\expandafter\def\csname PYG@tok@gr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
-\expandafter\def\csname PYG@tok@cm\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
-\expandafter\def\csname PYG@tok@vg\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
-\expandafter\def\csname PYG@tok@m\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@mh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@cs\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}\def\PYG@bc##1{\setlength{\fboxsep}{0pt}\colorbox[rgb]{1.00,0.94,0.94}{\strut ##1}}}
-\expandafter\def\csname PYG@tok@ge\endcsname{\let\PYG@it=\textit}
 \expandafter\def\csname PYG@tok@vc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
-\expandafter\def\csname PYG@tok@il\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@go\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.20,0.20,0.20}{##1}}}
-\expandafter\def\csname PYG@tok@cp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@gi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
-\expandafter\def\csname PYG@tok@gh\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
-\expandafter\def\csname PYG@tok@ni\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.84,0.33,0.22}{##1}}}
-\expandafter\def\csname PYG@tok@nl\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.13,0.44}{##1}}}
-\expandafter\def\csname PYG@tok@nn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
-\expandafter\def\csname PYG@tok@no\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.38,0.68,0.84}{##1}}}
-\expandafter\def\csname PYG@tok@na\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@nb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@nc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
 \expandafter\def\csname PYG@tok@nd\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.33,0.33,0.33}{##1}}}
-\expandafter\def\csname PYG@tok@ne\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@nf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.02,0.16,0.49}{##1}}}
-\expandafter\def\csname PYG@tok@si\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.44,0.63,0.82}{##1}}}
-\expandafter\def\csname PYG@tok@s2\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@vi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@nc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
 \expandafter\def\csname PYG@tok@nt\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.02,0.16,0.45}{##1}}}
-\expandafter\def\csname PYG@tok@nv\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
-\expandafter\def\csname PYG@tok@s1\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@gp\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
-\expandafter\def\csname PYG@tok@sh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@ow\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@sx\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
+\expandafter\def\csname PYG@tok@mo\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
 \expandafter\def\csname PYG@tok@bp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@nb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@nv\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@se\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@ne\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@ss\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.32,0.47,0.09}{##1}}}
+\expandafter\def\csname PYG@tok@go\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.20,0.20,0.20}{##1}}}
 \expandafter\def\csname PYG@tok@c1\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@vi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@s1\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@sb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
 \expandafter\def\csname PYG@tok@kc\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@c\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@gi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@ow\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@kt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.56,0.13,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@mh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@na\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@ni\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.84,0.33,0.22}{##1}}}
+\expandafter\def\csname PYG@tok@ge\endcsname{\let\PYG@it=\textit}
+\expandafter\def\csname PYG@tok@sr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.14,0.33,0.53}{##1}}}
+\expandafter\def\csname PYG@tok@si\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.44,0.63,0.82}{##1}}}
+\expandafter\def\csname PYG@tok@kp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@sx\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
+\expandafter\def\csname PYG@tok@w\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PYG@tok@o\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PYG@tok@k\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@gt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
 \expandafter\def\csname PYG@tok@mf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
 \expandafter\def\csname PYG@tok@err\endcsname{\def\PYG@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
-\expandafter\def\csname PYG@tok@kd\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@ss\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.32,0.47,0.09}{##1}}}
-\expandafter\def\csname PYG@tok@sr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.14,0.33,0.53}{##1}}}
-\expandafter\def\csname PYG@tok@mo\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@mi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
-\expandafter\def\csname PYG@tok@kn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@o\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
-\expandafter\def\csname PYG@tok@kr\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
 \expandafter\def\csname PYG@tok@s\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@kp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@w\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
-\expandafter\def\csname PYG@tok@kt\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.56,0.13,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@gd\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PYG@tok@gu\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PYG@tok@nn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.05,0.52,0.71}{##1}}}
+\expandafter\def\csname PYG@tok@cp\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@no\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.38,0.68,0.84}{##1}}}
 \expandafter\def\csname PYG@tok@sc\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@sb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
-\expandafter\def\csname PYG@tok@k\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
-\expandafter\def\csname PYG@tok@se\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@nf\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.02,0.16,0.49}{##1}}}
+\expandafter\def\csname PYG@tok@kn\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@vg\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.73,0.38,0.84}{##1}}}
+\expandafter\def\csname PYG@tok@mb\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@nl\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.13,0.44}{##1}}}
+\expandafter\def\csname PYG@tok@gp\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.78,0.36,0.04}{##1}}}
+\expandafter\def\csname PYG@tok@il\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@sh\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@kd\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@kr\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.44,0.13}{##1}}}
+\expandafter\def\csname PYG@tok@m\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@cm\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@gs\endcsname{\let\PYG@bf=\textbf}
+\expandafter\def\csname PYG@tok@s2\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@gh\endcsname{\let\PYG@bf=\textbf\def\PYG@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
 \expandafter\def\csname PYG@tok@sd\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.44,0.63}{##1}}}
+\expandafter\def\csname PYG@tok@mi\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.13,0.50,0.31}{##1}}}
+\expandafter\def\csname PYG@tok@c\endcsname{\let\PYG@it=\textit\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}}
+\expandafter\def\csname PYG@tok@cs\endcsname{\def\PYG@tc##1{\textcolor[rgb]{0.25,0.50,0.56}{##1}}\def\PYG@bc##1{\setlength{\fboxsep}{0pt}\colorbox[rgb]{1.00,0.94,0.94}{\strut ##1}}}
+\expandafter\def\csname PYG@tok@gr\endcsname{\def\PYG@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
 
 \def\PYGZbs{\char`\\}
 \def\PYGZus{\char`\_}
@@ -114,6 +116,8 @@
 \def\PYGZrb{]}
 \makeatother
 
+\renewcommand\PYGZsq{\textquotesingle}
+
 \begin{document}
 
 \maketitle
@@ -121,9 +125,9 @@
 \phantomsection\label{index::doc}
 
 
-\textbf{Release:} 0.6b
+\textbf{Release:} 0.7b
 
-\textbf{Date:} 18 September, 2013
+\textbf{Date:} 19 November, 2014
 
 \textbf{Author:} \href{mailto:jaroslav.fowkes@ed.ac.uk}{J. M. Fowkes}
 
@@ -131,14 +135,14 @@ oBB is an algorithm for the parallel global optimization of functions with Lipch
 
 
 \chapter{Installing oBB}
-\label{install:installing-obb}\label{install::doc}\label{install:overlapping-branch-and-bound}
+\label{install::doc}\label{install:installing-obb}\label{install:overlapping-branch-and-bound}
 
 \section{Requirements}
 \label{install:requirements}
 oBB requires the following software to be installed:
 \begin{itemize}
 \item {} 
-\href{http://www.python.org/}{Python 2.6 to 2.7}
+\href{http://www.python.org/}{Python 2.6/2.7 or Python 3}
 
 \item {} 
 A working implementation of MPI-2 (e.g. \href{http://www.open-mpi.org/}{OpenMPI} or \href{http://www.mpich.org/}{MPICH})
@@ -167,7 +171,7 @@ For easy installation, use \href{http://www.pip-installer.org/}{pip} as root:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }\PYG{o}{[}sudo\PYG{o}{]} pip install obb
+\PYG{n+nv}{\PYGZdl{} }\PYG{o}{[}sudo\PYG{o}{]} pip install \PYGZhy{}\PYGZhy{}pre obb
 \end{Verbatim}
 \end{quote}
 
@@ -183,7 +187,7 @@ If you do not have root privileges or you want to install oBB for your private u
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }pip install \PYGZhy{}\PYGZhy{}user obb
+\PYG{n+nv}{\PYGZdl{} }pip install \PYGZhy{}\PYGZhy{}pre \PYGZhy{}\PYGZhy{}user obb
 \end{Verbatim}
 \end{quote}
 
@@ -193,7 +197,7 @@ Note that if an older install of oBB is present on your system you can use:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }\PYG{o}{[}sudo\PYG{o}{]} pip install \PYGZhy{}\PYGZhy{}upgrade obb
+\PYG{n+nv}{\PYGZdl{} }\PYG{o}{[}sudo\PYG{o}{]} pip install \PYGZhy{}\PYGZhy{}pre \PYGZhy{}\PYGZhy{}upgrade obb
 \end{Verbatim}
 \end{quote}
 
@@ -248,7 +252,7 @@ Note that if using the MPICH implementation of MPI you first need to start an mp
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }mpd \PYGZam{}
+\PYG{n+nv}{\PYGZdl{} }mpd \PYG{p}{\PYGZam{}}
 \end{Verbatim}
 \end{quote}
 
@@ -269,7 +273,7 @@ If oBB was installed manually you have to remove the installed files by hand (lo
 
 
 \chapter{User Guide}
-\label{userguide:user-guide}\label{userguide::doc}
+\label{userguide::doc}\label{userguide:user-guide}
 This section describes the main interface to oBB and how to use it.
 
 
@@ -284,7 +288,7 @@ oBB is designed to solve the global optimization problem
                 &Ex = d\end{split}\notag
 \end{gather}\end{quote}
 
-where the objective function $f$ has Lipschitz continuous gradient or Hessian. oBB does not need to know the Lipschitz constants explicitly, it merely requires the user to supply elementwise bounds on the Hessian or derivative tensor of the objective function (see {\hyperref[userguide:how-to-use-obb]{How to use oBB}}). The linear inequality constraints $Ax \le b$ and equality constraints $Ex = d$ are optional but the bound constraints $l \le x \le u$ are required.
+where the objective function \(f\) has Lipschitz continuous gradient or Hessian. oBB does not need to know the Lipschitz constants explicitly, it merely requires the user to supply elementwise bounds on the Hessian or derivative tensor of the objective function (see {\hyperref[userguide:how-to-use-obb]{How to use oBB}}). The linear inequality constraints \(Ax \le b\) and equality constraints \(Ex = d\) are optional but the bound constraints \(l \le x \le u\) are required.
 
 oBB uses local first or second order Taylor type approximations over balls within a parallel branch and bound framework. As with all branch and bound algorithms, the curse of dimensionality limits its use to low dimensional problems. The choice of whether to use first or second order approximations is down to the user  (see {\hyperref[userguide:how-to-use-obb]{How to use oBB}}).
 
@@ -306,31 +310,31 @@ Second order models: \textbf{`c'} - norm based, \textbf{`gc'} - minimum eigenval
 If using a first order model, the user is required to write the following functions:
 \begin{itemize}
 \item {} 
-\textbf{f(x)} - returns objective function $f$ at point $x$ (scalar)
+\textbf{f(x)} - returns objective function \(f\) at point \(x\) (scalar)
 
 \item {} 
-\textbf{g(x)} - returns gradient $\nabla_x f$ of objective function at $x$ (numpy 1D-array)
+\textbf{g(x)} - returns gradient \(\nabla_x f\) of objective function at \(x\) (numpy 1D-array)
 
 \end{itemize}
 
 along with the bounding function:
 \begin{itemize}
 \item {} 
-\textbf{bndH(l,u)} - returns two numpy 2D-arrays of elementwise lower and upper bounds on the Hessian $\nabla_{xx} f$ of the objective function over $[l,u]$
+\textbf{bndH(l,u)} - returns two numpy 2D-arrays of elementwise lower and upper bounds on the Hessian \(\nabla_{xx} f\) of the objective function over \([l,u]\)
 
 \end{itemize}
 
 For a second order model the user is additionally required to write the function:
 \begin{itemize}
 \item {} 
-\textbf{H(x)} - returns Hessian $\nabla_{xx} f$ of objective function at $x$ (numpy 2D-array)
+\textbf{H(x)} - returns Hessian \(\nabla_{xx} f\) of objective function at \(x\) (numpy 2D-array)
 
 \end{itemize}
 
 and rather than \textbf{bndH} the bounding function:
 \begin{itemize}
 \item {} 
-\textbf{bndT(l,u)} - returns two numpy 3D-arrays of elementwise lower and upper bounds on the derivative tensor $\nabla_{xxx} f$ of the objective function over $[l,u]$
+\textbf{bndT(l,u)} - returns two numpy 3D-arrays of elementwise lower and upper bounds on the derivative tensor \(\nabla_{xxx} f\) of the objective function over \([l,u]\)
 
 \end{itemize}
 
@@ -372,7 +376,7 @@ and if \href{http://www.matplotlib.org/}{matplotlib} is installed:
 
 \end{itemize}
 
-Note that the inequality constraint arguments $A, b$ and  equality constraint arguments $E, d$ are also optional as the optimization problem is only required to be bound constrained.
+Note that the inequality constraint arguments \(A, b\) and  equality constraint arguments \(E, d\) are also optional as the optimization problem is only required to be bound constrained.
 
 The user can also specify the QP solver that the algorithm calls to obtain feasible upper bounds (see {\hyperref[userguide:cfg2013]{{[}CFG2013{]}}} for details). At present the user can choose from \href{http://cvxopt.org/}{CVXOPT's qp solver} or the \href{http://github.com/mpy/PyQuadProg/}{QuadProg++ solver} using the optional argument:
 \begin{itemize}
@@ -394,7 +398,7 @@ Suppose we wish to solve the following global optimization problem:
 \text{and }  \; &\sum_{i=1}^n -x_i \le 1\end{split}\notag
 \end{gather}\end{quote}
 
-One can see that the gradient $g$, Hessian $H$ and third order derivative tensor $T$ are given by
+One can see that the gradient \(g\), Hessian \(H\) and third order derivative tensor \(T\) are given by
 \begin{quote}
 \begin{gather}
 \begin{split}&g(x) = ( \cos(x_1), \dotsc, \cos(x_n))^T \\
@@ -402,9 +406,9 @@ One can see that the gradient $g$, Hessian $H$ and third order derivative tensor
 &T(x) = diagt( -\cos(x_1), \dotsc, -\cos(x_n))\end{split}\notag
 \end{gather}\end{quote}
 
-where $diagt$ is the tensor diagonal function (i.e. $diagt(v)$ places the vector $v$ on the diagonal of the tensor).
+where \(diagt\) is the tensor diagonal function (i.e. \(diagt(v)\) places the vector \(v\) on the diagonal of the tensor).
 
-It is straightforward to obtain elementwise bounds on the Hessian matrix $H$ and third order derivative tensor $T$ as both $sin$ and $cos$ can be bounded below and above by -1 and 1 respectively.
+It is straightforward to obtain elementwise bounds on the Hessian matrix \(H\) and third order derivative tensor \(T\) as both \(sin\) and \(cos\) can be bounded below and above by -1 and 1 respectively.
 
 We can code this up in a python script file, let's call it sines.py as follows:
 \begin{quote}
@@ -464,7 +468,7 @@ To run the user-created python script file (e.g. sines.py, see {\hyperref[usergu
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }mpiexec \PYGZhy{}n 4 python sines.py
+\PYG{n+nv}{\PYGZdl{} }mpiexec \PYGZhy{}n \PYG{l+m}{4} python sines.py
 \end{Verbatim}
 \end{quote}
 
@@ -472,7 +476,7 @@ Note that if using the MPICH implementation of MPI we first need to start an mpd
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n+nv}{\PYGZdl{} }mpd \PYGZam{}
+\PYG{n+nv}{\PYGZdl{} }mpd \PYG{p}{\PYGZam{}}
 \end{Verbatim}
 \end{quote}
 
@@ -481,9 +485,9 @@ but this is not necessary for other MPI implementations, e.g. OpenMPI.
 
 \section{Using the RBF Layer}
 \label{userguide:using-the-rbf-layer}
-oBB can optionally approximate the objective function $f$ by a radial basis function (RBF) surrogate and optimize the approximation instead (see {\hyperref[userguide:fgf2013]{{[}FGF2013{]}}} for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which it should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.
+oBB can optionally approximate the objective function \(f\) by a radial basis function (RBF) surrogate and optimize the approximation instead (see {\hyperref[userguide:fgf2013]{{[}FGF2013{]}}} for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which it should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.
 
-As before, the user is required to write a python script file that defines the functions and parameters necessary to solve the problem and then passes them to the \textbf{obb\_rbf} function. In addition to the approximation model, algorithm type and objective function arguments described in {\hyperref[userguide:how-to-use-obb]{How to use oBB}} only an $n$ by $m$ numpy array of $m$ points at which to sample the objective function needs to be passed to the \textbf{obb\_rbf} function using the \textbf{pts} argument.
+As before, the user is required to write a python script file that defines the functions and parameters necessary to solve the problem and then passes them to the \textbf{obb\_rbf} function. In addition to the approximation model, algorithm type and objective function arguments described in {\hyperref[userguide:how-to-use-obb]{How to use oBB}} only an \(n\) by \(m\) numpy array of \(m\) points at which to sample the objective function needs to be passed to the \textbf{obb\_rbf} function using the \textbf{pts} argument.
 
 For example, suppose we wish to solve an RBF approximation to the problem given in the {\hyperref[userguide:example-of-use]{Example of Use}} section:
 \begin{quote}
