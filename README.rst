@@ -1,11 +1,14 @@
-===
-OBB
-===
+===========================================
+OBB: Overlapping Branch and Bound algorithm
+===========================================
 oBB is an algorithm for the parallel global optimization of functions with Lipchitz continuous gradient or Hessian.
+
+This is an implementation of the algorithm from our paper:
+`Branching and Bounding Improvements for Global Optimization Algorithms with Lipschitz Continuity Properties <http://dx.doi.org/10.1007/s10898-014-0199-6>`_ 
+C. Cartis, J. M. Fowkes and N. I. M. Gould. Journal of Global Optimization, vol. 61, no. 3, pp. 429–457, 2015.
 
 Documentation
 -------------
-
 HTML documentation is available at http://packages.python.org/oBB
 
 Requirements
@@ -85,3 +88,11 @@ If oBB was installed using *pip* you can uninstall as follows::
     $ [sudo] pip uninstall obb
 
 If oBB was installed manually you have to remove the installed files by hand (located in your python site-packages directory).
+
+Bugs
+----
+Please report any bugs using GitHub's issue tracker.
+
+License
+-------
+This algorithm is released under the GNU LGPLv3 license.
