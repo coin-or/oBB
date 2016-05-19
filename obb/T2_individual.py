@@ -516,11 +516,11 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
             return int(r*1e8)
 
         # Initialise empty arrays
-        if(A == None):
+        if(A is None):
             A = empty((0,D))
             b = empty(0)
 
-        if(E == None):
+        if(E is None):
             E = empty((0,D))
             d = empty(0)
 

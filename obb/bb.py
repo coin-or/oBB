@@ -107,8 +107,8 @@ def obb(f, g, H, bndH, bndT, l, u, alg, mod, A=None, b=None, E=None, d=None, tol
         print('Problem Details: \n----------------')
         print('Dimension: %d \nObjective Function: %s ') % (len(l), f.__name__)
         print 'l:', l, '\nu:', u
-        if(A != None): print 'A:', A, '\nb:', b
-        if(E != None): print 'E:', E, '\nd:', d
+        if(A is not None): print 'A:', A, '\nb:', b
+        if(E is not None): print 'E:', E, '\nd:', d
         print('Model Type: %s') % mod
         print('Number of Processes: %i') % numprocs
 
@@ -243,8 +243,8 @@ def obb_rbf(f, pts, l, u, alg, mod,  A=None, b=None, E=None, d=None, tol=1e-2, h
         print('Using RBF Layer, number of samples: %d') % size(pts,0)
         print('Dimension: %d \nObjective Function: %s ') % (len(l), f.__name__)
         print 'l:', l, '\nu:', u
-        if(A != None): print 'A:', A, '\nb:', b
-        if(E != None): print 'E:', E, '\nd:', d
+        if(A is not None): print 'A:', A, '\nb:', b
+        if(E is not None): print 'E:', E, '\nd:', d
         print('Model Type: %s') % mod
         print('Number of Processes: %i') % numprocs
 
