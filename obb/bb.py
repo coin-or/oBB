@@ -107,8 +107,8 @@ def obb(f, g, H, bndH, bndT, l, u, alg, mod, A=None, b=None, E=None, d=None, tol
         print('Problem Details: \n----------------')
         print('Dimension: %d \nObjective Function: %s ') % (len(l), f.__name__)
         print 'l:', l, '\nu:', u
-        if(A is not None): print 'A:', A, '\nb:', b
-        if(E is not None): print 'E:', E, '\nd:', d
+        if(A != None): print 'A:', A, '\nb:', b
+        if(E != None): print 'E:', E, '\nd:', d
         print('Model Type: %s') % mod
         print('Number of Processes: %i') % numprocs
 
@@ -312,7 +312,7 @@ def obb_rbf_coconut(f, alg, mod, tol=1e-2, heur=0, toltype='r', vis=0, qpsolver=
 
     # RBF Layer
     # Load RBF surrogate
-    from numpy import load, hstack, vstack
+    from numpy import load, hstack, vstack, delete
     from pkg_resources import resource_stream
     pth = resource_stream('obb','coconut/'+str(f))
 
@@ -330,6 +330,13 @@ def obb_rbf_coconut(f, alg, mod, tol=1e-2, heur=0, toltype='r', vis=0, qpsolver=
     b = data['b']
     E = data['E']
     d = data['d']
+
+    # For Isnnodoc and hs055 there are some constraint linearly dependent
+    # we need to remove it
+    # Isnnodoc: constraint 1 or 2
+    # hs055: constraint 3 or 4
+    #E = delete(E,3,axis=0)
+    #d = delete(d,3)
 
     # Set up relevant global variables
     import config

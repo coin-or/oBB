@@ -1,5 +1,5 @@
 from __future__ import division
-def bound(c,(bndH,method),d1,f,g,d2,D):
+def bound(c,(bndH,method),d1,f,g,d2,D,A=None,b=None,E=None,d=None,U=None):
 
     # Norm function
     from numpy import ones

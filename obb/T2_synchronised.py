@@ -53,7 +53,6 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
         return False
 
     if(Heur == 0):
-
         ksp = 3**D
         kspi = ksp
 
@@ -88,18 +87,87 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 
         # Necessary functions
         from itertools import product
-        from numpy import array, sqrt, empty, zeros, inf, hstack, isinf, argmin, argmax, all
+        from numpy import array, sqrt, empty, zeros, inf, hstack, isinf, argmin, argmax, all,ones, identity, vstack, dot
         from numpy.linalg import norm
         from math import floor
         from time import time
 
+        # Import cvxopt solver
+        from cvxopt import matrix
+        from cvxopt.solvers import qp, options
+
+        # Set tolerance options
+        options['show_progress'] = False
+        options['abstol'] = 1e-9
+        options['reltol'] = 1e-8
+        options['feastol'] = 1e-9
+
+        # Initialise empty arrays
+        if A is None:
+            A = empty((0,D))
+            b = empty(0)
+
+        if E is None:
+            E = empty((0,D))
+            d = empty(0)
+
+        # Check if circle has feasible point
+        def mfeasible(c, lfather=None, ufather=None):
+
+            #box containing the ball
+            c.lReduced = c.xc - c.r * ones(D)
+            c.uReduced = c.xc + c.r * ones(D)
+
+            # check if the sub-ball is in the domain reduced of the father
+            def checkAndUpdateBound():
+
+                # intersection between the box of the ball and the box reduced of the father
+                for i in range(0,D):
+
+                    if c.lReduced[i]<lfather[i]:
+                        c.lReduced[i]=lfather[i]
+
+                    if c.uReduced[i]>ufather[i]:
+                        c.uReduced[i]=ufather[i]
+
+            checkAndUpdateBound()
+
+            # Solve QP to check feasibility
+            sol = qp(matrix(2*identity(D)),matrix(-2*c.xc),matrix(vstack([-1*identity(D),identity(D),A])),matrix(hstack([-l,u,b])),matrix(E),matrix(d))
+
+            mxopt = array(sol['x']).flatten()
+            mr = sol['primal objective']
+            mr = mr + dot(c.xc,c.xc)
+
+            # Check if point lies inside domain
+            if(mr <= (c.r**2)):
+                mf = 1
+            else:
+                mf = 0
+                mxopt = None
+
+            return mf, mxopt
+
         # Timer
         timer = time()
 
-        # Set up initial circle
+
         r = norm(u-l)/2 # Radius
         xc = (u+l)/2 # Centre
 
+        cn = circle(xc,r)
+
+        mfeas, cxopt = mfeasible(cn,l,u)
+
+        # Upper bound
+        ubound = f(cxopt)
+
+        #lower bound and reduced domain
+        _, l, u = bound(cn,Lg,Lh,f,g,H,D,A,b,E,d,ubound,True)
+        #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        # 0.c
+        # Split ball
         if(Heur == 0):
 
             # Split circle into more circles
@@ -118,9 +186,13 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
             # Scale configuration
             spk = inc*lat
 
+
         # Array to distribute amongst processes
         darray = empty((kspi,D+1))
+        boundarray = empty(2*D)
+        boundarray = hstack([l,u])
         reqidsend = []
+        reqboundsend = []
 
         # Create surrounding circles
         for i in range(0,kspi):
@@ -131,6 +203,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
             # Add to distribution list
             darray[i,:] = hstack([array([rn]),xcn])
 
+        # 0.c
         # Distribute data evenly amongst processes
         ihi = 0
         trem = kspi
@@ -146,10 +219,10 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
             print('Master sending data elements [%i:%i] to processor %i') % (ilo-1,ihi,p+1)
             comm.Ssend(array([ihi-ilo+1],dtype='i'), dest=p+1, tag=9) # send array size
             reqidsend.append(comm.Issend(darray[ilo-1:ihi,:], dest=p+1, tag=10)) # send data array (Isend?)
+            reqboundsend.append(comm.Issend(boundarray, dest=p+1, tag=6))
 
             prem = prem - 1
             trem = trem - tproc
-
 
         # Initial communication setup
         lclists = [1 for i in range(1,numprocs)]
@@ -166,6 +239,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
         # Initial local upper bound
         U = inf
 
+        # 0.d-e
         # Initial rlist, xclist and comm setup
         rlist = []
         xclist = []
@@ -191,6 +265,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
         print('Master waiting for initial data sends to complete...')
         for p in range(0,numprocs-1):
             reqidsend[p].Wait()
+            reqboundsend[p].Wait()
         print('done.')
 
         # Asynchronously receive xcn from all workers
@@ -198,6 +273,8 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 
             reqxcndat.append(comm.Irecv(rxcndat[p], source=p+1, tag=12))
 
+        #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        # 1.
         #and(rad > 1e-15)
         #and((time()-timer) < 3000)
         while((lclists != zerolist)and(not(all(rxcndat == 0)))):
@@ -205,7 +282,8 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
             # Update iteration count
             #itr = itr + 1
 
-                 # Asynchronously receive U and len(clist)
+            # 1.a
+            # Asynchronously receive U and len(clist)
             for p in range(0,numprocs-1):
 
                 if(reqbrecv[p].Test()):
@@ -218,7 +296,9 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                     # New Receive
                     reqbrecv[p] = comm.Irecv(rarr[p], source=p+1, tag=2)
 
-            # Asynchronously send U
+            # 1.b
+            # Asynchronously send U = min(p in {1,...,P}) Up
+            # where Up = rarr[p]
             for p in range(0,numprocs-1):
 
                 # If previous communication has finished start new
@@ -228,6 +308,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                     reqbsend[p] = comm.Issend(array([U]), dest=p+1, tag=3)
 
 
+            # 1.c
             # If data check requested, process accordingly
             # If all data sizes received and previous sends have completed
             if(MPI.Request.Testall(reqxcndat))and(MPI.Request.Testall(reqxcnsend)):
@@ -259,7 +340,6 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 
                 # If data from all workers received
                 if(MPI.Request.Testall(reqxcnrecv)):
-
                     # Arrays to send
                     nc = [None for p in range(0,numprocs-1)]
 
@@ -295,9 +375,8 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                     # Not waiting for data
                     dwait = 0
 
-
-            # Load Balancing
-
+            #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            # 1.d
             # Load Balancing spread across nodes
 
             # Take snapshot of load
@@ -385,6 +464,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                 # Iteration counter
                 it += 1
 
+            # 1.e
             # Load Balancing on each node
 
             # For each node (excl master)
@@ -445,8 +525,9 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 
                         # Update iteration counter
                         biter += 1
+            #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+        # 2
         # If all finished, send kill signals
         print('Master sending kill signals...')
         for p in range(0,numprocs-1):
@@ -465,6 +546,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
             reqbrecv[p].Free()
             #reqdreq[p].Free()
 
+        # 3
         # Receive xopt from all processors
         reqe = []
         earr = empty((numprocs-1,D))
@@ -514,7 +596,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 
         # import necessary functions
         from heapq import heappush, heappop
-        from numpy import array, pi, sqrt, dot, identity, hstack, vstack, inf, empty, ones, zeros, tile, roll, all
+        from numpy import array, sqrt, dot, identity, hstack, vstack, inf, empty, ones, zeros, tile, roll, all
         from numpy.linalg import norm
         from itertools import product
         from sys import float_info
@@ -528,10 +610,23 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
         primes = [73856093, 19349663, 83492791, 15485863, 86028121, 32452843, 67867967, 49979687,
                   86028157, 13769629, 95189161, 29223841, 83972821, 39271703, 79186817, 47286739,
                   98767549, 14139199, 64244023, 18551173, 55621541, 10920859, 53615137, 24405817,
-                  43176253 ]
+                  43176253]
+
+
+        # Pick up scattered list
+        rsize = array([0],dtype='i')
+        comm.Recv(rsize, source=0, tag=9)
+        rarray = empty((rsize[0],D+1))
+        boundarray = empty(2*D)
+        comm.Recv(rarray, source=0, tag=10)
+        comm.Recv(boundarray, source=0, tag=6)
+        print('Processor %i received initial data') % rank
+
+        lr = boundarray[0:D]
+        ur = boundarray[D:2*D]
+
         # Hash function
         def hashnd(x):
-
             result = 0
             for i in range(0,D):
                 result = result ^ (int(floor(x[i]/res))*primes[i])
@@ -539,15 +634,14 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 
         # Hash radius
         def hashrn(r):
-
             return int(r*1e8)
 
         # Initialise empty arrays
-        if(A is None):
+        if A is None:
             A = empty((0,D))
             b = empty(0)
 
-        if(E is None):
+        if E is None:
             E = empty((0,D))
             d = empty(0)
 
@@ -588,17 +682,52 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
             options['feastol'] = 1e-9
 
             # Check if circle has feasible point
-            def mfeasible(c):
+            def mfeasible(c, lfather=None, ufather=None):
 
-                # Solve QP to check feasibility
-                sol = qp(matrix(2*identity(D)),matrix(-2*c.xc),matrix(vstack([-1*identity(D),identity(D),A])),matrix(hstack([-l,u,b])),matrix(E),matrix(d))
-                mxopt = array(sol['x']).flatten()
-                mr = sol['primal objective']
-                mr = mr + dot(c.xc,c.xc)
+                #box containing the ball
+                c.lReduced = c.xc - c.r * ones(D)
+                c.uReduced = c.xc + c.r * ones(D)
 
-                # Check if point lies inside domain
-                if(mr < (c.r**2)):
-                    mf = 1
+                # check if the sub-ball is in the domain reduced of the father
+                def checkAndUpdateBound():
+
+                    check=1
+
+                    for i in range(0,D):
+
+                        # check the intersection between the subball and the reduction of the father's ball
+                        # if there isn't intersection, then discard the subball (check = 0)
+                        if c.lReduced[i]>ufather[i] or c.uReduced[i]<lfather[i]:
+                            check=0
+                            break
+
+                        # intersection of the subball with the orginal domain (reduced at first step)
+                        if c.lReduced[i]<lr[i]:
+                            c.lReduced[i]=lr[i]
+
+                        if c.uReduced[i]>ur[i]:
+                            c.uReduced[i]=ur[i]
+
+                    return check
+
+                check=1
+                if lfather is not None and ufather is not None:
+                    check = checkAndUpdateBound()
+
+                if check==1:
+                    # Solve QP to check feasibility
+                    sol = qp(matrix(2*identity(D)),matrix(-2*c.xc),matrix(vstack([-1*identity(D),identity(D),A])),matrix(hstack([-lr,ur,b])),matrix(E),matrix(d))
+
+                    mxopt = array(sol['x']).flatten()
+                    mr = sol['primal objective']
+                    mr = mr + dot(c.xc,c.xc)
+
+                    # Check if point lies inside domain
+                    if(mr <= (c.r**2)):
+                        mf = 1
+                    else:
+                        mf = 0
+                        mxopt = None
                 else:
                     mf = 0
                     mxopt = None
@@ -665,18 +794,15 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 
         # Remove and return (in an mpi transfer array) the n lowest priority tasks
         def npop_task(n):
-            carray = empty((n,D+2))
+            carray = empty((n,(3*D)+2))
             for i in range(0,n):
                 celm = pop_task()
-                carray[i,:] = hstack([array([celm[0],celm[1].r]),celm[1].xc])
+                carray[i,0:D+2] = hstack([array([celm[0],celm[1].r]),celm[1].xc])
+                carray[i,D+2:2*D+2] = celm[1].lReduced
+                carray[i,2*D+2:3*D+2] = celm[1].uReduced
+
             return carray
 
-        # Pick up scattered list
-        rsize = array([0],dtype='i')
-        comm.Recv(rsize, source=0, tag=9)
-        rarray = empty((rsize[0],D+1))
-        comm.Recv(rarray, source=0, tag=10)
-        print('Processor %i received initial data') % rank
 
         # Initial local upper bound
         U = inf
@@ -697,6 +823,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
         reqdsizesendn = [MPI.REQUEST_NULL for i in range(1,numprocs)]
         reqconfn = MPI.REQUEST_NULL
 
+        # 1.b-c
         # Bound intial list and convert to priority queue
         for k in range(0,rsize):
 
@@ -704,13 +831,10 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
             cn = circle(rarray[k,1:D+1],rarray[k,0])
 
             # Check if circle is feasible
-            mfeas, cxopt = mfeasible(cn)
+            mfeas, cxopt = mfeasible(cn,lr,ur)
 
             # If circle has a feasible point (i.e. it's feasible)
             if(mfeas != 0):
-
-                # Bound circle
-                cn.lbound = bound(cn,Lg,Lh,f,g,H,D)
 
                 # Upper bound
                 ubound = f(cxopt)
@@ -720,6 +844,9 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                     U = ubound
                     xopt = cxopt
 
+                # Bound circle
+                cn.lbound, cn.lReduced, cn.uReduced = bound(cn,Lg,Lh,f,g,H,D,A,b,E,d,U,True,cn.r*2)
+
                 # Add to priority queue
                 add_task(cn)
 
@@ -727,9 +854,13 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                 if(Vis ==1):
                     drawc(cn)
 
+        initialRadius = cn.r*2
+
+        # 1.d
         # Asynchronously send U and len(clist)
         reqbsend = comm.Issend(array([U,len(clist)]), dest=0, tag=2)
 
+        # 1.e
         # Asynchronously receive U
         reqbrecv = comm.Irecv(rarr, source=0, tag=3)
 
@@ -752,6 +883,9 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
         # Initial kill signal request
         reqk = comm.Irecv(karr, source=0, tag=4)
 
+        #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        # 2
+        optimality = False
         while(kill == 0):
 
             # Set tolerance
@@ -763,6 +897,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
             # Prune list
             i = 0
             while(i < len(clist)):
+
                 if(clist[i][0] > cutoff):
                     del clist[i]
                     i=i-1
@@ -777,8 +912,8 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                 if(Heur == 0):
 
                     # Split circle into more circles
-                    inc = (cslb.r)/sqrt(D) # Increment
-                    rn = (cslb.r)/2 # New radius
+                    inc = cslb.r/sqrt(D) # Increment
+                    rn = cslb.r/2 # New radius
                     xc = cslb.xc # Centre
 
                     # Create square spoke configuration
@@ -791,7 +926,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 
                     # Split circle into more circles
                     inc = cslb.r # Increment
-                    rn = (cslb.r)/2 # New radius
+                    rn = cslb.r/2 # New radius
                     xc = cslb.xc # Centre
 
                     # Scale configuration
@@ -837,11 +972,12 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                 lmfeas = []
                 lcxopt = []
                 lubound = []
+
                 for i in range(0,len(xcn)):
 
                     # Create circle
                     lcn.append(circle(xcn[i,:],rn))
-                    mfeas, cxopt = mfeasible(lcn[i])
+                    mfeas, cxopt = mfeasible(lcn[i],cslb.lReduced,cslb.uReduced)
                     lmfeas.append(mfeas)
                     lcxopt.append(cxopt)
 
@@ -849,7 +985,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                     if(mfeas != 0):
 
                         # Lower bound
-                        lcn[i].lbound = bound(lcn[i],Lg,Lh,f,g,H,D)
+                        lcn[i].lbound, lcn[i].lReduced, lcn[i].uReduced = bound(lcn[i],Lg,Lh,f,g,H,D,A,b,E,d,U,optimality,initialRadius)
 
                         # Upper bound
                         lubound.append(f(cxopt))
@@ -895,13 +1031,10 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 
                             # Create circle
                             cn = circle(xcn[j,:],rn)
-                            mfeas, cxopt = mfeasible(cn)
+                            mfeas, cxopt = mfeasible(cn,cslb.lReduced,cslb.uReduced)
 
                             # If circle has a feasible point (i.e. it's feasible)
                             if(mfeas != 0):
-
-                                # Lower bound
-                                cn.lbound = bound(cn,Lg,Lh,f,g,H,D)
 
                                 # Upper bound
                                 ubound = f(cxopt)
@@ -910,6 +1043,9 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                                 if(ubound < U):
                                     U = ubound
                                     xopt = cxopt
+
+                                # Lower bound
+                                cn.lbound, cn.lReduced, cn.uReduced = bound(cn,Lg,Lh,f,g,H,D,A,b,E,d,U,optimality,initialRadius)
 
                                 # Add to priority queue
                                 add_task(cn)
@@ -1004,7 +1140,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                 # If not waiting to receive data
                 if(dwait == 0):
 
-                    darr = empty((darrsize[0],D+2))
+                    darr = empty((darrsize[0],(3*D)+2))
                     reqds = comm.Irecv(darr,source=darrsize[1], tag=1)
 
                     # Waiting for data
@@ -1016,6 +1152,9 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                     for i in range(0,darrsize[0]):
                         ctemp = circle(darr[i,2:2+D],darr[i,1])
                         ctemp.lbound = darr[i,0]
+                        ctemp.lReduced = darr[i,2+D:2+2*D]
+                        ctemp.uReduced = darr[i,2+2*D:2+3*D]
+
                         add_task(ctemp)
 
                     print('Data received succesfully.')
@@ -1041,7 +1180,8 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                 # If not waiting to receive data
                 if(dwaitn == 0):
 
-                    darrn = empty((darrsizen[0],D+2))
+                    darrn = empty((darrsizen[0],(3*D)+2))
+
                     reqdsn = comm.Irecv(darrn,source=darrsizen[1], tag=28)
 
                     # Waiting for data
@@ -1053,6 +1193,9 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                     for i in range(0,darrsizen[0]):
                         ctemp = circle(darrn[i,2:2+D],darrn[i,1])
                         ctemp.lbound = darrn[i,0]
+                        ctemp.lReduced = darrn[i,2+D:2+2*D]
+                        ctemp.uReduced = darrn[i,2+2*D:2+3*D]
+
                         add_task(ctemp)
 
                     print('Intercomm: Data received succesfully.')

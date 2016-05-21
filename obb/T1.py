@@ -23,104 +23,138 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
     # Get D
     D = len(l)
 
+    # Import necessary functions
+    from numpy import array, pi, sqrt, dot, identity, hstack, vstack, empty, inf, all, ones
+    from numpy.linalg import norm
+    from time import time
+    from itertools import product
+    from sys import float_info
+
+    # Initialise empty arrays
+    if A is None:
+        A = empty((0,D))
+        b = empty(0)
+
+    if E is None:
+        E = empty((0,D))
+        d = empty(0)
+
+    # QuadProg++ solver (fast!)
+    if(qpsolver == 'quadprog'):
+
+        # Import QuadProg++ solver
+        from PyQuadProg import PyQuadProg
+
+        # Check if circle has feasible point
+        def mfeasible(c):
+
+            # Solve QP to check feasibility
+            sol = PyQuadProg(2*identity(D),-2*c.xc,E.transpose(),-1*d,vstack([identity(D),-1*identity(D),-1*A]).transpose(),hstack([-l,u,b]))
+            mxopt = sol.x.getArray()
+            mr = dot(mxopt,mxopt) + dot(mxopt,-2*c.xc) + dot(c.xc,c.xc)
+
+            # Check if point lies inside domain
+            if(mr < (c.r**2)):
+                mf = 1
+            else:
+                mf = 0
+                mxopt = None
+
+            return mf, mxopt
+
+    # CVXOPT QP solver (slow)
+    elif(qpsolver == 'cvxopt'):
+
+        # Import cvxopt solver
+        from cvxopt import matrix
+        from cvxopt.solvers import qp, options
+
+        # Set tolerance options
+        options['show_progress'] = False
+        options['abstol'] = 1e-9
+        options['reltol'] = 1e-8
+        options['feastol'] = 1e-9
+
+        # Check if circle has feasible point
+        def mfeasible(c, lfather=None, ufather=None):
+
+                #box containing the ball
+                c.lReduced = c.xc - c.r * ones(D)
+                c.uReduced = c.xc + c.r * ones(D)
+
+                # check if the sub-ball is in the domain reduced of the father
+                def checkAndUpdateBound():
+
+                    check=1
+
+                    # intersection between the box of the ball and the box reduced of the father
+                    for i in range(0,D):
+
+                        if c.lReduced[i]>ufather[i] or c.uReduced[i]<lfather[i]:
+                            check=0
+                            break
+
+                        if c.lReduced[i]<lfather[i]:
+                            c.lReduced[i]=lfather[i]
+
+                        if c.uReduced[i]>ufather[i]:
+                            c.uReduced[i]=ufather[i]
+
+                    return check
+
+                check=1
+                if lfather is not None and ufather is not None:
+                    check = checkAndUpdateBound()
+
+                if check==1:
+                    # Solve QP to check feasibility
+                    sol = qp(matrix(2*identity(D)),matrix(-2*c.xc),matrix(vstack([-1*identity(D),identity(D),A])),matrix(hstack([-boundarray[0:D],boundarray[D:2*D],b])),matrix(E),matrix(d))
+                    #sol = qp(matrix(2*identity(D)),matrix(-2*c.xc),matrix(vstack([-1*identity(D),identity(D),A])),matrix(hstack([-l,u,b])),matrix(E),matrix(d))
+
+                    mxopt = array(sol['x']).flatten()
+                    mr = sol['primal objective']
+                    mr = mr + dot(c.xc,c.xc)
+
+                    # Check if point lies inside domain
+                    if(mr <= (c.r**2)):
+                        mf = 1
+                    else:
+                        mf = 0
+                        mxopt = None
+                else:
+                    mf = 0
+                    mxopt = None
+
+                return mf, mxopt
+
+    # NAG QP solver (fast!)
+    elif(qpsolver == 'nag'):
+
+        # Import QP Solver
+        from qpsolver_lincon import qpsolver_lincon
+
+        # Check if circle has feasible point
+        def mfeasible(c):
+
+            # Solve QP to check feasibility
+            mxopt = c.xc.copy()
+            mr = qpsolver_lincon(2*identity(D),-2*c.xc,hstack([l,-inf,d]),hstack([u,b,d]),mxopt,vstack([A,E]),D,A.shape[0]+E.shape[0])
+            mr = mr + dot(c.xc,c.xc)
+
+            # Check if point lies inside domain
+            if(mr < (c.r**2)):
+                mf = 1
+            else:
+                mf = 0
+                mxopt = None
+
+            return mf, mxopt
+
     # Master Process
     if(rank == 0):
 
         # Number of processors
         numprocs = comm.Get_size()
-
-        # Import necessary functions
-        from numpy import array, pi, sqrt, dot, identity, hstack, vstack, empty, inf
-        from numpy.linalg import norm
-        from time import time
-        from itertools import product
-        from sys import float_info
-
-        # Initialise empty arrays
-        if(A is None):
-            A = empty((0,D))
-            b = empty(0)
-
-        if(E is None):
-            E = empty((0,D))
-            d = empty(0)
-
-        # QuadProg++ solver (fast!)
-        if(qpsolver == 'quadprog'):
-
-            # Import QuadProg++ solver
-            from PyQuadProg import PyQuadProg
-
-            # Check if circle has feasible point
-            def mfeasible(c):
-
-                # Solve QP to check feasibility
-                sol = PyQuadProg(2*identity(D),-2*c.xc,E.transpose(),-1*d,vstack([identity(D),-1*identity(D),-1*A]).transpose(),hstack([-l,u,b]))
-                mxopt = sol.x.getArray()
-                mr = dot(mxopt,mxopt) + dot(mxopt,-2*c.xc) + dot(c.xc,c.xc)
-
-                # Check if point lies inside domain
-                if(mr < (c.r**2)):
-                    mf = 1
-                else:
-                    mf = 0
-                    mxopt = None
-
-                return mf, mxopt
-
-        # CVXOPT QP solver (slow)
-        elif(qpsolver == 'cvxopt'):
-
-            # Import cvxopt solver
-            from cvxopt import matrix
-            from cvxopt.solvers import qp, options
-
-            # Set tolerance options
-            options['show_progress'] = False
-            options['abstol'] = 1e-9
-            options['reltol'] = 1e-8
-            options['feastol'] = 1e-9
-
-            # Check if circle has feasible point
-            def mfeasible(c):
-
-                # Solve QP to check feasibility
-                sol = qp(matrix(2*identity(D)),matrix(-2*c.xc),matrix(vstack([-1*identity(D),identity(D),A])),matrix(hstack([-l,u,b])),matrix(E),matrix(d))
-                mxopt = array(sol['x']).flatten()
-                mr = sol['primal objective']
-                mr = mr + dot(c.xc,c.xc)
-
-                # Check if point lies inside domain
-                if(mr < (c.r**2)):
-                    mf = 1
-                else:
-                    mf = 0
-                    mxopt = None
-
-                return mf, mxopt
-
-        # NAG QP solver (fast!)
-        elif(qpsolver == 'nag'):
-
-            # Import QP Solver
-            from qpsolver_lincon import qpsolver_lincon
-
-            # Check if circle has feasible point
-            def mfeasible(c):
-
-                # Solve QP to check feasibility
-                mxopt = c.xc.copy()
-                mr = qpsolver_lincon(2*identity(D),-2*c.xc,hstack([l,-inf,d]),hstack([u,b,d]),mxopt,vstack([A,E]),D,A.shape[0]+E.shape[0])
-                mr = mr + dot(c.xc,c.xc)
-
-                # Check if point lies inside domain
-                if(mr < (c.r**2)):
-                    mf = 1
-                else:
-                    mf = 0
-                    mxopt = None
-
-                return mf, mxopt
 
         # Visualisation
         if(Vis == 1):
@@ -144,7 +178,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 
         if(Heur == 0):
 
-            ksp = 3**D
+            ksp = 3**D ######## 3^n sub-balls
 
         else:
             # Load relevant normalised lattice
@@ -213,7 +247,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
             cutoff = U - L
 
         #and((time()-timer) < 3000)
-        while((cutoff > Tol)and(rad > Rtol)):
+        while((cutoff > Tol)and(rad > Rtol)):#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   MAIN WHILE
 
             # Update iteration count
             itr = itr + 1
@@ -315,6 +349,7 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
                 ihi = ihi + tproc
 
                 req.append(comm.isend(dlist[ilo-1:ihi], dest=numprocs-1-p, tag=0))
+                comm.send(U, dest=numprocs-1-p, tag=1)
 
                 prem = prem - 1
                 trem = trem - tproc
@@ -326,9 +361,9 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
             for k in range(ihi,ihi+tproc):
 
                 # Bound circle
-                dlist[k].ubound = f(dlist[k].xopt)
+                dlist[k].lbound = bound(dlist[k],Lg,Lh,f,g,H,D,A,b,E,d,U)
 
-                dlist[k].lbound = bound(dlist[k],Lg,Lh,f,g,H,D)
+                dlist[k].ubound = f(dlist[k].xopt)
 
                 # Add to circle list
                 clist.append(dlist[k])
@@ -347,7 +382,6 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 
             # Find circle c with smallest ubound
             cslb = min(clist,key=lambda x: x.ubound)
-
             # Update global feasible upper bound
             U = cslb.ubound
             xopt = cslb.xopt
@@ -402,14 +436,15 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
 
     # Worker processes
     else:
-
         # Idle time
         if(TimeWidle == 1):
             eltime = MPI.Wtime()
             itime = 0
 
         # Pick up scattered list
+        #rlist,Global_UB = comm.recv(source=0, tag=0)
         rlist = comm.recv(source=0, tag=0)
+        Global_UB = comm.recv(source=0, tag=1)
 
         # Idle time
         if(TimeWidle == 1):
@@ -421,9 +456,9 @@ def runpar(f, g, H, Lg, Lh, l, u, bound, circle, A=None, b=None, E=None, d=None,
             for k in range(0,len(rlist)):
 
                 # Bound circle
-                rlist[k].ubound = f(rlist[k].xopt)
+                rlist[k].lbound = bound(rlist[k],Lg,Lh,f,g,H,D,A,b,E,d,Global_UB)
 
-                rlist[k].lbound = bound(rlist[k],Lg,Lh,f,g,H,D)
+                rlist[k].ubound = f(rlist[k].xopt)
 
             # Send bounded list
             comm.send(rlist, dest=0, tag=1)
