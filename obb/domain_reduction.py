@@ -51,7 +51,7 @@ def RR(c,(bndH,mod),f,g,H,D,A=None,b=None,E=None,d=None,U=None,optimality=None):
 
         while True:
 
-            # Building the underestimator
+            # Building the convex underestimator
             if optimality is True:
                 convexUnder, gconvexUnder = convexUnderEstimator(f,g,bndH,D,l,u)
 
