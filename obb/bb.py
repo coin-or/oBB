@@ -10,7 +10,7 @@
 # bndT - derivative tensor bounding function
 # l - function lower bound
 # u - function upper bound
-# alg - algorithm type (T1, T2_individual, T2_synchronised)
+# alg - algorithm type (T1, T2_individual, T2_synchronised, T2_synchronised_rr)
 # mod - model type (q - norm quadratic, c - norm cubic, g/Hz/lbH/E0/Ediag -  min eig. quadratic,
 #                  gc - gershgorin cubic)
 # A - inequality constraint matrix
@@ -40,14 +40,6 @@ def obb(f, g, H, bndH, bndT, l, u, alg, mod, A=None, b=None, E=None, d=None, tol
     # Circle class
     from circle import circle
 
-    # Model type
-    if(mod in ['g','Hz','lbH','E0','Ediag','q']):
-        from lboundme_loc import bound
-    elif(mod in ['gc','c']):
-        from lboundgc_loc import bound
-    else:
-        raise RuntimeError('Model must be Norm Quadratic (q), Norm Cubic (c), Min Eigenvalue Type Quadratic (g, Hz, lbH, E0, Ediag) or Gershgorin Cubic (gc).')
-
     # Algorithm
     if(alg == 'T1'):
         from T1 import runpar
@@ -55,8 +47,24 @@ def obb(f, g, H, bndH, bndT, l, u, alg, mod, A=None, b=None, E=None, d=None, tol
         from T2_individual import runpar
     elif(alg == 'T2_synchronised'):
         from T2_synchronised import runpar
+    elif(alg == 'T2_synchronised_rr'):
+        from T2_synchronised_rr import runpar
     else:
-        raise RuntimeError('Algorithm must be T1, T2_individual or T2_synchronised.')
+        raise RuntimeError('Algorithm must be T1, T2_individual, T2_synchronised or T2_synchronised_rr.')
+
+    # Model type
+    if(mod in ['g','Hz','lbH','E0','Ediag','q']):
+        if(alg == 'T2_synchronised_rr'):
+            from lboundme_loc_rr import bound
+        else:
+            from lboundme_loc import bound
+    elif(mod in ['gc','c']):
+        if(alg == 'T2_synchronised_rr'):
+            from lboundgc_loc_rr import bound
+        else:
+            from lboundgc_loc import bound
+    else:
+        raise RuntimeError('Model must be Norm Quadratic (q), Norm Cubic (c), Min Eigenvalue Type Quadratic (g, Hz, lbH, E0, Ediag) or Gershgorin Cubic (gc).')
 
     # Define decorator for counting function calls
     def count_calls(fn):
@@ -107,8 +115,8 @@ def obb(f, g, H, bndH, bndT, l, u, alg, mod, A=None, b=None, E=None, d=None, tol
         print('Problem Details: \n----------------')
         print('Dimension: %d \nObjective Function: %s ') % (len(l), f.__name__)
         print 'l:', l, '\nu:', u
-        if(A != None): print 'A:', A, '\nb:', b
-        if(E != None): print 'E:', E, '\nd:', d
+        if(A is not None): print 'A:', A, '\nb:', b
+        if(E is not None): print 'E:', E, '\nd:', d
         print('Model Type: %s') % mod
         print('Number of Processes: %i') % numprocs
 
@@ -133,7 +141,7 @@ def obb(f, g, H, bndH, bndT, l, u, alg, mod, A=None, b=None, E=None, d=None, tol
 # pts - points at which to sample function (to construct RBF)
 # l - function lower bound
 # u - function upper bound
-# alg - algorithm type (T1, T2_individual, T2_synchronised)
+# alg - algorithm type (T1, T2_individual, T2_synchronised, T2_synchronised_rr)
 # mod - model type (q - norm quadratic, c - norm cubic, g/Hz/lbH/E0/Ediag -  min eig. quadratic,
 #                  gc - gershgorin cubic)
 # A - constraint matrix
@@ -162,14 +170,6 @@ def obb_rbf(f, pts, l, u, alg, mod,  A=None, b=None, E=None, d=None, tol=1e-2, h
     # Circle class
     from circle import circle
 
-    # Model type
-    if(mod in ['g','Hz','lbH','E0','Ediag','q']):
-        from lboundme_loc import bound
-    elif(mod in ['gc','c']):
-        from lboundgc_loc import bound
-    else:
-        raise RuntimeError('Model must be Norm Quadratic (q), Norm Cubic (c), Min Eigenvalue Type Quadratic (g, Hz, lbH, E0, Ediag) or Gershgorin Cubic (gc).')
-
     # Algorithm
     if(alg == 'T1'):
         from T1 import runpar
@@ -177,8 +177,24 @@ def obb_rbf(f, pts, l, u, alg, mod,  A=None, b=None, E=None, d=None, tol=1e-2, h
         from T2_individual import runpar
     elif(alg == 'T2_synchronised'):
         from T2_synchronised import runpar
+    elif(alg == 'T2_synchronised_rr'):
+        from T2_synchronised_rr import runpar
     else:
-        raise RuntimeError('Algorithm must be T1, T2_individual or T2_synchronised.')
+        raise RuntimeError('Algorithm must be T1, T2_individual, T2_synchronised or T2_synchronised_rr.')
+
+    # Model type
+    if(mod in ['g','Hz','lbH','E0','Ediag','q']):
+        if(alg == 'T2_synchronised_rr'):
+            from lboundme_loc_rr import bound
+        else:
+            from lboundme_loc import bound
+    elif(mod in ['gc','c']):
+        if(alg == 'T2_synchronised_rr'):
+            from lboundgc_loc_rr import bound
+        else:
+            from lboundgc_loc import bound
+    else:
+        raise RuntimeError('Model must be Norm Quadratic (q), Norm Cubic (c), Min Eigenvalue Type Quadratic (g, Hz, lbH, E0, Ediag) or Gershgorin Cubic (gc).')
 
     # RBF Layer
     # Fit RBF surrogate
@@ -266,7 +282,7 @@ def obb_rbf(f, pts, l, u, alg, mod,  A=None, b=None, E=None, d=None, tol=1e-2, h
 #
 # Principal arguments are:
 # f - RBF approximation from COCONUT test set to optimize
-# alg - algorithm type (T1, T2_individual, T2_synchronised)
+# alg - algorithm type (T1, T2_individual, T2_synchronised, T2_synchronised_rr)
 # mod - model type (q - norm quadratic, c - norm cubic, g/Hz/lbH/E0/Ediag -  min eig. quadratic,
 #                  gc - gershgorin cubic)
 #
@@ -292,14 +308,6 @@ def obb_rbf_coconut(f, alg, mod, tol=1e-2, heur=0, toltype='r', vis=0, qpsolver=
     # Circle class
     from circle import circle
 
-    # Model type
-    if(mod in ['g','Hz','lbH','E0','Ediag','q']):
-        from lboundme_loc import bound
-    elif(mod in ['gc','c']):
-        from lboundgc_loc import bound
-    else:
-        raise RuntimeError('Model must be Norm Quadratic (q), Norm Cubic (c), Min Eigenvalue Type Quadratic (g, Hz, lbH, E0, Ediag) or Gershgorin Cubic (gc).')
-
     # Algorithm
     if(alg == 'T1'):
         from T1 import runpar
@@ -307,8 +315,24 @@ def obb_rbf_coconut(f, alg, mod, tol=1e-2, heur=0, toltype='r', vis=0, qpsolver=
         from T2_individual import runpar
     elif(alg == 'T2_synchronised'):
         from T2_synchronised import runpar
+    elif(alg == 'T2_synchronised_rr'):
+        from T2_synchronised_rr import runpar
     else:
-        raise RuntimeError('Algorithm must be T1, T2_individual or T2_synchronised.')
+        raise RuntimeError('Algorithm must be T1, T2_individual, T2_synchronised or T2_synchronised_rr.')
+
+    # Model type
+    if(mod in ['g','Hz','lbH','E0','Ediag','q']):
+        if(alg == 'T2_synchronised_rr'):
+            from lboundme_loc_rr import bound
+        else:
+            from lboundme_loc import bound
+    elif(mod in ['gc','c']):
+        if(alg == 'T2_synchronised_rr'):
+            from lboundgc_loc_rr import bound
+        else:
+            from lboundgc_loc import bound
+    else:
+        raise RuntimeError('Model must be Norm Quadratic (q), Norm Cubic (c), Min Eigenvalue Type Quadratic (g, Hz, lbH, E0, Ediag) or Gershgorin Cubic (gc).')
 
     # RBF Layer
     # Load RBF surrogate
@@ -330,13 +354,6 @@ def obb_rbf_coconut(f, alg, mod, tol=1e-2, heur=0, toltype='r', vis=0, qpsolver=
     b = data['b']
     E = data['E']
     d = data['d']
-
-    # For Isnnodoc and hs055 there are some constraint linearly dependent
-    # we need to remove it
-    # Isnnodoc: constraint 1 or 2
-    # hs055: constraint 3 or 4
-    #E = delete(E,3,axis=0)
-    #d = delete(d,3)
 
     # Set up relevant global variables
     import config

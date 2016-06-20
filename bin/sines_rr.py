@@ -3,8 +3,8 @@ from obb import obb
 from numpy import sin, cos, diag, ones, zeros
 
 # Input Settings
-# Algorithm (T1, T2_individual, T2_synchronised)
-alg = 'T1'
+# Algorithm (T1, T2_individual, T2_synchronised, T2_synchronised_rr)
+alg = 'T2_synchronised_rr'
 
 # Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,
 # c - norm cubic, gc - gershgorin cubic)
@@ -20,7 +20,7 @@ toltype = 'r'
 vis = 0
 
 # QP solver (cvxopt, quadprog)
-qpsolver = 'quadprog'
+qpsolver = 'cvxopt'
 
 # Tensor diagonal function
 def diagt(v):

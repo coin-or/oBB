@@ -1,6 +1,5 @@
 from __future__ import division
-def RR(c,(bndH,mod),f,g,H,D,A=None,b=None,E=None,d=None,U=None,optimality=None):
-
+def RR(c,bndH,f,g,D,A=None,b=None,E=None,d=None,U=None,optimality=None):
 
     from spline_alphaBB import convexUnderEstimator
     # import necessary functions

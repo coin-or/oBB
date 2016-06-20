@@ -4,8 +4,8 @@ from numpy import sin, ones
 from numpy.random import rand,seed
 
 # Input Settings
-# Algorithm (T1, T2_individual, T2_synchronised)
-alg = 'T1'
+# Algorithm (T1, T2_individual, T2_synchronised, T2_synchronised_rr)
+alg = 'T2_synchronised_rr'
 
 # Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,
 # c - norm cubic, gc - gershgorin cubic)

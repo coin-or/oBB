@@ -2,8 +2,8 @@
 from obb import obb_rbf_coconut
 
 # Input Settings
-# Algorithm (T1, T2_individual, T2_synchronised)
-alg = 'T1'
+# Algorithm (T1, T2_individual, T2_synchronised, T2_synchronised_rr)
+alg = 'T2_synchronised_rr'
 
 # Model type (q - norm quadratic, c - norm cubic, g/Hz/lbH/E0/Ediag - min eig. quadratic,
 # gc - gershgorin cubic)

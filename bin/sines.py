@@ -3,7 +3,7 @@ from obb import obb
 from numpy import sin, cos, diag, ones, zeros
 
 # Input Settings
-# Algorithm (T1, T2_individual, T2_synchronised)
+# Algorithm (T1, T2_individual, T2_synchronised, T2_synchronised_rr)
 alg = 'T1'
 
 # Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic,

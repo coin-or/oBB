@@ -47,6 +47,7 @@ The type of parallel branch and bound algorithm to use should be passed to oBB's
 
 * **'T1'** - bounds in parallel
 * **'T2_individual'**, **'T2_synchronised'** - tree in parallel
+* **'T2_synchronised_rr'** - tree in parallel *with range reduction*
 
 See `Example of Use`_ for an in-depth worked example in python.
 
@@ -69,7 +70,7 @@ The user can also specify the QP solver that the algorithm calls to obtain feasi
 
 * **qpsolver** - QP solver to use (**'cvxopt'** - CVXOPT's qp [default], **'quadprog'** - QuadProg++)
 
-Note that the QuadProg++ solver is faster as it is written in C++ but has very limited error handling and may not work in all cases. The CVXOPT solver is slower as it is written entirely in Python but considerably more stable.
+Note that the QuadProg++ solver is faster as it is written in C++ but has very limited error handling and may not work in all cases. The CVXOPT solver is slower as it is written in Python but considerably more stable.
 
 Example of Use
 --------------
@@ -102,7 +103,7 @@ We can code this up in a python script file, let's call it sines.py as follows:
       from numpy import sin, cos, diag, ones, zeros
 
       # Input Settings
-      # Algorithm (T1, T2_individual, T2_synchronised)
+      # Algorithm (T1, T2_individual, T2_synchronised, T2_synchronised_rr)
       alg = 'T1'
 
       # Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic, 
@@ -182,7 +183,7 @@ We can code this up in a python script file, let's call it sines_rbf.py as follo
 	from numpy.random import rand, seed
 
 	# Input Settings
-	# Algorithm (T1, T2_individual, T2_synchronised)
+	# Algorithm (T1, T2_individual, T2_synchronised, T2_synchronised_rr)
 	alg = 'T1'
 
 	# Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic, 
@@ -229,7 +230,7 @@ oBB comes with a set of pre-computed RBF approximations to selected functions fr
 	from obb import obb_rbf_coconut
 
 	# Input Settings
-	# Algorithm (T1, T2_individual, T2_synchronised)
+	# Algorithm (T1, T2_individual, T2_synchronised, T2_synchronised_rr)
 	alg = 'T1'
 
 	# Model type (q - norm quadratic, g/Hz/lbH/E0/Ediag - min eig. quadratic, 
@@ -250,7 +251,7 @@ Note the use of **obb_rbf_coconut** as the calling function and the optional **'
 Acknowledgements
 ----------------
 This work was supported by EPSRC grants `EP/I028854/1 <http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/I028854/1>`_ (PI: `Dr Coralia Cartis <http://www.maths.ox.ac.uk/people/profiles/coralia.cartis>`_) and NAIS `EP/G036136/1 <http://gow.epsrc.ac.uk/NGBOViewGrant.aspx?GrantRef=EP/G036136/1>`_.
-We are also grateful to `Prof Nick Gould <http://www.numerical.rl.ac.uk/people/nimg/>`_ for his help and advice during development and Mehdi Towhidi for providing us with his `PyQuadProg code <http://github.com/mpy/PyQuadProg>`_.
+We are also grateful to `Prof Nick Gould <http://www.numerical.rl.ac.uk/people/nimg/>`_ for his help and advice during development, Mehdi Towhidi for providing us with his `PyQuadProg code <http://github.com/mpy/PyQuadProg>`_ and Alberto Guida for his range reduction strategy enhancement.
 
 References
 ----------

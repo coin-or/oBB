@@ -1,6 +1,8 @@
 language: python
 python:
+    - 2.6
     - 2.7
+    - 3.4
     - 3.5
 env:
     - MPI=mpich2
@@ -20,4 +22,4 @@ before_script:
     - test $MPI == mpich2 && MPIEXEC='mpiexec -launcher fork' || true
 script:
     - $MPIEXEC -n 5 python $PWD/bin/sines.py 
-    - $MPIEXEC -n 5 python $PWD/bin/sines_quadprog.py 
+    - $MPIEXEC -n 5 python $PWD/bin/sines_rr.py 

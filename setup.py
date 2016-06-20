@@ -9,16 +9,19 @@ from numpy import get_include
 if (version_info[:2] < (2,6)):
     print("oBB requires Python 2.6/2.7 or Python 3. Python %d.%d detected" % version_info[:2])
     exit(-1)
-elif (version_info[0] == 3):
-    print("Support for Python 3 is currently experimental.")
 
 # Get package version
 exec(open('obb/version.py').read())
 
-# Setup QuadProg++ Extension
+# Setup QuadProg++ and SLSQP Extension
 ext_modules = [Extension('PyQuadProg',
                           sources=['pyquadprog/PyQuadProg.cpp','quadprog/QuadProg++.cc','quadprog/Array.cc'],
                           include_dirs=['pyquadprog','quadprog',get_include()],
+                          language='c++'
+                          ), 
+               Extension('_nlopt',
+                          sources=['slsqp/slsqp.c','nlopt/general.c','nlopt/optimize.c','nlopt/options.c','nlopt/stop.c','nlopt/timer.c','nlopt/nlopt_wrap.cxx'],
+                          include_dirs=['slsqp','nlopt',get_include()],
                           language='c++'
                           )]
 
@@ -34,6 +37,7 @@ setup(
     include_package_data=True,
     package_data={'obb': ['obb/coconut/*','obb/coconut_tol']},
     ext_modules=ext_modules,
+    py_modules=['nlopt'],
     url='http://pypi.python.org/pypi/oBB/',
     license='LGPLv3',
     long_description=open('README.rst').read(),
@@ -51,6 +55,7 @@ setup(
         "Natural Language :: English",
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Topic :: Scientific/Engineering :: Mathematics",
     ],

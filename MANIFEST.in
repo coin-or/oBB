@@ -3,7 +3,13 @@ include docs/latex/oBB.pdf
 include docs/html/*
 include docs/html/_static/*
 include docs/html/_sources/*
+include docs/html/_static/css/*
+include docs/html/_static/fonts/*
+include docs/html/_static/js/*
 include quadprog/*
 include pyquadprog/*
 include obb/coconut/*
 include obb/coconut_tol
+include obb/lattices/*
+include slsqp/*
+include nlopt/*
