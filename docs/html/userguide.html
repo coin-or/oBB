@@ -155,11 +155,11 @@
 </div></blockquote>
 <p>where the objective function <span class="math">\(f\)</span> has Lipschitz continuous gradient or Hessian. oBB does not need to know the Lipschitz constants explicitly, it merely requires the user to supply elementwise bounds on the Hessian or derivative tensor of the objective function (see <a class="reference internal" href="#how-to-use-obb">How to use oBB</a>). The linear inequality constraints <span class="math">\(Ax \le b\)</span> and equality constraints <span class="math">\(Ex = d\)</span> are optional but the bound constraints <span class="math">\(l \le x \le u\)</span> are required.</p>
 <p>oBB uses local first or second order Taylor type approximations over balls within a parallel branch and bound framework. As with all branch and bound algorithms, the curse of dimensionality limits its use to low dimensional problems. The choice of whether to use first or second order approximations is down to the user  (see <a class="reference internal" href="#how-to-use-obb">How to use oBB</a>).</p>
-<p>For an in-depth technical description of the algorithm see the tech-report <a class="reference internal" href="#cfg2013" id="id1">[CFG2013]</a> and the paper <a class="reference internal" href="#fgf2013" id="id2">[FGF2013]</a>.</p>
+<p>For an in-depth technical description of the algorithm see the tech-report <a class="reference internal" href="#cfg2013" id="id1">[CFG2013]</a> and the paper <a class="reference internal" href="#fgf2013" id="id2">[FGF2013]</a>, along with the Master's thesis <a class="reference internal" href="#g2015" id="id3">[G2015]</a> for the optional range reduction strategy.</p>
 </div>
 <div class="section" id="how-to-use-obb">
 <h2>How to use oBB<a class="headerlink" href="#how-to-use-obb" title="Permalink to this headline">¶</a></h2>
-<p>oBB requires the user to write a python script file that defines the functions and parameters necessary to solve the global optimization problem and then passes them to the main <strong>obb</strong> function (see <a class="reference internal" href="#example-of-use">Example of Use</a>). The necessary functions are determined by the choice of a first or second order approximation model. The following approximation models can be passed to oBB's <strong>obb</strong> function using the <strong>mod</strong> argument (see <a class="reference internal" href="#cfg2013" id="id3">[CFG2013]</a> for details):</p>
+<p>oBB requires the user to write a python script file that defines the functions and parameters necessary to solve the global optimization problem and then passes them to the main <strong>obb</strong> function (see <a class="reference internal" href="#example-of-use">Example of Use</a>). The necessary functions are determined by the choice of a first or second order approximation model. The following approximation models can be passed to oBB's <strong>obb</strong> function using the <strong>mod</strong> argument (see <a class="reference internal" href="#cfg2013" id="id4">[CFG2013]</a> for details):</p>
 <ul class="simple">
 <li>First order models: <strong>'q'</strong> - norm based,  <strong>'g'</strong>, <strong>'Hz'</strong>, <strong>'lbH'</strong>, <strong>'E0'</strong>, <strong>'Ediag'</strong> - minimum eigenvalue based</li>
 <li>Second order models: <strong>'c'</strong> - norm based, <strong>'gc'</strong> - minimum eigenvalue based</li>
@@ -181,13 +181,13 @@
 <ul class="simple">
 <li><strong>bndT(l,u)</strong> - returns two numpy 3D-arrays of elementwise lower and upper bounds on the derivative tensor <span class="math">\(\nabla_{xxx} f\)</span> of the objective function over <span class="math">\([l,u]\)</span></li>
 </ul>
-<p>The type of parallel branch and bound algorithm to use should be passed to oBB's <strong>obb</strong> function using the <strong>alg</strong> argument and can be one of the following (see <a class="reference internal" href="#cfg2013" id="id4">[CFG2013]</a> for details):</p>
+<p>The type of parallel branch and bound algorithm to use should be passed to oBB's <strong>obb</strong> function using the <strong>alg</strong> argument and can be one of the following (see <a class="reference internal" href="#cfg2013" id="id5">[CFG2013]</a> for details):</p>
 <ul class="simple">
 <li><strong>'T1'</strong> - bounds in parallel</li>
 <li><strong>'T2_individual'</strong>, <strong>'T2_synchronised'</strong> - tree in parallel</li>
 <li><strong>'T2_synchronised_rr'</strong> - tree in parallel <em>with range reduction</em></li>
 </ul>
-<p>See <a class="reference internal" href="#example-of-use">Example of Use</a> for an in-depth worked example in python.</p>
+<p>See <a class="reference internal" href="#example-of-use">Example of Use</a> for an in-depth worked example in python. Note that the range reduction strategy improves performance in many cases but may not always guarantee global optimality (see <a class="reference internal" href="#g2015" id="id6">[G2015]</a> for details).</p>
 </div>
 <div class="section" id="optional-arguments">
 <h2>Optional Arguments<a class="headerlink" href="#optional-arguments" title="Permalink to this headline">¶</a></h2>
@@ -203,7 +203,7 @@
 <li><strong>vis</strong> - visualisation of the algorithm in 2D (<strong>0</strong> - off [default], <strong>1</strong> - on)</li>
 </ul>
 <p>Note that the inequality constraint arguments <span class="math">\(A, b\)</span> and  equality constraint arguments <span class="math">\(E, d\)</span> are also optional as the optimization problem is only required to be bound constrained.</p>
-<p>The user can also specify the QP solver that the algorithm calls to obtain feasible upper bounds (see <a class="reference internal" href="#cfg2013" id="id5">[CFG2013]</a> for details). At present the user can choose from <a class="reference external" href="http://cvxopt.org/">CVXOPT's qp solver</a> or the <a class="reference external" href="http://github.com/mpy/PyQuadProg/">QuadProg++ solver</a> using the optional argument:</p>
+<p>The user can also specify the QP solver that the algorithm calls to obtain feasible upper bounds (see <a class="reference internal" href="#cfg2013" id="id7">[CFG2013]</a> for details). At present the user can choose from <a class="reference external" href="http://cvxopt.org/">CVXOPT's qp solver</a> or the <a class="reference external" href="http://github.com/mpy/PyQuadProg/">QuadProg++ solver</a> using the optional argument:</p>
 <ul class="simple">
 <li><strong>qpsolver</strong> - QP solver to use (<strong>'cvxopt'</strong> - CVXOPT's qp [default], <strong>'quadprog'</strong> - QuadProg++)</li>
 </ul>
@@ -294,7 +294,7 @@
 </div>
 <div class="section" id="using-the-rbf-layer">
 <h2>Using the RBF Layer<a class="headerlink" href="#using-the-rbf-layer" title="Permalink to this headline">¶</a></h2>
-<p>oBB can optionally approximate the objective function <span class="math">\(f\)</span> by a radial basis function (RBF) surrogate and optimize the approximation instead (see <a class="reference internal" href="#fgf2013" id="id6">[FGF2013]</a> for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which it should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.</p>
+<p>oBB can optionally approximate the objective function <span class="math">\(f\)</span> by a radial basis function (RBF) surrogate and optimize the approximation instead (see <a class="reference internal" href="#fgf2013" id="id8">[FGF2013]</a> for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which it should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.</p>
 <p>As before, the user is required to write a python script file that defines the functions and parameters necessary to solve the problem and then passes them to the <strong>obb_rbf</strong> function. In addition to the approximation model, algorithm type and objective function arguments described in <a class="reference internal" href="#how-to-use-obb">How to use oBB</a> only an <span class="math">\(n\)</span> by <span class="math">\(m\)</span> numpy array of <span class="math">\(m\)</span> points at which to sample the objective function needs to be passed to the <strong>obb_rbf</strong> function using the <strong>pts</strong> argument.</p>
 <p>For example, suppose we wish to solve an RBF approximation to the problem given in the <a class="reference internal" href="#example-of-use">Example of Use</a> section:</p>
 <blockquote>
@@ -352,7 +352,7 @@
 </div>
 <div class="section" id="rbf-layer-for-the-coconut-test-set">
 <h2>RBF Layer for the COCONUT Test Set<a class="headerlink" href="#rbf-layer-for-the-coconut-test-set" title="Permalink to this headline">¶</a></h2>
-<p>oBB comes with a set of pre-computed RBF approximations to selected functions from the <a class="reference external" href="http://www.mat.univie.ac.at/~neum/glopt/coconut/Benchmark/Benchmark.html">COCONUT test set</a> that were used to produce the numerical results in the paper <a class="reference internal" href="#cfg2013" id="id7">[CFG2013]</a>. In order to optimize these approximations using oBB, the user is required to write a python script file that defines the desired function and tolerance and then passes them to the <strong>obb_rbf_coconut</strong> function (see <a class="reference internal" href="#cfg2013" id="id8">[CFG2013]</a> for a list of all 31 functions available). For example, to optimize an RBF approximation to the <strong>'hs041'</strong> function the user could write the following python script file, let's call it coconut.py:</p>
+<p>oBB comes with a set of pre-computed RBF approximations to selected functions from the <a class="reference external" href="http://www.mat.univie.ac.at/~neum/glopt/coconut/Benchmark/Benchmark.html">COCONUT test set</a> that were used to produce the numerical results in the paper <a class="reference internal" href="#cfg2013" id="id9">[CFG2013]</a>. In order to optimize these approximations using oBB, the user is required to write a python script file that defines the desired function and tolerance and then passes them to the <strong>obb_rbf_coconut</strong> function (see <a class="reference internal" href="#cfg2013" id="id10">[CFG2013]</a> for a list of all 31 functions available). For example, to optimize an RBF approximation to the <strong>'hs041'</strong> function the user could write the following python script file, let's call it coconut.py:</p>
 <blockquote>
 <div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Example COCONUT RBF code for oBB</span>
 <span class="kn">from</span> <span class="nn">obb</span> <span class="kn">import</span> <span class="n">obb_rbf_coconut</span>
@@ -376,7 +376,7 @@
 </pre></div>
 </div>
 </div></blockquote>
-<p>Note the use of <strong>obb_rbf_coconut</strong> as the calling function and the optional <strong>'12hr'</strong> tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see <a class="reference internal" href="#cfg2013" id="id9">[CFG2013]</a> for details). This file is included in oBB as coconut.py, to run it see <a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a>.</p>
+<p>Note the use of <strong>obb_rbf_coconut</strong> as the calling function and the optional <strong>'12hr'</strong> tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see <a class="reference internal" href="#cfg2013" id="id11">[CFG2013]</a> for details). This file is included in oBB as coconut.py, to run it see <a class="reference internal" href="#running-the-algorithm">Running the Algorithm</a>.</p>
 </div>
 <div class="section" id="acknowledgements">
 <h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
@@ -388,13 +388,19 @@ We are also grateful to <a class="reference external" href="http://www.numerical
 <table class="docutils citation" frame="void" id="cfg2013" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[CFG2013]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>, <a class="fn-backref" href="#id4">3</a>, <a class="fn-backref" href="#id5">4</a>, <a class="fn-backref" href="#id7">5</a>, <a class="fn-backref" href="#id8">6</a>, <a class="fn-backref" href="#id9">7</a>)</em> Cartis, C., Fowkes, J. M. and Gould, N. I. M. (2013) 'Branching and Bounding Improvements for Global Optimization Algorithms with Lipschitz Continuity Properties', <em>ERGO Technical Report</em>, no. 13-010, pp. 1-33. <a class="reference external" href="http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html">http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html</a></td></tr>
+<tr><td class="label">[CFG2013]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id4">2</a>, <a class="fn-backref" href="#id5">3</a>, <a class="fn-backref" href="#id7">4</a>, <a class="fn-backref" href="#id9">5</a>, <a class="fn-backref" href="#id10">6</a>, <a class="fn-backref" href="#id11">7</a>)</em> Cartis, C., Fowkes, J. M. and Gould, N. I. M. (2013) 'Branching and Bounding Improvements for Global Optimization Algorithms with Lipschitz Continuity Properties', <em>ERGO Technical Report</em>, no. 13-010, pp. 1-33. <a class="reference external" href="http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html">http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-13-010.html</a></td></tr>
 </tbody>
 </table>
 <table class="docutils citation" frame="void" id="fgf2013" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[FGF2013]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id6">2</a>)</em> Fowkes, J. M. , Gould,  N. I. M. and Farmer, C. L. (2013) 'A Branch and Bound Algorithm for the Global Optimization of Hessian Lipschitz Continuous Functions', <em>Journal of Global Optimization</em>, vol. 56, no. 4, pp. 1791-1815. <a class="reference external" href="http://dx.doi.org/10.1007/s10898-012-9937-9">http://dx.doi.org/10.1007/s10898-012-9937-9</a></td></tr>
+<tr><td class="label">[FGF2013]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id8">2</a>)</em> Fowkes, J. M. , Gould,  N. I. M. and Farmer, C. L. (2013) 'A Branch and Bound Algorithm for the Global Optimization of Hessian Lipschitz Continuous Functions', <em>Journal of Global Optimization</em>, vol. 56, no. 4, pp. 1791-1815. <a class="reference external" href="http://dx.doi.org/10.1007/s10898-012-9937-9">http://dx.doi.org/10.1007/s10898-012-9937-9</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="g2015" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[G2015]</td><td><em>(<a class="fn-backref" href="#id3">1</a>, <a class="fn-backref" href="#id6">2</a>)</em> Guida, A. (2015) 'A Branch and Bound Algorithm for the Global Optimization and its Improvements', Master's Thesis, Faculty of Engineering, University of Florence, pp. 1-88. <a class="reference external" href="http://people.maths.ox.ac.uk/cartis/papers/Thesys_Alberto_Guida.pdf">http://people.maths.ox.ac.uk/cartis/papers/Thesys_Alberto_Guida.pdf</a></td></tr>
 </tbody>
 </table>
 </div>
@@ -418,7 +424,7 @@ We are also grateful to <a class="reference external" href="http://www.numerical
   <div role="contentinfo">
     <p>
         &copy; Copyright 2016, J. M. Fowkes.
-      Last updated on 20 Jun, 2016.
+      Last updated on 18 Jul, 2016.
 
     </p>
   </div>

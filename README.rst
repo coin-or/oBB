@@ -1,11 +1,15 @@
-================================================
-OBB: Overlapping Branch and Bound |Build Status|
-================================================
+===============================================================
+OBB: Overlapping Branch and Bound |Build Status| |PyPI Version|
+===============================================================
 oBB is an algorithm for the parallel global optimization of functions with Lipchitz continuous gradient or Hessian.
 
 This is an implementation of the algorithm from our paper:
 `Branching and Bounding Improvements for Global Optimization Algorithms with Lipschitz Continuity Properties <http://dx.doi.org/10.1007/s10898-014-0199-6>`_ 
 C. Cartis, J. M. Fowkes and N. I. M. Gould. Journal of Global Optimization, vol. 61, no. 3, pp. 429–457, 2015.
+
+The latest version contains an optional range reduction strategy that improves performance in many cases but may not always guarantee global optimality. For details please see the Master's thesis:  
+`A Branch and Bound Algorithm for the Global Optimization and its Improvements <http://people.maths.ox.ac.uk/cartis/papers/Thesys_Alberto_Guida.pdf>`_ 
+A. Guida. Master's Thesis, Faculty of Engineering, University of Florence, 2015.
 
 Documentation
 -------------
@@ -52,9 +56,9 @@ Manual installation
 -------------------
 Alternatively, you can download the source code and unpack as follows::
 
-    $ wget http://pypi.python.org/packages/source/o/oBB/oBB-X.X.tar.gz
-    $ tar -xzvf oBB-X.X.tar.gz
-    $ cd oBB-X.X
+    $ wget https://pypi.io/packages/source/o/oBB/oBB-0.8b.zip
+    $ unzip oBB-0.8b.zip
+    $ cd oBB-0.8b
 
 and then build and install manually using::
 
@@ -99,3 +103,5 @@ This algorithm is released under the GNU LGPLv3 license.
 
 .. |Build Status| image::  https://travis-ci.org/coin-or/oBB.svg?branch=master
                   :target: https://travis-ci.org/coin-or/oBB
+.. |PyPI Version| image:: https://img.shields.io/pypi/v/oBB.svg
+                  :target: https://pypi.python.org/pypi/oBB

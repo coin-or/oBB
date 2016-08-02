@@ -13,7 +13,7 @@
 \contentsline {section}{\numberline {2.5}Running the Algorithm}{7}{section.2.5}
 \contentsline {section}{\numberline {2.6}Using the RBF Layer}{7}{section.2.6}
 \contentsline {section}{\numberline {2.7}RBF Layer for the COCONUT Test Set}{9}{section.2.7}
-\contentsline {section}{\numberline {2.8}Acknowledgements}{9}{section.2.8}
+\contentsline {section}{\numberline {2.8}Acknowledgements}{10}{section.2.8}
 \contentsline {section}{\numberline {2.9}References}{10}{section.2.9}
 \contentsline {chapter}{\numberline {3}Acknowledgements}{11}{chapter.3}
-\contentsline {chapter}{Bibliography}{12}{chapter*.13}
+\contentsline {chapter}{Bibliography}{12}{chapter*.15}

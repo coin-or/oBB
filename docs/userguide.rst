@@ -17,7 +17,7 @@ where the objective function :math:`f` has Lipschitz continuous gradient or Hess
 
 oBB uses local first or second order Taylor type approximations over balls within a parallel branch and bound framework. As with all branch and bound algorithms, the curse of dimensionality limits its use to low dimensional problems. The choice of whether to use first or second order approximations is down to the user  (see `How to use oBB`_). 
 
-For an in-depth technical description of the algorithm see the tech-report [CFG2013]_ and the paper [FGF2013]_.
+For an in-depth technical description of the algorithm see the tech-report [CFG2013]_ and the paper [FGF2013]_, along with the Master's thesis [G2015]_ for the optional range reduction strategy.
 
 How to use oBB
 --------------
@@ -48,8 +48,8 @@ The type of parallel branch and bound algorithm to use should be passed to oBB's
 * **'T1'** - bounds in parallel
 * **'T2_individual'**, **'T2_synchronised'** - tree in parallel
 * **'T2_synchronised_rr'** - tree in parallel *with range reduction*
-
-See `Example of Use`_ for an in-depth worked example in python.
+  
+See `Example of Use`_ for an in-depth worked example in python. Note that the range reduction strategy improves performance in many cases but may not always guarantee global optimality (see [G2015]_ for details).
 
 Optional Arguments
 ------------------
@@ -261,3 +261,6 @@ References
 
 .. [FGF2013]   
    Fowkes, J. M. , Gould,  N. I. M. and Farmer, C. L. (2013) 'A Branch and Bound Algorithm for the Global Optimization of Hessian Lipschitz Continuous Functions', *Journal of Global Optimization*, vol. 56, no. 4, pp. 1791-1815. http://dx.doi.org/10.1007/s10898-012-9937-9 
+
+.. [G2015] 
+   Guida, A. (2015) 'A Branch and Bound Algorithm for the Global Optimization and its Improvements', Master's Thesis, Faculty of Engineering, University of Florence, pp. 1-88. http://people.maths.ox.ac.uk/cartis/papers/Thesys_Alberto_Guida.pdf 

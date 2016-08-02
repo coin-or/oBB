@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2012.11.27)  20 JUN 2016 15:48
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2012.11.27)  18 JUL 2016 15:10
 entering extended mode
  %&-line parsing enabled.
 **oBB.tex
@@ -952,20 +952,20 @@ less on input line 610.
 ] (./oBB.ind)
 
 Package Fancyhdr Warning: \fancyfoot's `E' option without twoside option is use
-less on input line 623.
+less on input line 626.
 
 [12
 
 
 ] (./oBB.aux) ) 
 Here is how much of TeX's memory you used:
- 7637 strings out of 256216
- 97627 string characters out of 1917071
- 171541 words of memory out of 1500000
- 10630 multiletter control sequences out of 10000+200000
+ 7645 strings out of 256216
+ 97726 string characters out of 1917071
+ 171689 words of memory out of 1500000
+ 10634 multiletter control sequences out of 10000+200000
  64045 words of font info for 88 fonts, out of 1200000 for 2000
  646 hyphenation exceptions out of 8191
- 32i,22n,45p,888b,439s stack positions out of 5000i,500n,6000p,200000b,15000s
+ 32i,22n,45p,889b,439s stack positions out of 5000i,500n,6000p,200000b,15000s
 {/usr/share/texmf/fonts/enc/dvips/base/8r.enc}</usr/share/texmf/
 fonts/type1/bluesky/cm/cmex10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmmi
 10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmmi6.pfb></usr/share/texmf/fon
@@ -978,9 +978,9 @@ sr/share/texmf/fonts/type1/urw/courier/ucrro8a.pfb></usr/share/texmf/fonts/type
 1/urw/helvetic/uhvb8a.pfb></usr/share/texmf/fonts/type1/urw/helvetic/uhvbo8a.pf
 b></usr/share/texmf/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf/fonts/ty
 pe1/urw/times/utmr8a.pfb></usr/share/texmf/fonts/type1/urw/times/utmri8a.pfb>
-Output written on oBB.pdf (14 pages, 240913 bytes).
+Output written on oBB.pdf (14 pages, 242810 bytes).
 PDF statistics:
- 316 PDF objects out of 1000 (max. 8388607)
- 49 named destinations out of 1000 (max. 131072)
+ 324 PDF objects out of 1000 (max. 8388607)
+ 53 named destinations out of 1000 (max. 131072)
  170 words of extra memory for PDF output out of 10000 (max. 10000000)
 

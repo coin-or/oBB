@@ -307,12 +307,12 @@ where the objective function \(f\) has Lipschitz continuous gradient or Hessian.
 
 oBB uses local first or second order Taylor type approximations over balls within a parallel branch and bound framework. As with all branch and bound algorithms, the curse of dimensionality limits its use to low dimensional problems. The choice of whether to use first or second order approximations is down to the user  (see {\hyperref[userguide:how\string-to\string-use\string-obb]{\crossref{How to use oBB}}}).
 
-For an in-depth technical description of the algorithm see the tech-report \phantomsection\label{userguide:id1}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}} and the paper \phantomsection\label{userguide:id2}{\hyperref[userguide:fgf2013]{\crossref{{[}FGF2013{]}}}}.
+For an in-depth technical description of the algorithm see the tech-report \phantomsection\label{userguide:id1}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}} and the paper \phantomsection\label{userguide:id2}{\hyperref[userguide:fgf2013]{\crossref{{[}FGF2013{]}}}}, along with the Master's thesis \phantomsection\label{userguide:id3}{\hyperref[userguide:g2015]{\crossref{{[}G2015{]}}}} for the optional range reduction strategy.
 
 
 \section{How to use oBB}
 \label{userguide:how-to-use-obb}
-oBB requires the user to write a python script file that defines the functions and parameters necessary to solve the global optimization problem and then passes them to the main \textbf{obb} function (see {\hyperref[userguide:example\string-of\string-use]{\crossref{Example of Use}}}). The necessary functions are determined by the choice of a first or second order approximation model. The following approximation models can be passed to oBB's \textbf{obb} function using the \textbf{mod} argument (see \phantomsection\label{userguide:id3}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}} for details):
+oBB requires the user to write a python script file that defines the functions and parameters necessary to solve the global optimization problem and then passes them to the main \textbf{obb} function (see {\hyperref[userguide:example\string-of\string-use]{\crossref{Example of Use}}}). The necessary functions are determined by the choice of a first or second order approximation model. The following approximation models can be passed to oBB's \textbf{obb} function using the \textbf{mod} argument (see \phantomsection\label{userguide:id4}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}} for details):
 \begin{itemize}
 \item {} 
 First order models: \textbf{`q'} - norm based,  \textbf{`g'}, \textbf{`Hz'}, \textbf{`lbH'}, \textbf{`E0'}, \textbf{`Ediag'} - minimum eigenvalue based
@@ -353,7 +353,7 @@ and rather than \textbf{bndH} the bounding function:
 
 \end{itemize}
 
-The type of parallel branch and bound algorithm to use should be passed to oBB's \textbf{obb} function using the \textbf{alg} argument and can be one of the following (see \phantomsection\label{userguide:id4}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}} for details):
+The type of parallel branch and bound algorithm to use should be passed to oBB's \textbf{obb} function using the \textbf{alg} argument and can be one of the following (see \phantomsection\label{userguide:id5}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}} for details):
 \begin{itemize}
 \item {} 
 \textbf{`T1'} - bounds in parallel
@@ -366,7 +366,7 @@ The type of parallel branch and bound algorithm to use should be passed to oBB's
 
 \end{itemize}
 
-See {\hyperref[userguide:example\string-of\string-use]{\crossref{Example of Use}}} for an in-depth worked example in python.
+See {\hyperref[userguide:example\string-of\string-use]{\crossref{Example of Use}}} for an in-depth worked example in python. Note that the range reduction strategy improves performance in many cases but may not always guarantee global optimality (see \phantomsection\label{userguide:id6}{\hyperref[userguide:g2015]{\crossref{{[}G2015{]}}}} for details).
 
 
 \section{Optional Arguments}
@@ -396,7 +396,7 @@ and if \href{http://www.matplotlib.org/}{matplotlib} is installed:
 
 Note that the inequality constraint arguments \(A, b\) and  equality constraint arguments \(E, d\) are also optional as the optimization problem is only required to be bound constrained.
 
-The user can also specify the QP solver that the algorithm calls to obtain feasible upper bounds (see \phantomsection\label{userguide:id5}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}} for details). At present the user can choose from \href{http://cvxopt.org/}{CVXOPT's qp solver} or the \href{http://github.com/mpy/PyQuadProg/}{QuadProg++ solver} using the optional argument:
+The user can also specify the QP solver that the algorithm calls to obtain feasible upper bounds (see \phantomsection\label{userguide:id7}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}} for details). At present the user can choose from \href{http://cvxopt.org/}{CVXOPT's qp solver} or the \href{http://github.com/mpy/PyQuadProg/}{QuadProg++ solver} using the optional argument:
 \begin{itemize}
 \item {} 
 \textbf{qpsolver} - QP solver to use (\textbf{`cvxopt'} - CVXOPT's qp {[}default{]}, \textbf{`quadprog'} - QuadProg++)
@@ -501,7 +501,7 @@ but this is not necessary for other MPI implementations, e.g. OpenMPI.
 
 \section{Using the RBF Layer}
 \label{userguide:using-the-rbf-layer}
-oBB can optionally approximate the objective function \(f\) by a radial basis function (RBF) surrogate and optimize the approximation instead (see \phantomsection\label{userguide:id6}{\hyperref[userguide:fgf2013]{\crossref{{[}FGF2013{]}}}} for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which it should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.
+oBB can optionally approximate the objective function \(f\) by a radial basis function (RBF) surrogate and optimize the approximation instead (see \phantomsection\label{userguide:id8}{\hyperref[userguide:fgf2013]{\crossref{{[}FGF2013{]}}}} for details). The advantage of this approach is that the user merely needs to supply the objective function and a set of points at which it should be evaluated to construct the RBF approximation. The disadvantage is that the optimum found by the algorithm will only be close to the optimum of the objective function if it is sampled at sufficiently many points.
 
 As before, the user is required to write a python script file that defines the functions and parameters necessary to solve the problem and then passes them to the \textbf{obb\_rbf} function. In addition to the approximation model, algorithm type and objective function arguments described in {\hyperref[userguide:how\string-to\string-use\string-obb]{\crossref{How to use oBB}}} only an \(n\) by \(m\) numpy array of \(m\) points at which to sample the objective function needs to be passed to the \textbf{obb\_rbf} function using the \textbf{pts} argument.
 
@@ -564,7 +564,7 @@ Note the use of \textbf{obb\_rbf} instead of \textbf{obb} and the need for a ran
 
 \section{RBF Layer for the COCONUT Test Set}
 \label{userguide:rbf-layer-for-the-coconut-test-set}
-oBB comes with a set of pre-computed RBF approximations to selected functions from the \href{http://www.mat.univie.ac.at/~neum/glopt/coconut/Benchmark/Benchmark.html}{COCONUT test set} that were used to produce the numerical results in the paper \phantomsection\label{userguide:id7}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}}. In order to optimize these approximations using oBB, the user is required to write a python script file that defines the desired function and tolerance and then passes them to the \textbf{obb\_rbf\_coconut} function (see \phantomsection\label{userguide:id8}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}} for a list of all 31 functions available). For example, to optimize an RBF approximation to the \textbf{`hs041'} function the user could write the following python script file, let's call it coconut.py:
+oBB comes with a set of pre-computed RBF approximations to selected functions from the \href{http://www.mat.univie.ac.at/~neum/glopt/coconut/Benchmark/Benchmark.html}{COCONUT test set} that were used to produce the numerical results in the paper \phantomsection\label{userguide:id9}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}}. In order to optimize these approximations using oBB, the user is required to write a python script file that defines the desired function and tolerance and then passes them to the \textbf{obb\_rbf\_coconut} function (see \phantomsection\label{userguide:id10}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}} for a list of all 31 functions available). For example, to optimize an RBF approximation to the \textbf{`hs041'} function the user could write the following python script file, let's call it coconut.py:
 \begin{quote}
 
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -590,7 +590,7 @@ oBB comes with a set of pre-computed RBF approximations to selected functions fr
 \end{Verbatim}
 \end{quote}
 
-Note the use of \textbf{obb\_rbf\_coconut} as the calling function and the optional \textbf{`12hr'} tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see \phantomsection\label{userguide:id9}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}} for details). This file is included in oBB as coconut.py, to run it see {\hyperref[userguide:running\string-the\string-algorithm]{\crossref{Running the Algorithm}}}.
+Note the use of \textbf{obb\_rbf\_coconut} as the calling function and the optional \textbf{`12hr'} tolerance setting which runs the algorithm to the absolute tolerance obtained by a serial code in twelve hours (see \phantomsection\label{userguide:id11}{\hyperref[userguide:cfg2013]{\crossref{{[}CFG2013{]}}}} for details). This file is included in oBB as coconut.py, to run it see {\hyperref[userguide:running\string-the\string-algorithm]{\crossref{Running the Algorithm}}}.
 
 
 \section{Acknowledgements}
@@ -613,6 +613,9 @@ Cartis, C., Fowkes, J. M. and Gould, N. I. M. (2013) `Branching and Bounding Imp
 }
 \bibitem[FGF2013]{FGF2013}{\phantomsection\label{userguide:fgf2013} 
 Fowkes, J. M. , Gould,  N. I. M. and Farmer, C. L. (2013) `A Branch and Bound Algorithm for the Global Optimization of Hessian Lipschitz Continuous Functions', \emph{Journal of Global Optimization}, vol. 56, no. 4, pp. 1791-1815. \url{http://dx.doi.org/10.1007/s10898-012-9937-9}
+}
+\bibitem[G2015]{G2015}{\phantomsection\label{userguide:g2015} 
+Guida, A. (2015) `A Branch and Bound Algorithm for the Global Optimization and its Improvements', Master's Thesis, Faculty of Engineering, University of Florence, pp. 1-88. \url{http://people.maths.ox.ac.uk/cartis/papers/Thesys\_Alberto\_Guida.pdf}
 }
 \end{thebibliography}
 
