@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type = "text/xsl" href = "http://www.coin-or.org/projects/autoGen.xsl"?>
+<projectData xmlns="coin-or.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="coin-or.org http://www.coin-or.org/projects/autoGen.xsd">
+  <projectBasics>
+    <projectName>oBB</projectName>
+    <projectDescription>
+        An algorithm for the parallel global optimization of
+        functions with a Lipschitz continuous gradient or Hessian.
+      </projectDescription>
+    <projectShortDescription>
+        Parallel global optimization of Hessian Lipschitz continuous
+        functions.
+    </projectShortDescription>
+    <projectManager>Jaroslav Fowkes</projectManager>
+    <projectHomePage>https://github.com/coin-or/oBB</projectHomePage>
+    <projectLicense>Gnu Lesser General Public License Version 3</projectLicense>
+    <projectLicenseURL>http://www.gnu.org/licenses/lgpl.html</projectLicenseURL>
+    <coinLinkedProjects/>
+    <otherLinkedPackages>
+      <otherPackage>
+        <packageName>Python</packageName>
+        <packageURL>http://www.python.org/</packageURL>
+        <requiredOrOptional>Required</requiredOrOptional>
+      </otherPackage>
+      <otherPackage>
+        <packageName>OpenMPI or another working implementation of MPI-2</packageName>
+        <packageURL>http://www.open-mpi.org/</packageURL>
+        <requiredOrOptional>Required</requiredOrOptional>
+      </otherPackage>
+      <otherPackage>
+        <packageName>NumPy</packageName>
+        <packageURL>http://www.numpy.org/</packageURL>
+        <requiredOrOptional>Required</requiredOrOptional>
+      </otherPackage>
+      <otherPackage>
+        <packageName>MPI for Python</packageName>
+        <packageURL>http://mpi4py.scipy.org/</packageURL>
+        <requiredOrOptional>Required</requiredOrOptional>
+      </otherPackage>
+      <otherPackage>
+        <packageName>CVXOPT</packageName>
+        <packageURL>http://cvxopt.org/</packageURL>
+        <requiredOrOptional>Required</requiredOrOptional>
+      </otherPackage>
+      <otherPackage>
+        <packageName>matplotlib</packageName>
+        <packageURL>http://www.matplotlib.org/</packageURL>
+        <requiredOrOptional>Optional</requiredOrOptional>
+      </otherPackage>
+    </otherLinkedPackages>
+    <projectLanguage>Python</projectLanguage>
+    <developmentStatus>
+      <activityStatus>Inactive</activityStatus>
+      <maturityLevel>4</maturityLevel>
+    </developmentStatus>
+    <testedPlatforms>
+      <platform>
+        <operatingSystem>Linux</operatingSystem>
+        <compiler>GNU</compiler>
+      </platform>
+    </testedPlatforms>
+    <projectCategories>
+      <category>Optimization deterministic nonlinear</category>
+    </projectCategories>
+  </projectBasics>
+  <leftMenuLinks>
+    <documentation>https://pythonhosted.org/oBB/</documentation>
+    <sourceCodeDownload/>
+    <binaryDownload/>
+    <mailingList>http://list.coin-or.org/mailman/listinfo/obb</mailingList>
+  </leftMenuLinks>
+</projectData>
