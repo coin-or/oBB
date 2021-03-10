@@ -101,7 +101,7 @@ License
 -------
 This algorithm is released under the GNU LGPLv3 license.
 
-.. |Build Status| image::  https://travis-ci.org/coin-or/oBB.svg?branch=master
-                  :target: https://travis-ci.org/coin-or/oBB
+.. |Build Status| image::  https://travis-ci.com/coin-or/oBB.svg?branch=master
+                  :target: https://travis-ci.com/coin-or/oBB
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/oBB.svg
                   :target: https://pypi.python.org/pypi/oBB
