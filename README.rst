@@ -1,6 +1,6 @@
-===============================================================
-OBB: Overlapping Branch and Bound |Build Status| |PyPI Version|
-===============================================================
+=========================================================================
+OBB: Overlapping Branch and Bound |License| |Build Status| |PyPI Version|
+=========================================================================
 oBB is an algorithm for the parallel global optimization of functions with Lipchitz continuous gradient or Hessian.
 
 This is an implementation of the algorithm from our paper:
@@ -101,6 +101,9 @@ License
 -------
 This algorithm is released under the GNU LGPLv3 license.
 
+.. |License| image::  https://img.shields.io/badge/License-LGPL%20v3-blue.svg
+             :target: https://www.gnu.org/licenses/lgpl-3.0
+             :alt: GNU LGPL v3 License
 .. |Build Status| image::  https://travis-ci.com/coin-or/oBB.svg?branch=master
                   :target: https://travis-ci.com/coin-or/oBB
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/oBB.svg
